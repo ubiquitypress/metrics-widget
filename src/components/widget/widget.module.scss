@@ -1,0 +1,14 @@
+.widget {
+  font-size: 62.5%;
+  font-family: inherit;
+
+  // Resets
+  li {
+    list-style-type: none;
+  }
+  ul,
+  li {
+    padding: 0;
+    margin: 0;
+  }
+}

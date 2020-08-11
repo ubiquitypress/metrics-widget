@@ -1,0 +1,47 @@
+.navigation {
+  ul {
+    overflow-y: auto;
+
+    li {
+      display: inline-block;
+
+      &:not(:last-child) {
+        margin-right: 0.5em;
+      }
+
+      button {
+        border: 0.1em solid transparent;
+        background: transparent;
+        padding: 1em;
+        border-radius: 0.4em;
+        min-width: 6rem;
+        text-align: center;
+        font-size: inherit;
+        transition: background-color 0.2s;
+
+        &.active,
+        &:hover {
+          cursor: pointer;
+          background: #edf0fb;
+          background: rgba(80, 108, 211, 0.1);
+        }
+        &:focus {
+          border-color: #506bd3;
+          outline: none;
+        }
+
+        .count {
+          color: #506cd3;
+          font-size: 2em;
+          font-weight: 600;
+          margin-bottom: 0.3em;
+        }
+
+        .label {
+          color: #000000;
+          font-size: 1.4em;
+        }
+      }
+    }
+  }
+}
