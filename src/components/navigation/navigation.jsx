@@ -33,10 +33,14 @@ const Navigation = ({ events, activeType, onItemClick }) => {
       // Loop through each, finding its match
       counts.forEach((measure_uri) => {
         filteredEvents.forEach((fe) => {
-          if (fe.measure_uri === measure_uri)
+          if (
+            fe.type === category &&
+            (fe.measure_uri === measure_uri || measure_uri === '*')
+          ) {
             summatedValues[category] = summatedValues[category]
               ? summatedValues[category] + fe.value
               : fe.value;
+          }
         });
       });
     });
@@ -57,7 +61,9 @@ const Navigation = ({ events, activeType, onItemClick }) => {
                 [styles.active]: activeType === type,
               })}
             >
-              <div className={styles.count}>{mergedEvents[type]}</div>
+              <div className={styles.count}>
+                {mergedEvents[type].toLocaleString()}
+              </div>
               <div className={styles.label}>{type}</div>
             </button>
           </li>

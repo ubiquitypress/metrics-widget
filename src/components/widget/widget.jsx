@@ -8,7 +8,6 @@ const Widget = () => {
   const events = useFetch(
     'https://metrics-api.operas-eu.org/events/?filter=work_uri:info:doi:10.5334/bbc&aggregation=measure_uri'
   );
-  console.log(events);
 
   // TODO: Add actual UI here
   if (events.loading) return <p>loading</p>;
