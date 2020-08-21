@@ -13,41 +13,52 @@
 
     <script>
       const metrics_config = {
-        downloads: {
-          nav_count: [
-            'https://metrics.operas-eu.org/oapen/downloads/v1',
-            'https://metrics.operas-eu.org/up-ga/downloads/v1',
-          ],
-          displays: [],
+        settings: {
+          base_url: 'https://metrics-api.operas-eu.org/events',
+          work_uri: 'info:doi:10.5334/bbc'
         },
-        citations: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        citations: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        tweets: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        references: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        sessions: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        reads: {
-          nav_count: ['*'],
-          displays: [],
-        },
-        annotations: {
-          nav_count: ['*'],
-          displays: [],
-        },
+        tabs: {
+          downloads: {
+            nav_counts: ['*'],
+            graphs: {
+              world_map: [
+                'https://metrics.operas-eu.org/up-ga/downloads/v1',
+                'https://metrics.operas-eu.org/oapen/downloads/v1'
+              ],
+              time_graph: [
+                'https://metrics.operas-eu.org/up-logs/downloads/v1'
+              ],
+              country_table: [
+                'https://metrics.operas-eu.org/up-ga/downloads/v1',
+                'https://metrics.operas-eu.org/oapen/downloads/v1'
+              ]
+            }
+          },
+          citations: {
+            nav_counts: ['*'],
+            graphs: {}
+          },
+          tweets: {
+            nav_counts: ['*'],
+            graphs: {}
+          },
+          references: {
+            nav_counts: ['*'],
+            graphs: {}
+          },
+          sessions: {
+            nav_counts: ['*'],
+            graphs: {}
+          },
+          reads: {
+            nav_counts: ['*'],
+            graphs: {}
+          },
+          annotations: {
+            nav_counts: ['*'],
+            graphs: {}
+          }
+        }
       };
     </script>
 

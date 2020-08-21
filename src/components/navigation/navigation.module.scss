@@ -1,5 +1,6 @@
 .navigation {
   ul {
+    display: flex;
     overflow-y: auto;
 
     li {
@@ -14,7 +15,7 @@
         background: transparent;
         padding: 1em;
         border-radius: 0.4em;
-        min-width: 6rem;
+        min-width: 10em;
         text-align: center;
         font-size: inherit;
         transition: background-color 0.2s;

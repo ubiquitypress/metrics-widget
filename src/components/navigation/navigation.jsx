@@ -7,8 +7,8 @@ const Navigation = ({ events, activeType, onItemClick }) => {
   const [mergedEvents, setMergedEvents] = useState({});
 
   // Handler for when a button is clicked to change tab
-  const onButtonClick = (type) => {
-    if (activeType !== type) onItemClick(type);
+  const onButtonClick = type => {
+    onItemClick(type);
   };
 
   // When the list of events changes (or component mounts),
@@ -17,22 +17,22 @@ const Navigation = ({ events, activeType, onItemClick }) => {
   // useEffect() prevents this running every time the component is re-rendered
   useEffect(() => {
     // Get all event categories as keys in `metrics_config`
-    const categories = Object.keys(metrics_config);
+    const categories = Object.keys(metrics_config.tabs);
 
     // Remove from {events} ones that are not in `metrics_config`
     const filteredEvents = events.filter(
-      (event) => categories.indexOf(event.type) !== -1
+      event => categories.indexOf(event.type) !== -1
     );
 
     // Loop through all `metrics_config` keys to find
     // the ones we should be displaying counts for
     const summatedValues = {};
-    categories.forEach((category) => {
-      const counts = metrics_config[category].nav_count;
+    categories.forEach(category => {
+      const counts = metrics_config.tabs[category].nav_counts;
 
       // Loop through each, finding its match
-      counts.forEach((measure_uri) => {
-        filteredEvents.forEach((fe) => {
+      counts.forEach(measure_uri => {
+        filteredEvents.forEach(fe => {
           if (
             fe.type === category &&
             (fe.measure_uri === measure_uri || measure_uri === '*')
@@ -53,12 +53,12 @@ const Navigation = ({ events, activeType, onItemClick }) => {
   return (
     <nav className={styles.navigation}>
       <ul>
-        {Object.keys(mergedEvents).map((type) => (
+        {Object.keys(mergedEvents).map(type => (
           <li key={type}>
             <button
               onClick={() => onButtonClick(type)}
               className={classnames({
-                [styles.active]: activeType === type,
+                [styles.active]: activeType === type
               })}
             >
               <div className={styles.count}>
@@ -81,11 +81,15 @@ Navigation.propTypes = {
       type: PropTypes.string,
       measure_uri: PropTypes.string,
       value: PropTypes.number,
-      source: PropTypes.string,
+      source: PropTypes.string
     })
   ).isRequired,
-  activeType: PropTypes.string.isRequired,
-  onItemClick: PropTypes.func.isRequired,
+  activeType: PropTypes.string,
+  onItemClick: PropTypes.func.isRequired
+};
+
+Navigation.defaultProps = {
+  activeType: null
 };
 
 export default Navigation;
