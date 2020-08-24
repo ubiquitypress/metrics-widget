@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
 import styles from './navigation.module.scss';
 import PropTypes from 'prop-types';
+import getString from '../../localisation/get-string/get-string';
 
 const Navigation = ({ events, activeType, onItemClick }) => {
   const [mergedEvents, setMergedEvents] = useState({});
@@ -64,7 +65,7 @@ const Navigation = ({ events, activeType, onItemClick }) => {
               <div className={styles.count}>
                 {mergedEvents[type].toLocaleString()}
               </div>
-              <div className={styles.label}>{type}</div>
+              <div className={styles.label}>{getString(`tabs.${type}`)}</div>
             </button>
           </li>
         ))}

@@ -4,8 +4,10 @@ import flattenArray from '../../../utils/flatten-array/flatten-array';
 import MapGraph from '../../graphs/map-graph/map-graph';
 import fetchAllUrls from '../../../utils/fetch-all-urls/fetch-all-urls';
 import countryCodeFromURI from '../../../utils/country-code-from-uri/country-code-from-uri';
+import CardWrapper from '../../card-wrapper/card-wrapper';
+import getString from '../../../localisation/get-string/get-string';
 
-const WorldMap = ({ uris, onReady, hidden }) => {
+const WorldMap = ({ uris, activeType, onReady, hidden }) => {
   const [codes, setCodes] = useState(null);
 
   const fetchURIs = async () => {
@@ -44,12 +46,18 @@ const WorldMap = ({ uris, onReady, hidden }) => {
   }, [uris]);
 
   if (hidden) return null;
-  if (codes) return <MapGraph mapData={codes} />;
+  if (codes)
+    return (
+      <CardWrapper label={getString('labels.by_country', { name: activeType })}>
+        <MapGraph mapData={codes} />
+      </CardWrapper>
+    );
   return null;
 };
 
 WorldMap.propTypes = {
   uris: PropTypes.array.isRequired,
+  activeType: PropTypes.string.isRequired,
   hidden: PropTypes.bool,
   onReady: PropTypes.func
 };

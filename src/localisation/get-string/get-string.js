@@ -1,0 +1,44 @@
+import en from '../en.json';
+import PropTypes from 'prop-types';
+
+const getString = (path, interpolations, languageOverride) => {
+  // Choose the language
+  const language = languageOverride || metrics_config.settings.language;
+
+  // Make the dictionary depending on the chosen language
+  // This should be updated every time a new language is added.
+  let dict = {};
+  switch (language) {
+    case 'en':
+      dict = en;
+      break;
+  }
+
+  // Find the localisation value
+  try {
+    const split = path.split('.');
+    let marker = dict;
+    split.forEach(item => {
+      marker = marker[item];
+    });
+
+    // Replace any provided interpolations
+    if (interpolations) {
+      Object.keys(interpolations).forEach(key => {
+        marker = marker.replace(`{{${key}}}`, interpolations[key]);
+      });
+    }
+
+    return marker;
+  } catch (error) {
+    return path;
+  }
+};
+
+getString.defaultProps = {
+  path: PropTypes.string.isRequired,
+  interpolations: PropTypes.object,
+  languageOverride: PropTypes.string
+};
+
+export default getString;

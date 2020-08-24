@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import fetchAllUrls from '../../../utils/fetch-all-urls/fetch-all-urls';
 import flattenArray from '../../../utils/flatten-array/flatten-array';
-import countryCodeFromURI from '../../../utils/country-code-from-uri/country-code-from-uri';
 import CardWrapper from '../../card-wrapper/card-wrapper';
 import getString from '../../../localisation/get-string/get-string';
+import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 
-const CountryTable = ({ uris, activeType, onReady, hidden }) => {
+const WikipediaArticles = ({ uris, onReady, hidden }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -19,29 +18,23 @@ const CountryTable = ({ uris, activeType, onReady, hidden }) => {
 
     // Fetch all URLs
     fetchAllUrls(urls, res => {
-      const data = flattenArray(res).filter(item => item.country_uri);
+      const data = flattenArray(res).filter(item => item.event_uri);
 
-      // Pull the country codes from each item
-      const codes = {};
-      data.forEach(({ country_uri, value }) => {
-        let code = countryCodeFromURI(country_uri);
+      // Get an array of articles
+      const mapped = data
+        .map(item => item.event_uri) // populate only with event_uri values
+        .map(item => item.replace(/.*\/wiki\//g, '')) // remove URL part of string
+        .map(item => item.replace(/_/g, ' ')) // replace _ with a space
+        .map(item => decodeURIComponent(item)); // decode any encoded characters
 
-        // Localise the code, if specified in the settings
-        if (metrics_config.settings.localise_country_codes)
-          code = getString(`countries.${code}`);
+      // Sort alphabetically
+      mapped.sort();
 
-        codes[code] = codes[code] ? codes[code] + value : value;
-      });
-
-      // Move into an array and sort
-      const sorted = [];
-      Object.keys(codes).forEach(code => {
-        sorted.push({ key: code, value: codes[code].toString() });
-      });
-      sorted.sort((a, b) => b.value - a.value);
+      // Convert into a key/value object for the table
+      const keyValue = mapped.map(item => ({ key: item, value: null }));
 
       // Update the state with the new info
-      setTableData(sorted);
+      setTableData(keyValue);
 
       // Tell the parent that we're ready
       onReady();
@@ -60,18 +53,17 @@ const CountryTable = ({ uris, activeType, onReady, hidden }) => {
   if (hidden) return null;
   if (tableData)
     return (
-      <CardWrapper label={getString('labels.by_country', { name: activeType })}>
+      <CardWrapper label={getString('labels.wikipedia_articles')}>
         <KeyValueTable data={tableData} />
       </CardWrapper>
     );
   return null;
 };
 
-CountryTable.propTypes = {
+WikipediaArticles.propTypes = {
   uris: PropTypes.array.isRequired,
-  activeType: PropTypes.string.isRequired,
   onReady: PropTypes.func,
   hidden: PropTypes.bool
 };
 
-export default CountryTable;
+export default WikipediaArticles;

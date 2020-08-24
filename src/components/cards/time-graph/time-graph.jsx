@@ -3,8 +3,10 @@ import fetchAllUrls from '../../../utils/fetch-all-urls/fetch-all-urls';
 import flattenArray from '../../../utils/flatten-array/flatten-array';
 import PropTypes from 'prop-types';
 import LineGraph from '../../graphs/line-graph/line-graph';
+import CardWrapper from '../../card-wrapper/card-wrapper';
+import getString from '../../../localisation/get-string/get-string';
 
-const TimeGraph = ({ uris, onReady, hidden }) => {
+const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
   const [graphData, setGraphData] = useState(null);
 
   const fetchURIs = async () => {
@@ -35,6 +37,13 @@ const TimeGraph = ({ uris, onReady, hidden }) => {
         if (a.key < b.key) return -1;
         if (a.key > b.key) return 1;
         return 0;
+      });
+
+      // Go through each item to make it cumulative
+      sorted.forEach((item, index) => {
+        if (index > 0) {
+          sorted[index].value += sorted[index - 1].value;
+        }
       });
 
       // Determine the xAxis categories
@@ -72,16 +81,19 @@ const TimeGraph = ({ uris, onReady, hidden }) => {
   if (hidden) return null;
   if (graphData)
     return (
-      <LineGraph
-        seriesData={graphData.series}
-        xAxisCategories={graphData.xAxis}
-      />
+      <CardWrapper label={getString('labels.over_time', { name: activeType })}>
+        <LineGraph
+          seriesData={graphData.series}
+          xAxisCategories={graphData.xAxis}
+        />
+      </CardWrapper>
     );
   return null;
 };
 
 TimeGraph.propTypes = {
   uris: PropTypes.array.isRequired,
+  activeType: PropTypes.string.isRequired,
   onReady: PropTypes.func,
   hidden: PropTypes.bool
 };

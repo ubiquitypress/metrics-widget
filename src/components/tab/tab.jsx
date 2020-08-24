@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import WorldMap from '../cards/world-map/world-map';
 import TimeGraph from '../cards/time-graph/time-graph';
 import CountryTable from '../cards/country-table/country-table';
+import WikipediaArticles from '../cards/wikipedia-articles/wikipedia-articles';
 
 const Tab = ({ activeType }) => {
   const [graphs, setGraphs] = useState({});
@@ -40,7 +41,13 @@ const Tab = ({ activeType }) => {
 
     // Set the graphs in the object
     setGraphs(graphs);
-    setLoading({ ...loading, childrenLength: Object.keys(graphs).length });
+
+    // Update the loading state
+    setLoading({
+      ...loading,
+      childrenLength: Object.keys(graphs).length,
+      childrenLoaded: 0
+    });
   }, [activeType]);
 
   // Make sure we have some graphs to render
@@ -58,6 +65,7 @@ const Tab = ({ activeType }) => {
                 <WorldMap
                   key={name}
                   uris={uris}
+                  activeType={activeType}
                   onReady={onChildLoad}
                   hidden={loading.isLoading}
                 />
@@ -67,6 +75,7 @@ const Tab = ({ activeType }) => {
                 <TimeGraph
                   key={name}
                   uris={uris}
+                  activeType={activeType}
                   onReady={onChildLoad}
                   hidden={loading.isLoading}
                 />
@@ -74,6 +83,16 @@ const Tab = ({ activeType }) => {
             case 'country_table':
               return (
                 <CountryTable
+                  key={name}
+                  uris={uris}
+                  activeType={activeType}
+                  onReady={onChildLoad}
+                  hidden={loading.isLoading}
+                />
+              );
+            case 'wikipedia_articles':
+              return (
+                <WikipediaArticles
                   key={name}
                   uris={uris}
                   onReady={onChildLoad}
@@ -87,6 +106,8 @@ const Tab = ({ activeType }) => {
         })}
       </div>
     );
+
+  // There is no graph data to display
   return null;
 };
 
