@@ -3,88 +3,87 @@ import classnames from 'classnames';
 import styles from './navigation.module.scss';
 import PropTypes from 'prop-types';
 import getString from '../../localisation/get-string/get-string';
+import useFetch from '../../hooks/use-fetch';
 
-const Navigation = ({ events, activeType, onItemClick }) => {
-  const [mergedEvents, setMergedEvents] = useState({});
+const Navigation = ({ activeType, onItemClick }) => {
+  const [navItems, setNavItems] = useState({});
+  const { loading, error, data } = useFetch(
+    `${metrics_config.settings.base_url}?filter=work_uri:${metrics_config.settings.work_uri}&aggregation=measure_uri`
+  );
+
+  // Called when the component mounts
+  useEffect(() => {
+    if (data) {
+      // Get all event categories as keys in `metrics_config`
+      const categories = Object.keys(metrics_config.tabs);
+
+      // Remove API results that are not marked as categories
+      const filtered = data.filter(
+        item => categories.indexOf(item.type) !== -1
+      );
+
+      // Remove filtered items that are not listed in the `nav_counts`
+      const items = {};
+      categories.forEach(category => {
+        const navCounts = metrics_config.tabs[category].nav_counts;
+
+        // Loop through each URI provided in the `nav_counts` object
+        navCounts.forEach(uri => {
+          filtered.forEach(event => {
+            // We count this event's value as long as it is the right category, and
+            // the `measure_uri` field is provided in the `metrics_config` object.
+            // The latter condition is overruled if an asterisk is found instead.
+            if (
+              event.type === category &&
+              (event.measure_uri === uri || uri === '*')
+            ) {
+              items[category] = items[category]
+                ? items[category] + event.value
+                : event.value;
+            }
+          });
+        });
+
+        // Update the state
+        setNavItems(items);
+      });
+    }
+  }, [data]);
 
   // Handler for when a button is clicked to change tab
   const onButtonClick = type => {
     onItemClick(type);
   };
 
-  // When the list of events changes (or component mounts),
-  // let's first filter by the events specified in `metrics_config,`
-  // and then summate ones that are specified in the same config
-  // useEffect() prevents this running every time the component is re-rendered
-  useEffect(() => {
-    // Get all event categories as keys in `metrics_config`
-    const categories = Object.keys(metrics_config.tabs);
-
-    // Remove from {events} ones that are not in `metrics_config`
-    const filteredEvents = events.filter(
-      event => categories.indexOf(event.type) !== -1
+  // TODO: Add a loading icon here?
+  if (loading) return <p>Loading ...</p>;
+  if (navItems) {
+    return (
+      <nav className={styles.navigation}>
+        <ul>
+          {Object.keys(navItems).map(type => (
+            <li key={type}>
+              <button
+                onClick={() => onButtonClick(type)}
+                className={classnames({
+                  [styles.active]: activeType === type
+                })}
+              >
+                <div className={styles.count}>
+                  {navItems[type].toLocaleString()}
+                </div>
+                <div className={styles.label}>{getString(`tabs.${type}`)}</div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     );
-
-    // Loop through all `metrics_config` keys to find
-    // the ones we should be displaying counts for
-    const summatedValues = {};
-    categories.forEach(category => {
-      const counts = metrics_config.tabs[category].nav_counts;
-
-      // Loop through each, finding its match
-      counts.forEach(measure_uri => {
-        filteredEvents.forEach(fe => {
-          if (
-            fe.type === category &&
-            (fe.measure_uri === measure_uri || measure_uri === '*')
-          ) {
-            summatedValues[category] = summatedValues[category]
-              ? summatedValues[category] + fe.value
-              : fe.value;
-          }
-        });
-      });
-    });
-
-    // Finally, update the state with these values
-    setMergedEvents(summatedValues);
-  }, [events]);
-
-  // Return the navigation component
-  return (
-    <nav className={styles.navigation}>
-      <ul>
-        {Object.keys(mergedEvents).map(type => (
-          <li key={type}>
-            <button
-              onClick={() => onButtonClick(type)}
-              className={classnames({
-                [styles.active]: activeType === type
-              })}
-            >
-              <div className={styles.count}>
-                {mergedEvents[type].toLocaleString()}
-              </div>
-              <div className={styles.label}>{getString(`tabs.${type}`)}</div>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
+  }
+  return null;
 };
 
 Navigation.propTypes = {
-  events: PropTypes.arrayOf(
-    PropTypes.shape({
-      namespace: PropTypes.string,
-      version: PropTypes.string,
-      type: PropTypes.string,
-      measure_uri: PropTypes.string,
-      value: PropTypes.number,
-      source: PropTypes.string
-    })
-  ).isRequired,
   activeType: PropTypes.string,
   onItemClick: PropTypes.func.isRequired
 };

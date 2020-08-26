@@ -5,10 +5,10 @@ import TimeGraph from '../cards/time-graph/time-graph';
 import CountryTable from '../cards/country-table/country-table';
 import WikipediaArticles from '../cards/wikipedia-articles/wikipedia-articles';
 
-const Tab = ({ activeType }) => {
+const Tab = ({ activeType, onLoadingChange }) => {
   const [graphs, setGraphs] = useState({});
   const [loading, setLoading] = useState({
-    isLoading: true,
+    isLoading: false,
     childrenLength: 0,
     childrenLoaded: 0
   });
@@ -23,12 +23,21 @@ const Tab = ({ activeType }) => {
 
   useEffect(() => {
     if (
-      loading.childrenLength > 0 &&
-      loading.childrenLoaded === loading.childrenLength &&
-      loading.isLoading
-    ) {
+      loading.isLoading &&
+      (loading.childrenLength === 0 ||
+        loading.childrenLoaded === loading.childrenLength)
+    )
       setLoading({ ...loading, isLoading: false });
-    }
+
+    // if (
+    //   loading.isLoading &&
+    //   (loading.childrenLength === 0 ||
+    //     loading.childrenLoaded === loading.childrenLength)
+    // )
+    //   setLoading({ ...loading, isLoading: false });
+
+    // Tell the parent <Widget /> that we are [not] loading
+    onLoadingChange(loading.isLoading);
   }, [loading]);
 
   // Only re-calculate data when the activeType is changed
@@ -45,6 +54,7 @@ const Tab = ({ activeType }) => {
     // Update the loading state
     setLoading({
       ...loading,
+      isLoading: true,
       childrenLength: Object.keys(graphs).length,
       childrenLoaded: 0
     });
@@ -108,11 +118,12 @@ const Tab = ({ activeType }) => {
     );
 
   // There is no graph data to display
-  return null;
+  return <p>No data to display.</p>; // TODO: display something else?
 };
 
 Tab.propTypes = {
-  activeType: PropTypes.string
+  activeType: PropTypes.string,
+  onLoadingChange: PropTypes.func
 };
 
 export default Tab;

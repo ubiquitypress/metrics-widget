@@ -1,33 +1,28 @@
 import React, { useState } from 'react';
 import Navigation from '../navigation/navigation';
 import styles from './widget.module.scss';
-import useFetch from '../../hooks/use-fetch';
 import Tab from '../tab/tab';
 
 const Widget = () => {
   const [tab, setTab] = useState(null);
+  const [tabLoading, setTabLoading] = useState(false);
 
-  // TODO: should we move this data into the navbar itself, now that it is not being used by any other component?
-  const events = useFetch(
-    `${metrics_config.settings.base_url}?filter=work_uri:${metrics_config.settings.work_uri}&aggregation=measure_uri`
-  );
-
-  const ToggleTab = newTab => {
-    setTab(newTab === tab ? null : newTab);
+  // When the tab begins/ends loading, this function is called
+  // This prevents the user jumping between navigation menus whilst data is
+  // still loading, causing data leaks and unnecessary requests
+  const setTabLoadingState = state => {
+    if (tabLoading !== state) setTabLoading(state);
   };
 
-  // TODO: Add actual UI here
-  if (events.loading) return <p>loading</p>;
-  if (events.error) return <p>{events.error}</p>;
+  // Toggles between navigation tabs, whilst no data is loading
+  const ToggleTab = newTab => {
+    if (!tabLoading) setTab(newTab === tab ? null : newTab);
+  };
 
   return (
     <div className={styles.widget}>
-      <Navigation
-        events={events.data}
-        activeType={tab}
-        onItemClick={ToggleTab}
-      />
-      <Tab activeType={tab} />
+      <Navigation activeType={tab} onItemClick={ToggleTab} />
+      <Tab activeType={tab} onLoadingChange={setTabLoadingState} />
     </div>
   );
 };
