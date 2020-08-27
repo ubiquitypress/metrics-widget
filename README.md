@@ -4,13 +4,13 @@ This documentation covers both the general usage and installation of the widget,
 
 ## Table of Contents
 
-- [Getting Started](#Getting-Started)
-- [Configuration](#Configuration)
-  - [Settings](#Settings)
-  - [Tabs](#Tabs)
-- [Supported Languages](#Supported-Languages)
-- [Supported Metrics](#Supported-Metrics)
-- [Supported Graphs](#Supported-Graphs)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+  - [Settings](#settings)
+  - [Tabs](#tabs)
+- [Supported Languages](#supported-languages)
+- [Supported Metrics](#supported-metrics)
+- [Supported Graphs](#supported-graphs)
 
 ## Getting Started
 
@@ -35,7 +35,7 @@ To embed the widget onto a page, you will need to add three core components. The
 
 The `div#metrics-block` is the element in which the widget will be embedded into. You can place this anywhere on the page.
 
-The first `script` tag defines a `metrics_config` object. This variable must be present, and cannot be renamed. This is where the widget will pull its configuration settings from. All configuration settings can be found [here](#Configuration).
+The first `script` tag defines a `metrics_config` object. This variable must be present, and cannot be renamed. This is where the widget will pull its configuration settings from. All configuration settings can be found [here](#configuration).
 
 The final script tag is to import the JavaScript code for the widget. It is recommended to place this before the closing `</body>` tag on the HTML page.
 
@@ -43,7 +43,7 @@ If you have implemented just the above steps, you should see an error message st
 
 ## Configuration
 
-All configuration for the widget is handled within the `merics_config` object, set up in the [Getting Started](#Getting-Started) section.
+All configuration for the widget is handled within the `merics_config` object, set up in the [Getting Started](#getting-started) section.
 
 Within the object, the following keys should be present:
 
@@ -60,12 +60,12 @@ The following fields are accepted within the `settings` object of the `metrics_c
 | ---------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | base_url               | string  | yes      | the base URL of where the metrics are hosted<br> example: https://metrics-api.operas-eu.org/events                                                                                      |
 | work_uri               | string  | yes      | the URI scheme and URI to use<br> example: `info:doi:10.5334/bay`                                                                                                                       |
-| language               | string  | no       | the ISO 639-1 language code to display text in<br> if your [language is not supported](#Supported-Languages), please consider contributing<br> the default value for this field is `en` |
+| language               | string  | no       | the ISO 639-1 language code to display text in<br> if your [language is not supported](#supported-languages), please consider contributing<br> the default value for this field is `en` |
 | localise_country_codes | boolean | false    | if `true`, graphs that display country codes will display their name instead<br> language names will be localised to the provided `language`<br> example: `fr` => `French`              |
 
 ### Tabs
 
-Within the `tabs` object of the `metrics_config` object, each field will represent the name of the metric you wish to display. Each field will represent a new navigation tab. A full list of supported fields can be found [here](#Supported-Metrics).
+Within the `tabs` object of the `metrics_config` object, each field will represent the name of the metric you wish to display. Each field will represent a new navigation tab. A full list of supported fields can be found [here](#supported-metrics).
 
 For example, to display metrics for downloads, tweets, and sessions, the `tabs` object would look like this:
 
@@ -88,7 +88,7 @@ downloads: {
 
 The `nav_counts` array accepts a list of URIs that will contribute towards the metrics count displayed in the navigation menu. If you wish to include all URIs in the count, you can simply write a `['*']` wildcard.
 
-The `graphs` object accepts fields for all pre-defined graphs to be shown. A full list of supported graphs can be found [here](#Supported-Graphs).
+The `graphs` object accepts fields for all pre-defined graphs to be shown. A full list of supported graphs can be found [here](#supported-graphs).
 
 Each object within the `graphs` object expects an array of URIs to be provided. Only one graph will be rendered regardless of the number of URIs provided, as the values will be merged together. Unlike for the `nav_counts` object, you cannot specify a wildcard here.
 
