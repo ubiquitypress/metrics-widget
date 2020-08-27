@@ -21,6 +21,11 @@
 
     .key {
       flex-grow: 1;
+      margin-right: 1em;
+    }
+    .value {
+      display: flex;
+      align-items: center;
     }
   }
 }

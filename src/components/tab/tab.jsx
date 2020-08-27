@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Loading from '../loading/loading';
 import WorldMap from '../cards/world-map/world-map';
 import TimeGraph from '../cards/time-graph/time-graph';
 import CountryTable from '../cards/country-table/country-table';
 import WikipediaArticles from '../cards/wikipedia-articles/wikipedia-articles';
+import styles from './tab.module.scss';
+import getString from '../../localisation/get-string/get-string';
 
 const Tab = ({ activeType, onLoadingChange }) => {
   const [graphs, setGraphs] = useState({});
@@ -21,6 +24,7 @@ const Tab = ({ activeType, onLoadingChange }) => {
     }));
   };
 
+  // Called when the loading state changes
   useEffect(() => {
     if (
       loading.isLoading &&
@@ -28,13 +32,6 @@ const Tab = ({ activeType, onLoadingChange }) => {
         loading.childrenLoaded === loading.childrenLength)
     )
       setLoading({ ...loading, isLoading: false });
-
-    // if (
-    //   loading.isLoading &&
-    //   (loading.childrenLength === 0 ||
-    //     loading.childrenLoaded === loading.childrenLength)
-    // )
-    //   setLoading({ ...loading, isLoading: false });
 
     // Tell the parent <Widget /> that we are [not] loading
     onLoadingChange(loading.isLoading);
@@ -64,61 +61,67 @@ const Tab = ({ activeType, onLoadingChange }) => {
   if (Object.keys(graphs).length > 0)
     return (
       <div>
-        {loading.isLoading && <p>Loading this data...</p>}
-        {Object.keys(graphs).map(name => {
-          const uris = graphs[name];
+        {loading.isLoading && <Loading />}
+        <ul className={styles.tab}>
+          {Object.keys(graphs).map(name => {
+            const uris = graphs[name];
 
-          // Update this whenever new cards are added
-          switch (name) {
-            case 'world_map':
-              return (
-                <WorldMap
-                  key={name}
-                  uris={uris}
-                  activeType={activeType}
-                  onReady={onChildLoad}
-                  hidden={loading.isLoading}
-                />
-              );
-            case 'time_graph':
-              return (
-                <TimeGraph
-                  key={name}
-                  uris={uris}
-                  activeType={activeType}
-                  onReady={onChildLoad}
-                  hidden={loading.isLoading}
-                />
-              );
-            case 'country_table':
-              return (
-                <CountryTable
-                  key={name}
-                  uris={uris}
-                  activeType={activeType}
-                  onReady={onChildLoad}
-                  hidden={loading.isLoading}
-                />
-              );
-            case 'wikipedia_articles':
-              return (
-                <WikipediaArticles
-                  key={name}
-                  uris={uris}
-                  onReady={onChildLoad}
-                  hidden={loading.isLoading}
-                />
-              );
-          }
+            // Update this whenever new cards are added
+            switch (name) {
+              case 'world_map':
+                return (
+                  <li key={name}>
+                    <WorldMap
+                      uris={uris}
+                      activeType={activeType}
+                      onReady={onChildLoad}
+                      hidden={loading.isLoading}
+                    />
+                  </li>
+                );
+              case 'time_graph':
+                return (
+                  <li key={name}>
+                    <TimeGraph
+                      uris={uris}
+                      activeType={activeType}
+                      onReady={onChildLoad}
+                      hidden={loading.isLoading}
+                    />
+                  </li>
+                );
+              case 'country_table':
+                return (
+                  <li key={name}>
+                    <CountryTable
+                      uris={uris}
+                      activeType={activeType}
+                      onReady={onChildLoad}
+                      hidden={loading.isLoading}
+                    />
+                  </li>
+                );
+              case 'wikipedia_articles':
+                return (
+                  <li key={name}>
+                    <WikipediaArticles
+                      uris={uris}
+                      onReady={onChildLoad}
+                      hidden={loading.isLoading}
+                    />
+                  </li>
+                );
+            }
 
-          // No matching cards are found
-          return null;
-        })}
+            // No matching cards are found
+            return null;
+          })}
+        </ul>
       </div>
     );
 
   // There is no graph data to display
-  return <p>No data to display.</p>; // TODO: display something else?
+  return <p>{getString('general.no_graphs')}</p>;
 };
 
 Tab.propTypes = {

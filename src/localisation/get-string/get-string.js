@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const getString = (path, interpolations, languageOverride) => {
   // Choose the language
-  const language = languageOverride || metrics_config.settings.language;
+  const language = languageOverride || metrics_config.settings.language || 'en';
 
   // Make the dictionary depending on the chosen language
   // This should be updated every time a new language is added.

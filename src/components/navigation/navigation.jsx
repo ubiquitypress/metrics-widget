@@ -55,8 +55,12 @@ const Navigation = ({ activeType, onItemClick }) => {
     onItemClick(type);
   };
 
-  // TODO: Add a loading icon here?
-  if (loading) return <p>Loading ...</p>;
+  if (loading)
+    return (
+      <div className={styles.loading}>
+        <p>{getString('general.loading_widget')}</p>
+      </div>
+    );
   if (navItems) {
     return (
       <nav className={styles.navigation}>

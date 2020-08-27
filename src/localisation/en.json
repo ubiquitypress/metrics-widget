@@ -1,4 +1,9 @@
 {
+  "general": {
+    "loading_widget": "Loading Metrics",
+    "loading_graphs": "Loading graph data",
+    "no_graphs": "No data to display."
+  },
   "tabs": {
     "downloads": "Downloads",
     "citations": "Citations",

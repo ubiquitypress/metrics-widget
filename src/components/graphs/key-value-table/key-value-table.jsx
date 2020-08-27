@@ -8,7 +8,7 @@ const KeyValueTable = ({ data }) => {
       {data.map(item => (
         <li key={item.key}>
           <div className={styles.key}>{item.key}</div>
-          <div>{item.value}</div>
+          <div className={styles.value}>{item.value}</div>
         </li>
       ))}
     </ul>

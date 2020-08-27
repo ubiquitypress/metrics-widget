@@ -22,7 +22,7 @@ const Widget = () => {
   return (
     <div className={styles.widget}>
       <Navigation activeType={tab} onItemClick={ToggleTab} />
-      <Tab activeType={tab} onLoadingChange={setTabLoadingState} />
+      {tab && <Tab activeType={tab} onLoadingChange={setTabLoadingState} />}
     </div>
   );
 };
