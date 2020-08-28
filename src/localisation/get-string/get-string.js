@@ -21,6 +21,7 @@ const getString = (path, interpolations, languageOverride) => {
     split.forEach(item => {
       marker = marker[item];
     });
+    if (!marker) return path;
 
     // Replace any provided interpolations
     if (interpolations) {
