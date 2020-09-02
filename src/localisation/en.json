@@ -10,7 +10,8 @@
     "tweets": "Tweets",
     "references": "References",
     "sessions": "Sessions",
-    "reads": "Reads"
+    "reads": "Reads",
+    "annotations": "Annotations"
   },
   "labels": {
     "over_time": "{{name}} over time",

@@ -108,6 +108,8 @@ downloads: {
 
 You can display as little or many graphs as you want for each tab, though keep in mind that they will all share the same horizontal space. The order of the graphs correlates to the order in which they are defined in their parent object.
 
+NOTE: The best way to know which metrics can be used within which graph array is by visiting the base URL endpoint with the `measure_uri` aggregation attached. For example, to find out which URIs I would want to use to count `downloads` for a work with a `base_url` of _https://metrics-api.operas-eu.org/events_ and a `work_uri` of _'info:doi:10.5334/bay'_ (both provided in the `metrics_config.settings` object), visiting the following URL https://metrics-api.operas-eu.org/events/?filter=work_uri:info:doi:10.5334/bbc&aggregation=measure_uri will provide a list of all possible `measure_uri` fields. In the case above, three objects are labelled as `type: 'downloads'` and so any of their measure URIs can be used within the array above.
+
 ## Supported Languages
 
 The following languages are currently supported:
