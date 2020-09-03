@@ -1,13 +1,13 @@
 module.exports = {
   entry: './src/index.jsx',
   output: {
-    filename: 'widget.js',
+    filename: 'widget.js'
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './dist'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
@@ -15,13 +15,13 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-    ],
-  },
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
+  }
 };
