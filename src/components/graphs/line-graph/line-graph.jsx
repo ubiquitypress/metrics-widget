@@ -48,7 +48,10 @@ const LineGraph = ({ seriesData = [], xAxisCategories = [] }) => {
       categories: xAxisCategories
     },
     yaxis: {
-      tickAmount: 1
+      tickAmount: 1,
+      labels: {
+        formatter: value => Math.round(value) // prevents numbers appearing with decimals (6.0, 7.0, ..)
+      }
     }
   };
 
