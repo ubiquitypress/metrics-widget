@@ -22,7 +22,7 @@ test('renders tab when user clicks on navigation', async () => {
   await act(async () => getByTestId('navigation'));
   expect(queryByRole('tab')).not.toBeInTheDocument();
 
-  const downloadsBtn = getByRole('button', { name: '123 Downloads' });
+  const downloadsBtn = getByRole('button', { name: '123 tabs.downloads' });
   userEvent.click(downloadsBtn);
   await act(async () => getByTestId('tab'));
 });
@@ -32,7 +32,7 @@ test('clicking on the same navigation button twice will close the tab', async ()
   const { getByTestId, getByRole, queryByRole } = render();
   await act(async () => getByTestId('loading'));
   await act(async () => getByTestId('navigation'));
-  const downloadsBtn = getByRole('button', { name: '123 Downloads' });
+  const downloadsBtn = getByRole('button', { name: '123 tabs.downloads' });
   userEvent.click(downloadsBtn);
   await act(async () => getByTestId('tab'));
 
@@ -45,7 +45,7 @@ test('user cannot change tabs whilst data is loading', async () => {
   const { getByTestId, getByRole } = render();
   await act(async () => getByTestId('loading'));
   await act(async () => getByTestId('navigation'));
-  const downloadsBtn = getByRole('button', { name: '123 Downloads' });
+  const downloadsBtn = getByRole('button', { name: '123 tabs.downloads' });
 
   userEvent.click(downloadsBtn);
   mockFetchSuccess();

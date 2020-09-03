@@ -9,7 +9,7 @@ global.metrics_config = {
   settings: {
     base_url: 'https://metrics-api.operas-eu.org/events',
     work_uri: 'info:doi:10.5334/bay',
-    language: 'en',
+    language: 'it',
     localise_country_codes: false
   },
   tabs: {

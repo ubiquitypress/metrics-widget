@@ -115,7 +115,7 @@ test('onItemClick callback works', async () => {
 
   expect(onItemClick).toHaveBeenCalledTimes(0);
 
-  const tweetsBtn = getByRole('button', { name: '5 Tweets' });
+  const tweetsBtn = getByRole('button', { name: '5 tabs.tweets' });
   userEvent.click(tweetsBtn);
 
   expect(onItemClick).toHaveBeenCalledTimes(1);

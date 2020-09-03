@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import fetchAllUrls from '../../../utils/fetch-all-urls/fetch-all-urls';
 import flattenArray from '../../../utils/flatten-array/flatten-array';
 import PropTypes from 'prop-types';
@@ -23,7 +24,7 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
       // Make a key/value dictionary for each date
       const dates = {};
       data.forEach(item => {
-        const date = item.timestamp.split('T')[0]; // TODO: should we use Date() functions here instead?
+        const date = item.timestamp;
         dates[date] = dates[date] ? dates[date] + item.value : item.value;
       });
 
@@ -54,7 +55,7 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
           index === Math.floor(sorted.length / 2) ||
           index === sorted.length - 1
         )
-          xAxis.push(item.key);
+          xAxis.push(moment(item.key).format('MMM YYYY'));
         else xAxis.push('');
       });
 

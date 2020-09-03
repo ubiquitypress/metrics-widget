@@ -1,9 +1,10 @@
 import en from '../en.json';
+import getWidgetLanguage from '../../utils/get-widget-language/get-widget-language';
 import PropTypes from 'prop-types';
 
 const getString = (path, interpolations, languageOverride) => {
   // Choose the language
-  const language = languageOverride || metrics_config.settings.language || 'en';
+  const language = languageOverride || getWidgetLanguage();
 
   // Make the dictionary depending on the chosen language
   // This should be updated every time a new language is added.
