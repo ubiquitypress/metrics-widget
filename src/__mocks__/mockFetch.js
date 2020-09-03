@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 export const mockFetchSuccess = response => {
   global.fetch = jest.fn().mockImplementation(() =>
     Promise.resolve({
