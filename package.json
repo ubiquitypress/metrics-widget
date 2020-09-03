@@ -8,7 +8,8 @@
     "build": "webpack --mode production",
     "lint": "eslint --ignore-path .eslintignore . --ext .js,.ts,.tsx",
     "prettier": "prettier --ignore-path .prettierignore \"**/*.+(js|json|ts|tsx)\"",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "",
   "license": "ISC",
