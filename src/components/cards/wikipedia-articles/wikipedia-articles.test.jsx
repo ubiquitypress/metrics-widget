@@ -30,7 +30,7 @@ const render = ({
 };
 
 test('renders `wikipedia-articles` on success', async () => {
-  mockFetchSuccess({});
+  mockFetchSuccess({ event_uri: 'abc' });
   const { getByTestId } = render();
   await waitFor(() => {
     getByTestId('wikipedia-articles');
@@ -68,7 +68,7 @@ test('renders data on success', async () => {
 });
 
 test('does not render if `hidden`', async () => {
-  mockFetchSuccess({});
+  mockFetchSuccess({ event_uri: 'abc' });
   const { queryByTestId } = render({ hidden: true });
   await waitFor(() => {
     expect(queryByTestId('wikipedia-articles')).not.toBeInTheDocument();

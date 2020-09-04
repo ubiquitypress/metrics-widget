@@ -44,8 +44,6 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
         return 0;
       });
 
-      console.log(sorted);
-
       // Do we have data?
       if (sorted.length === 0) {
         return onReady();
