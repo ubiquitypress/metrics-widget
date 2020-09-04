@@ -6,6 +6,10 @@
   > li {
     flex-grow: 1;
 
+    &:empty {
+      display: none;
+    }
+
     &:not(:last-child) {
       margin-right: 2em;
     }

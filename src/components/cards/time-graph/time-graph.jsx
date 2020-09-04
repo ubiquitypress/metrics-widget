@@ -21,6 +21,7 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
     );
 
     // Fetch all URLs
+    // eslint-disable-next-line consistent-return
     fetchAllUrls(urls, res => {
       const data = flattenArray(res);
 
@@ -43,6 +44,13 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
         return 0;
       });
 
+      console.log(sorted);
+
+      // Do we have data?
+      if (sorted.length === 0) {
+        return onReady();
+      }
+
       // Go through each item to make it cumulative
       sorted.forEach((item, index) => {
         if (index > 0) {
@@ -50,8 +58,16 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
         }
       });
 
+      // Add a 0 to the front
+      if (sorted.length > 0)
+        sorted.unshift({
+          key: moment(sorted[0].key).subtract(1, 'day').toISOString(),
+          value: 0
+        });
+
       // Determine the xAxis categories
       const xAxis = [];
+
       sorted.forEach((item, index) => {
         if (
           index === 0 ||
