@@ -59,7 +59,7 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
       });
 
       // Add a 0 to the front
-      if (sorted.length > 0)
+      if (sorted.length === 1)
         sorted.unshift({
           key: moment(sorted[0].key).subtract(1, 'day').toISOString(),
           value: 0
