@@ -9,5 +9,6 @@ run-tests:
     - apk add npm
     - npm ci
     - npm run test
+    - npm run build
   only:
     - tags
