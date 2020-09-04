@@ -17,6 +17,13 @@
         margin-right: 0.5em;
       }
 
+      &:first-child {
+        margin-left: auto;
+      }
+      &:last-child {
+        margin-right: auto;
+      }
+
       button {
         border: 0.1em solid transparent;
         background: transparent;
