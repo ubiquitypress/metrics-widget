@@ -142,6 +142,7 @@ The following graphs are supported:
 | time_graph         | {metric} Over Time  | `timestamp`, `value`   | a line graph which shows the total metric values over time                                                                                            | 0.0.1+  |
 | wikipedia_articles | Wikipedia Articles  | `event_uri`            | a list of wikipedia articles where this item is referenced                                                                                            | 0.0.1+  |
 | world_map          | {metric} By Country | `country_uri`, `value` | a heatmap of the world, with countries having the most metric values being warmest the `country_table` graph represents the same data, but as a table | 0.0.1+  |
+| tweets             | Tweets              | `event_uri`            | a list of embedded Twitter tweets as iframes                                                                                                          | 0.0.6+  |
 
 ## Developer Guide
 
