@@ -5,10 +5,11 @@ import WorldMap from '../cards/world-map/world-map';
 import TimeGraph from '../cards/time-graph/time-graph';
 import CountryTable from '../cards/country-table/country-table';
 import WikipediaArticles from '../cards/wikipedia-articles/wikipedia-articles';
-import styles from './tab.module.scss';
+import Tweets from '../cards/tweets/tweets';
+import Wordpress from '../cards/wordpress/wordpress';
 import getString from '../../localisation/get-string/get-string';
 import getMetricsConfig from '../../utils/get-metrics-config/get-metrics-config';
-import Tweets from '../cards/tweets/tweets';
+import styles from './tab.module.scss';
 
 const Tab = ({ activeType, onLoadingChange }) => {
   const [graphs, setGraphs] = useState({});
@@ -125,6 +126,16 @@ const Tab = ({ activeType, onLoadingChange }) => {
                 return (
                   <li key={name}>
                     <Tweets
+                      uris={uris}
+                      onReady={onChildLoad}
+                      hidden={loading.isLoading}
+                    />
+                  </li>
+                );
+              case 'wordpress':
+                return (
+                  <li key={name}>
+                    <Wordpress
                       uris={uris}
                       onReady={onChildLoad}
                       hidden={loading.isLoading}

@@ -11,10 +11,23 @@ This documentation covers both the general usage and installation of the widget,
 - [Supported Languages](#supported-languages)
 - [Supported Events](#supported-events)
 - [Supported Graphs](#supported-graphs)
+- [Developer Guide](#developer-guide)
 
 ## Getting Started
 
-To embed the widget onto a page, you will need to add three core components. The HTML block below shows the minimum implementation detail.
+To embed the widget onto a page, you will need to add three core components.
+
+### Files
+
+The widget is compiled into a single `widget.js` file, and is stored on a CDN. This file will need to be imported in order for the widget to display.
+
+The current version of the widget is hosted at https://storage.googleapis.com/operas/metrics-widget-0.0.13/widget.js and is 180 KB in size.
+
+Note that certain graphs, such as the world map or line charts, take up a large amount of space due to the complexity of the SVGs used. In order to compromise for this, these graphs are excluded from the main `widget.js` build file, but additional scripts will be loaded into the DOM automatically if the widget detects a missing script.
+
+### Embedding
+
+The HTML block below shows the minimum implementation detail.
 
 ```html
 <html>
@@ -28,7 +41,7 @@ To embed the widget onto a page, you will need to add three core components. The
     </script>
 
     <!-- import the widget itself -->
-    <script src="dist/widget.js"></script>
+    <script src="path/to/widget.js"></script>
   </body>
 </html>
 ```
@@ -140,9 +153,10 @@ The following graphs are supported:
 | ------------------ | ------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | country_table      | {metric} By Country | `country_uri`, `value` | a table containing a list of countries and their metric values, descending the `world_map` graph represents the same data, but as a map of the world  | 0.0.1+  |
 | time_graph         | {metric} Over Time  | `timestamp`, `value`   | a line graph which shows the total metric values over time                                                                                            | 0.0.1+  |
-| wikipedia_articles | Wikipedia Articles  | `event_uri`            | a list of wikipedia articles where this item is referenced                                                                                            | 0.0.1+  |
+| wikipedia_articles | Wikipedia Articles  | `event_uri`            | a list of Wikipedia articles where this item is referenced                                                                                            | 0.0.1+  |
 | world_map          | {metric} By Country | `country_uri`, `value` | a heatmap of the world, with countries having the most metric values being warmest the `country_table` graph represents the same data, but as a table | 0.0.1+  |
 | tweets             | Tweets              | `event_uri`            | a list of embedded Twitter tweets as iframes                                                                                                          | 0.0.6+  |
+| wordpress          | Wordpress           | `event_uri`            | a list of Wordpress posts where this item is reference                                                                                                | 0.0.14+ |
 
 ## Developer Guide
 

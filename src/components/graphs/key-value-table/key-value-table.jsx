@@ -1,10 +1,16 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import styles from './key-value-table.module.scss';
 
-const KeyValueTable = ({ data }) => {
+const KeyValueTable = ({ data, options = {} }) => {
   return (
-    <ul className={styles.table} data-testid='key-value-table'>
+    <ul
+      className={classnames(styles.table, {
+        [styles.capitalize]: options.capitalize
+      })}
+      data-testid='key-value-table'
+    >
       {data.map(item => (
         <li key={item.key}>
           <div className={styles.key}>
@@ -30,7 +36,13 @@ KeyValueTable.propTypes = {
       value: PropTypes.string,
       link: PropTypes.string
     })
-  ).isRequired
+  ).isRequired,
+  options: PropTypes.shape({
+    capitalize: PropTypes.bool
+  })
+};
+KeyValueTable.defaultProps = {
+  options: {}
 };
 
 export default KeyValueTable;

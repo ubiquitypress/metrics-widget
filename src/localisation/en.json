@@ -21,7 +21,8 @@
     "over_time": "{{name}} over time",
     "by_country": "{{name}} by country",
     "cited_in": "Cited in",
-    "wikipedia_articles": "Wikipedia articles"
+    "wikipedia_articles": "Wikipedia articles",
+    "wordpress": "Wordpress"
   },
   "other": {
     "view_more": "View more",

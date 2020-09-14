@@ -7,7 +7,7 @@ import getString from '../../../localisation/get-string/get-string';
 import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const WikipediaArticles = ({ uris, onReady, hidden }) => {
+const Wordpress = ({ uris, onReady, hidden }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -34,10 +34,9 @@ const WikipediaArticles = ({ uris, onReady, hidden }) => {
 
       // Convert into a key/value object for the table
       const keyValue = filtered.map(uri => {
-        // Replace the key to be a string
-        let key = uri.replace(/.*\/wiki\//g, '');
-        key = key.replace(/_/g, ' ');
-        key = decodeURIComponent(key);
+        let key = uri.replace(/\/$/, ''); // Remove trailing slash, if present
+        key = key.substr(key.lastIndexOf('/') + 1); // Get all text after the last slash
+        key = key.replace(/-/g, ' ');
 
         // Return an object for the KeyValueTable
         return { key, keyLink: uri, value: null };
@@ -66,24 +65,24 @@ const WikipediaArticles = ({ uris, onReady, hidden }) => {
     if (tableData.length === 0) return null;
     return (
       <CardWrapper
-        label={getString('labels.wikipedia_articles')}
-        data-testid='wikipedia-articles'
+        label={getString('labels.wordpress')}
+        data-testid='wordpress'
       >
-        <KeyValueTable data={tableData} />
+        <KeyValueTable data={tableData} options={{ capitalize: true }} />
       </CardWrapper>
     );
   }
   return null;
 };
 
-WikipediaArticles.propTypes = {
+Wordpress.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
   hidden: PropTypes.bool
 };
-WikipediaArticles.defaultProps = {
+Wordpress.defaultProps = {
   hidden: false,
   onReady: null
 };
 
-export default WikipediaArticles;
+export default Wordpress;
