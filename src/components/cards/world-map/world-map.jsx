@@ -8,7 +8,7 @@ import CardWrapper from '../../card-wrapper/card-wrapper';
 import getString from '../../../localisation/get-string/get-string';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const WorldMap = ({ uris, activeType, onReady, hidden, width }) => {
+const WorldMap = ({ uris, activeType, onReady, hidden, width, hideLabel }) => {
   const [codes, setCodes] = useState(null);
 
   const fetchURIs = async () => {
@@ -60,6 +60,7 @@ const WorldMap = ({ uris, activeType, onReady, hidden, width }) => {
       <CardWrapper
         label={getString('labels.by_country', { name: activeType })}
         width={width}
+        hideLabel={hideLabel}
         data-testid='world-map'
       >
         <MapGraph mapData={codes} />
@@ -73,12 +74,14 @@ WorldMap.propTypes = {
   activeType: PropTypes.string.isRequired,
   hidden: PropTypes.bool,
   onReady: PropTypes.func,
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hideLabel: PropTypes.bool
 };
 WorldMap.defaultProps = {
   hidden: false,
   onReady: null,
-  width: null
+  width: null,
+  hideLabel: null
 };
 
 export default WorldMap;

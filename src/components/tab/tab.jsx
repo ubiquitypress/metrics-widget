@@ -70,7 +70,7 @@ const Tab = ({ activeType, onLoadingChange }) => {
         {loading.isLoading && <Loading message={getString('loading.graphs')} />}
         <ul className={styles.tab}>
           {Object.keys(graphs).map(name => {
-            const { width, uris } = graphs[name];
+            const { width, uris, hideLabel } = graphs[name];
 
             // Only render a placeholder div if we're testing, since we'll have
             // many different API calls made and it'll be impossible (and thankfully
@@ -89,6 +89,7 @@ const Tab = ({ activeType, onLoadingChange }) => {
                     onReady={onChildLoad}
                     hidden={loading.isLoading}
                     width={width}
+                    hideLabel={hideLabel}
                   />
                 );
               case 'time_graph':

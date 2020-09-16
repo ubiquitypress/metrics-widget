@@ -7,7 +7,7 @@ import getString from '../../../localisation/get-string/get-string';
 import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const WikipediaArticles = ({ uris, onReady, hidden, width }) => {
+const WikipediaArticles = ({ uris, onReady, hidden, width, hideLabel }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -70,6 +70,7 @@ const WikipediaArticles = ({ uris, onReady, hidden, width }) => {
       <CardWrapper
         label={getString('labels.wikipedia_articles')}
         width={width}
+        hideLabel={hideLabel}
         data-testid='wikipedia-articles'
       >
         <KeyValueTable data={tableData} />
@@ -82,12 +83,14 @@ WikipediaArticles.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
   hidden: PropTypes.bool,
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hideLabel: PropTypes.bool
 };
 WikipediaArticles.defaultProps = {
   hidden: false,
   onReady: null,
-  width: null
+  width: null,
+  hideLabel: null
 };
 
 export default WikipediaArticles;

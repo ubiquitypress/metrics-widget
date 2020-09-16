@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import convertWidth from '../../utils/convert-width/convert-width';
 import styles from './card-wrapper.module.scss';
 import getMetricsConfig from '../../utils/get-metrics-config/get-metrics-config';
@@ -7,8 +8,9 @@ import getMetricsConfig from '../../utils/get-metrics-config/get-metrics-config'
 const CardWrapper = ({
   label,
   width = 50,
-  children,
-  'data-testid': testId
+  hideLabel,
+  'data-testid': testId,
+  children
 }) => {
   const { one_per_row_width } = getMetricsConfig().settings;
   const [windowIsSmall, setWindowIsSmall] = useState(false);
@@ -36,7 +38,14 @@ const CardWrapper = ({
       style={{ width: convertWidth(windowIsSmall ? 100 : width) }}
       data-testid={testId}
     >
-      {label && <h2>{label}</h2>}
+      {label && (
+        <h2
+          aria-hidden={hideLabel}
+          className={classnames({ [styles.hidden]: hideLabel })}
+        >
+          {label}
+        </h2>
+      )}
       {children}
     </li>
   );
@@ -47,11 +56,13 @@ export default CardWrapper;
 CardWrapper.propTypes = {
   label: PropTypes.string,
   width: PropTypes.number,
-  children: PropTypes.node.isRequired,
-  'data-testid': PropTypes.string
+  hideLabel: PropTypes.bool,
+  'data-testid': PropTypes.string,
+  children: PropTypes.node.isRequired
 };
 CardWrapper.defaultProps = {
   label: null,
   width: 50,
+  hideLabel: false,
   'data-testid': null
 };

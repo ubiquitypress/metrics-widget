@@ -11,5 +11,11 @@
     line-height: 20px;
     margin-bottom: 1em;
     text-transform: capitalize;
+
+    &.hidden {
+      opacity: 0;
+      cursor: default;
+      pointer-events: none;
+    }
   }
 }

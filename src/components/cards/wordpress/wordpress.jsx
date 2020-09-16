@@ -7,7 +7,7 @@ import getString from '../../../localisation/get-string/get-string';
 import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const Wordpress = ({ uris, onReady, hidden, width }) => {
+const Wordpress = ({ uris, onReady, hidden, width, hideLabel }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -69,6 +69,7 @@ const Wordpress = ({ uris, onReady, hidden, width }) => {
       <CardWrapper
         label={getString('labels.wordpress')}
         width={width}
+        hideLabel={hideLabel}
         data-testid='wordpress'
       >
         <KeyValueTable data={tableData} options={{ capitalize: true }} />
@@ -81,12 +82,14 @@ Wordpress.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
   hidden: PropTypes.bool,
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hideLabel: PropTypes.bool
 };
 Wordpress.defaultProps = {
   hidden: false,
   onReady: null,
-  width: null
+  width: null,
+  hideLabel: null
 };
 
 export default Wordpress;
