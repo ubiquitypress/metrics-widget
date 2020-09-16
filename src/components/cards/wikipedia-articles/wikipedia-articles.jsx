@@ -7,7 +7,7 @@ import getString from '../../../localisation/get-string/get-string';
 import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const WikipediaArticles = ({ uris, onReady, hidden }) => {
+const WikipediaArticles = ({ uris, onReady, hidden, width }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -65,28 +65,29 @@ const WikipediaArticles = ({ uris, onReady, hidden }) => {
   }, [uris]);
 
   if (hidden) return null;
-  if (tableData) {
-    if (tableData.length === 0) return null;
+  if (tableData)
     return (
       <CardWrapper
         label={getString('labels.wikipedia_articles')}
+        width={width}
         data-testid='wikipedia-articles'
       >
         <KeyValueTable data={tableData} />
       </CardWrapper>
     );
-  }
   return null;
 };
 
 WikipediaArticles.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 WikipediaArticles.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default WikipediaArticles;

@@ -70,7 +70,7 @@ const Tab = ({ activeType, onLoadingChange }) => {
         {loading.isLoading && <Loading message={getString('loading.graphs')} />}
         <ul className={styles.tab}>
           {Object.keys(graphs).map(name => {
-            const uris = graphs[name];
+            const { width, uris } = graphs[name];
 
             // Only render a placeholder div if we're testing, since we'll have
             // many different API calls made and it'll be impossible (and thankfully
@@ -82,76 +82,76 @@ const Tab = ({ activeType, onLoadingChange }) => {
             switch (name) {
               case 'world_map':
                 return (
-                  <li key={name}>
-                    <WorldMap
-                      uris={uris}
-                      activeType={activeType}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <WorldMap
+                    key={name}
+                    uris={uris}
+                    activeType={activeType}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'time_graph':
                 return (
-                  <li key={name}>
-                    <TimeGraph
-                      uris={uris}
-                      activeType={activeType}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <TimeGraph
+                    key={name}
+                    uris={uris}
+                    activeType={activeType}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'country_table':
                 return (
-                  <li key={name}>
-                    <CountryTable
-                      uris={uris}
-                      activeType={activeType}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <CountryTable
+                    key={name}
+                    uris={uris}
+                    activeType={activeType}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'wikipedia_articles':
                 return (
-                  <li key={name}>
-                    <WikipediaArticles
-                      uris={uris}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <WikipediaArticles
+                    key={name}
+                    uris={uris}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'tweets':
                 return (
-                  <li key={name}>
-                    <Tweets
-                      uris={uris}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <Tweets
+                    key={name}
+                    uris={uris}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'wordpress':
                 return (
-                  <li key={name}>
-                    <Wordpress
-                      uris={uris}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <Wordpress
+                    key={name}
+                    uris={uris}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               case 'hypothesis':
                 return (
-                  <li key={name}>
-                    <Hypothesis
-                      uris={uris}
-                      onReady={onChildLoad}
-                      hidden={loading.isLoading}
-                    />
-                  </li>
+                  <Hypothesis
+                    key={name}
+                    uris={uris}
+                    onReady={onChildLoad}
+                    hidden={loading.isLoading}
+                    width={width}
+                  />
                 );
               default:
                 return null;

@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import getString from '../../../localisation/get-string/get-string';
 import styles from './key-value-table.module.scss';
 
 const KeyValueTable = ({ data, options = {} }) => {
@@ -11,6 +12,12 @@ const KeyValueTable = ({ data, options = {} }) => {
       })}
       data-testid='key-value-table'
     >
+      {/* Show a message if no data is found */}
+      {data.length === 0 && (
+        <li className={styles.empty}>{getString('other.no_data')}</li>
+      )}
+
+      {/* Otherwise, loop through each element */}
       {data.map(item => (
         <li key={item.key}>
           <div className={styles.key}>

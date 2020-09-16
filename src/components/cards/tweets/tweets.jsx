@@ -7,7 +7,7 @@ import CardWrapper from '../../card-wrapper/card-wrapper';
 import getString from '../../../localisation/get-string/get-string';
 import Twitter from '../../graphs/twitter/twitter';
 
-const Tweets = ({ uris, onReady, hidden }) => {
+const Tweets = ({ uris, onReady, hidden, width }) => {
   const [tweetURIs, setTweetURIs] = useState(null);
 
   const fetchURIs = async () => {
@@ -50,7 +50,11 @@ const Tweets = ({ uris, onReady, hidden }) => {
   if (hidden) return null;
   if (tweetURIs)
     return (
-      <CardWrapper label={getString('tabs.tweets')} data-testid='tweets'>
+      <CardWrapper
+        label={getString('tabs.tweets')}
+        width={width}
+        data-testid='tweets'
+      >
         <Twitter uris={tweetURIs} />
       </CardWrapper>
     );
@@ -60,11 +64,13 @@ const Tweets = ({ uris, onReady, hidden }) => {
 Tweets.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 Tweets.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default Tweets;

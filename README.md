@@ -21,7 +21,7 @@ To embed the widget onto a page, you will need to add three core components.
 
 The widget is compiled into a single `widget.js` file, and is stored on a CDN. This file will need to be imported in order for the widget to display.
 
-The current version of the widget is hosted at https://storage.googleapis.com/operas/metrics-widget-0.0.16/widget.js and is 184 KB in size.
+The current version of the widget is hosted at https://storage.googleapis.com/operas/metrics-widget-0.0.17/widget.js and is 193 KB in size.
 
 Note that certain graphs, such as the world map or line charts, take up a large amount of space due to the complexity of the SVGs used. In order to compromise for this, these graphs are excluded from the main `widget.js` build file, but additional scripts will be loaded into the DOM automatically if the widget detects a missing script.
 
@@ -179,7 +179,8 @@ The following graphs are supported:
 | wikipedia_articles | Wikipedia Articles  | `event_uri`            | a list of Wikipedia articles where this item is referenced                                                                                            | 0.0.1+  |
 | world_map          | {metric} By Country | `country_uri`, `value` | a heatmap of the world, with countries having the most metric values being warmest the `country_table` graph represents the same data, but as a table | 0.0.1+  |
 | tweets             | Tweets              | `event_uri`            | a list of embedded Twitter tweets as iframes                                                                                                          | 0.0.6+  |
-| wordpress          | Wordpress           | `event_uri`            | a list of Wordpress posts where this item is reference                                                                                                | 0.0.14+ |
+| wordpress          | Wordpress           | `event_uri`            | a list of Wordpress posts where this item is referenced                                                                                               | 0.0.14+ |
+| hypothesis         | Hypothesis          | `event_uri`            | a list of Hypothesis titles where this item is referenced                                                                                             | 0.0.17+ |
 
 ## Developer Guide
 

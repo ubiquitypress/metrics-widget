@@ -8,7 +8,7 @@ import CardWrapper from '../../card-wrapper/card-wrapper';
 import getString from '../../../localisation/get-string/get-string';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const CountryTable = ({ uris, activeType, onReady, hidden }) => {
+const CountryTable = ({ uris, activeType, onReady, hidden, width }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -69,6 +69,7 @@ const CountryTable = ({ uris, activeType, onReady, hidden }) => {
     return (
       <CardWrapper
         label={getString('labels.by_country', { name: activeType })}
+        width={width}
         data-testid='country-table'
       >
         <KeyValueTable data={tableData} />
@@ -81,11 +82,13 @@ CountryTable.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   activeType: PropTypes.string.isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 CountryTable.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default CountryTable;

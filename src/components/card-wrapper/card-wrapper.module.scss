@@ -1,9 +1,15 @@
 .cardWrapper {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 1.5em;
+  box-sizing: border-box;
+  margin-bottom: 1em !important;
+
   h2 {
     font-weight: 500;
     font-size: 1.4em;
     line-height: 20px;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
     text-transform: capitalize;
   }
 }

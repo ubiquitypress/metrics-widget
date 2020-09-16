@@ -7,7 +7,7 @@ import getString from '../../../localisation/get-string/get-string';
 import KeyValueTable from '../../graphs/key-value-table/key-value-table';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 
-const Wordpress = ({ uris, onReady, hidden }) => {
+const Wordpress = ({ uris, onReady, hidden, width }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -64,28 +64,29 @@ const Wordpress = ({ uris, onReady, hidden }) => {
   }, [uris]);
 
   if (hidden) return null;
-  if (tableData) {
-    if (tableData.length === 0) return null;
+  if (tableData)
     return (
       <CardWrapper
         label={getString('labels.wordpress')}
+        width={width}
         data-testid='wordpress'
       >
         <KeyValueTable data={tableData} options={{ capitalize: true }} />
       </CardWrapper>
     );
-  }
   return null;
 };
 
 Wordpress.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 Wordpress.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default Wordpress;

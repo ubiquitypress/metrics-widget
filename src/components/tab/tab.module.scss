@@ -1,20 +1,7 @@
 .tab {
   margin-top: 1em !important;
-  display: flex;
-  overflow-x: auto;
-
-  > li {
-    flex-grow: 1;
-    width: 100%;
-
-    &:empty {
-      display: none;
-    }
-
-    &:not(:last-child) {
-      margin-right: 2em;
-    }
-  }
+  overflow: hidden;
+  padding: 0;
 
   .noData {
     text-align: center;

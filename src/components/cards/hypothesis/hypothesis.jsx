@@ -15,7 +15,7 @@ import trimString from '../../../utils/trim-string/trim-string';
 import styles from './hypothesis.module.scss';
 import getVersion from '../../../utils/get-version/get-version';
 
-const Hypothesis = ({ uris, onReady, hidden }) => {
+const Hypothesis = ({ uris, onReady, hidden, width }) => {
   const [tableData, setTableData] = useState(null);
 
   const fetchURIs = async () => {
@@ -76,6 +76,7 @@ const Hypothesis = ({ uris, onReady, hidden }) => {
     return (
       <CardWrapper
         label={getString('labels.hypothesis')}
+        width={width}
         data-testid='hypothesis'
       >
         <Table>
@@ -121,11 +122,13 @@ const Hypothesis = ({ uris, onReady, hidden }) => {
 Hypothesis.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 Hypothesis.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default Hypothesis;

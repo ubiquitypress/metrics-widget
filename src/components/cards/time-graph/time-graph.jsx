@@ -8,7 +8,7 @@ import getString from '../../../localisation/get-string/get-string';
 import getMetricsConfig from '../../../utils/get-metrics-config/get-metrics-config';
 import formatTimestamp from '../../../utils/format-timestamp/format-timestamp';
 
-const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
+const TimeGraph = ({ uris, activeType, onReady, hidden, width }) => {
   const [graphData, setGraphData] = useState(null);
 
   const fetchURIs = async () => {
@@ -103,6 +103,7 @@ const TimeGraph = ({ uris, activeType, onReady, hidden }) => {
     return (
       <CardWrapper
         label={getString('labels.over_time', { name: activeType })}
+        width={width}
         data-testid='time-graph'
       >
         <LineGraph
@@ -119,11 +120,13 @@ TimeGraph.propTypes = {
   uris: PropTypes.arrayOf(PropTypes.string).isRequired,
   activeType: PropTypes.string.isRequired,
   onReady: PropTypes.func,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 TimeGraph.defaultProps = {
   hidden: false,
-  onReady: null
+  onReady: null,
+  width: null
 };
 
 export default TimeGraph;

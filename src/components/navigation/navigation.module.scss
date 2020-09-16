@@ -9,6 +9,7 @@
   ul {
     display: flex;
     overflow-y: auto;
+    padding: 0;
 
     li {
       display: inline-block;
@@ -33,6 +34,7 @@
         text-align: center;
         font-size: inherit;
         transition: background-color 0.2s;
+        height: 100%;
 
         &.active,
         &:hover {
