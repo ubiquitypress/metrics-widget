@@ -7,6 +7,8 @@ import getMetricsConfig from '../../utils/get-metrics-config/get-metrics-config'
 
 const Navigation = ({ activeType, onItemClick }) => {
   const [navItems, setNavItems] = useState({});
+  // TODO: Can we replace this with fetchAllURLs and remove
+  // this hook from the widget completely?
   const { loading, data } = useFetch(
     `${getMetricsConfig().settings.base_url}?filter=work_uri:${
       getMetricsConfig().settings.work_uri
