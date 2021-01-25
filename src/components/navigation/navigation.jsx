@@ -5,7 +5,7 @@ import getString from '../../localisation/get-string/get-string';
 import useFetch from '../../hooks/use-fetch';
 import getMetricsConfig from '../../utils/get-metrics-config/get-metrics-config';
 
-const Navigation = ({ activeType, onItemClick }) => {
+const Navigation = ({ activeType, onItemClick, onNavItemsLoad }) => {
   const [navItems, setNavItems] = useState({});
   // TODO: Can we replace this with fetchAllURLs and remove
   // this hook from the widget completely?
@@ -49,6 +49,9 @@ const Navigation = ({ activeType, onItemClick }) => {
             }
           });
         });
+
+        // Call the `onNavItemsLoad` function with the keys
+        if (onNavItemsLoad) onNavItemsLoad(Object.keys(items));
 
         // Update the state
         setNavItems(items);
@@ -94,10 +97,12 @@ const Navigation = ({ activeType, onItemClick }) => {
 
 Navigation.propTypes = {
   activeType: PropTypes.string,
-  onItemClick: PropTypes.func.isRequired
+  onItemClick: PropTypes.func.isRequired,
+  onNavItemsLoad: PropTypes.func
 };
 Navigation.defaultProps = {
-  activeType: null
+  activeType: null,
+  onNavItemsLoad: null
 };
 
 export default Navigation;

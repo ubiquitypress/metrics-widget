@@ -91,6 +91,7 @@ const metrics_config = {
     base_url: 'https://metrics-api.operas-eu.org/events',
     work_uri: 'info:doi:10.5334/bbc',
     language: 'en',
+    default_tabs: ['annotations', 'citations', 'downloads'],
     localise_country_codes: true,
     one_per_row_width: 450
   }
@@ -99,13 +100,14 @@ const metrics_config = {
 
 Above is an example setup of the _settings_ object within the _metrics_config_ object. Not all fields here are required, so please do refer to the table below for additional information.
 
-| field                  | type    | required | description                                                                                                                                                                             |
-| ---------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| base_url               | string  | yes      | the base URL of where the metrics are hosted<br> example: https://metrics-api.operas-eu.org/events                                                                                      |
-| work_uri               | string  | yes      | the URI scheme and URI to use<br> example: `info:doi:10.5334/bay`                                                                                                                       |
-| language               | string  | no       | the ISO 639-1 language code to display text in<br> if your [language is not supported](#supported-languages), please consider contributing<br> the default value for this field is `en` |
-| localise_country_codes | boolean | no       | if `true`, graphs that display country codes will display their name instead<br> language names will be localised to the provided `language`<br> example: `fr` => `French`              |
-| one_per_row_width      | number  | no       | if provided, all graphs will occupy their own row if the window width is less than or equal to this value                                                                               |
+| field                  | type    | required | description                                                                                                                                                                                                                    |
+| ---------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| base_url               | string  | yes      | the base URL of where the metrics are hosted.<br /> example: https://metrics-api.operas-eu.org/events                                                                                                                          |
+| work_uri               | string  | yes      | the URI scheme and URI to use.<br /> example: `info:doi:10.5334/bay`                                                                                                                                                           |
+| language               | string  | no       | the ISO 639-1 language code to display text in.<br /> if your [language is not supported](#supported-languages), please consider contributing.<br /> the default value for this field is `en`                                  |
+| default_tabs           | array   | no       | an array of tab names (see [Supported Measures](#supported-measures)).<br /> when the widget loads, the first matching measure in the array that has data will automatically open.<br /> example: `['downloads', 'citations']` |
+| localise_country_codes | boolean | no       | if `true`, graphs that display country codes will display their name instead.<br /> language names will be localised to the provided `language`.<br /> example: `fr` => `French`                                               |
+| one_per_row_width      | number  | no       | if provided, all graphs will occupy their own row if the window width is less than or equal to this value.                                                                                                                     |
 
 In order to have the correct settings, only two of the above fields are required. The `base_url` field in most cases will be the same as the example provided, unless you are hosting your own metrics service.
 
