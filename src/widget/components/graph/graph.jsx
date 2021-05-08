@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphPropTypes } from '../../proptypes';
 import { useMetrics } from '../../contexts/metrics';
-import Loading from '../loading';
 import GraphWrapper from '../graph-wrapper';
 import { useTranslation } from '../../contexts/i18n';
 import methods from './methods';
 import { useConfig } from '../../contexts/config';
 import KeyValueTable from '../graphs/key-value-table';
+import Hypothesis from '../graphs/hypothesis';
 
 const Graph = ({ type, tab, options }) => {
   const [data, setData] = useState(null);
@@ -28,7 +28,7 @@ const Graph = ({ type, tab, options }) => {
       uris = uris.reduce((acc, curr) => [...acc, ...curr], []);
 
       // Manipulate the graph data by calling its helper method
-      if (methods[type]) uris = methods[type]({ t, uris, config });
+      if (methods[type]) uris = await methods[type]({ t, uris, config });
 
       // Set the data
       setData(uris);
@@ -37,7 +37,22 @@ const Graph = ({ type, tab, options }) => {
     getData();
   }, []);
 
-  if (!data) return <Loading />;
+  if (!data) return null;
+
+  // Determine the graph to render
+  let graph = null;
+  switch (type) {
+    case 'country_table':
+    case 'wikipedia_articles':
+    case 'wordpress':
+      graph = <KeyValueTable {...data} />;
+      break;
+    case 'hypothesis':
+      graph = <Hypothesis {...data} />;
+      break;
+    default:
+      graph = <p>not implemented</p>;
+  }
   return (
     <GraphWrapper
       width={options.width}
@@ -46,9 +61,7 @@ const Graph = ({ type, tab, options }) => {
       })}
       hideLabel={options.hide_label}
     >
-      {(type === 'country_table' ||
-        type === 'wikipedia_articles' ||
-        type === 'wordpress') && <KeyValueTable {...data} />}
+      {graph}
     </GraphWrapper>
   );
 };
