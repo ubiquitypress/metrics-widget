@@ -19,7 +19,8 @@ export const configPropTypes = {
   tabs: PropTypes.objectOf(
     PropTypes.shape({
       nav_counts: PropTypes.arrayOf(PropTypes.string),
-      graphs: PropTypes.objectOf(PropTypes.shape(graphPropTypes))
+      graphs: PropTypes.objectOf(PropTypes.shape(graphPropTypes)),
+      operas_definition: PropTypes.string
     })
   )
 };
