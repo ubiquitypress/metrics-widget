@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphPropTypes } from '../../proptypes';
@@ -5,11 +6,15 @@ import { useMetrics } from '../../contexts/metrics';
 import Loading from '../loading';
 import GraphWrapper from '../graph-wrapper';
 import { useTranslation } from '../../contexts/i18n';
+import methods from './methods';
+import { useConfig } from '../../contexts/config';
+import KeyValueTable from '../graphs/key-value-table';
 
 const Graph = ({ type, tab, options }) => {
   const [data, setData] = useState(null);
   const { fetchMetric } = useMetrics();
   const { t } = useTranslation();
+  const config = useConfig();
 
   useEffect(() => {
     const getData = async () => {
@@ -22,8 +27,8 @@ const Graph = ({ type, tab, options }) => {
       );
       uris = uris.reduce((acc, curr) => [...acc, ...curr], []);
 
-      // Manipulate the graph data
-      // TODO
+      // Manipulate the graph data by calling its helper method
+      if (methods[type]) uris = methods[type]({ t, uris, config });
 
       // Set the data
       setData(uris);
@@ -41,7 +46,7 @@ const Graph = ({ type, tab, options }) => {
       })}
       hideLabel={options.hide_label}
     >
-      Graph here
+      {type === 'country_table' && <KeyValueTable {...data} />}
     </GraphWrapper>
   );
 };
