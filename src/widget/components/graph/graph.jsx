@@ -46,7 +46,9 @@ const Graph = ({ type, tab, options }) => {
       })}
       hideLabel={options.hide_label}
     >
-      {type === 'country_table' && <KeyValueTable {...data} />}
+      {(type === 'country_table' ||
+        type === 'wikipedia_articles' ||
+        type === 'wordpress') && <KeyValueTable {...data} />}
     </GraphWrapper>
   );
 };
