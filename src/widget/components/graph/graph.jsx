@@ -9,6 +9,7 @@ import methods from './methods';
 import { useConfig } from '../../contexts/config';
 import KeyValueTable from '../graphs/key-value-table';
 import Hypothesis from '../graphs/hypothesis';
+import LineGraph from '../graphs/line-graph';
 
 const Graph = ({ type, tab, options }) => {
   const [data, setData] = useState(null);
@@ -28,7 +29,7 @@ const Graph = ({ type, tab, options }) => {
       uris = uris.reduce((acc, curr) => [...acc, ...curr], []);
 
       // Manipulate the graph data by calling its helper method
-      if (methods[type]) uris = await methods[type]({ t, uris, config });
+      if (methods[type]) uris = await methods[type]({ t, uris, tab, config });
 
       // Set the data
       setData(uris);
@@ -42,6 +43,9 @@ const Graph = ({ type, tab, options }) => {
   // Determine the graph to render
   let graph = null;
   switch (type) {
+    case 'time_graph':
+      graph = <LineGraph {...data} />;
+      break;
     case 'country_table':
     case 'wikipedia_articles':
     case 'wordpress':
