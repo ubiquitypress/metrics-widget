@@ -42,7 +42,7 @@ const Panel = ({ name, active }) => {
         <>
           {!isLoaded && <Loading message={t('loading.graphs')} />}
 
-          <div style={{ opacity: isLoaded ? '1' : '0' }}>
+          <div className={isLoaded ? '' : 'hidden'}>
             {/* Render each graph for this panel */}
             {Object.entries(data.graphs).map(([type, options]) => (
               <Graph

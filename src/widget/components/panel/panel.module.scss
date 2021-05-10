@@ -1,5 +1,8 @@
 .panel {
-  &:global(.hidden) {
-    display: none;
+  &:global(.hidden),
+  :global(.hidden) {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
   }
 }
