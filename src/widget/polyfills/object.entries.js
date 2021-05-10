@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-plusplus */
 /* eslint-disable one-var */
 /* eslint-disable no-var */

@@ -27,7 +27,7 @@ const GraphWrapper = ({ width = 100, label, hideLabel, children }) => {
     >
       <h2
         className={`${styles['graph-wrapper-label']}${
-          hideLabel ? ' visually-hidden' : ''
+          hideLabel ? ' hidden' : ''
         }`}
       >
         {label}

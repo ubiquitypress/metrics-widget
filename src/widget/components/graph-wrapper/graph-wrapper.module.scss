@@ -10,4 +10,8 @@
   font-size: 1.2em;
   text-transform: capitalize;
   margin: 0 0 1em 0;
+
+  &:global(.hidden) {
+    opacity: 0;
+  }
 }
