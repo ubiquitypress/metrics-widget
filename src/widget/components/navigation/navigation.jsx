@@ -12,7 +12,7 @@ const Navigation = ({ tabs, active, setTab }) => {
       role='tablist'
       aria-label={t('general.title')}
     >
-      {Object.entries(tabs).map(([name, val]) => (
+      {tabs.map(({ name, count }) => (
         <button
           key={name}
           className={`${styles['navigation-button']}${
@@ -26,7 +26,7 @@ const Navigation = ({ tabs, active, setTab }) => {
           onClick={() => setTab(name)}
         >
           <div className={styles['navigation-count']}>
-            {val.toLocaleString(lang)}
+            {count.toLocaleString(lang)}
           </div>
           <div className={styles['navigation-name']}>{t(`tabs.${name}`)}</div>
         </button>
@@ -36,7 +36,13 @@ const Navigation = ({ tabs, active, setTab }) => {
 };
 
 Navigation.propTypes = {
-  tabs: PropTypes.objectOf(PropTypes.number).isRequired,
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      nav_counts: PropTypes.arrayOf(PropTypes.string),
+      count: PropTypes.number
+    })
+  ).isRequired,
   active: PropTypes.string,
   setTab: PropTypes.func.isRequired
 };

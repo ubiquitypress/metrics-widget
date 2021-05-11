@@ -43,25 +43,28 @@
         },
         tabs: {
           sessions: {
+            order: 1,
             nav_counts: ['*'],
             graphs: {
               time_graph: {
                 width: 100,
-                uris: ['https://metrics.operas-eu.org/up-ga/sessions/v1']
+                uris: ['https://metrics.operas-eu.org/up-logs/sessions/v1']
               },
               country_table: {
                 width: 30,
-                uris: ['https://metrics.operas-eu.org/up-ga/sessions/v1']
+                uris: ['https://metrics.operas-eu.org/up-logs/sessions/v1']
               },
               world_map: {
                 width: 70,
                 hide_label: true,
-                uris: ['https://metrics.operas-eu.org/up-ga/sessions/v1']
+                uris: ['https://metrics.operas-eu.org/up-logs/sessions/v1']
               }
             },
-            operas_definition: 'https://metrics.operas-eu.org/up-ga/sessions/v1'
+            operas_definition:
+              'https://metrics.operas-eu.org/up-logs/sessions/v1'
           },
           downloads: {
+            order: 2,
             nav_counts: ['*'],
             graphs: {
               time_graph: {
@@ -70,100 +73,16 @@
               },
               country_table: {
                 width: 30,
-                uris: [
-                  'https://metrics.operas-eu.org/up-ga/downloads/v1',
-                  'https://metrics.operas-eu.org/oapen/downloads/v1'
-                ]
+                uris: ['https://metrics.operas-eu.org/up-logs/downloads/v1']
               },
               world_map: {
                 width: 70,
                 hide_label: true,
-                uris: [
-                  'https://metrics.operas-eu.org/up-ga/downloads/v1',
-                  'https://metrics.operas-eu.org/oapen/downloads/v1'
-                ]
+                uris: ['https://metrics.operas-eu.org/up-logs/downloads/v1']
               }
             },
             operas_definition:
-              'https://metrics.operas-eu.org/up-ga/downloads/v1'
-          },
-          citations: {
-            nav_counts: ['*'],
-            graphs: {
-              time_graph: {
-                width: 100,
-                uris: ['https://metrics.operas-eu.org/crossref/citations/v1']
-              }
-            },
-            operas_definition:
-              'https://metrics.operas-eu.org/crossref/citations/v1'
-          },
-          tweets: {
-            nav_counts: ['*'],
-            graphs: {
-              tweets: {
-                width: 40,
-                uris: ['https://metrics.operas-eu.org/twitter/tweets/v1']
-              },
-              time_graph: {
-                width: 60,
-                uris: ['https://metrics.operas-eu.org/twitter/tweets/v1']
-              }
-            },
-            operas_definition: 'https://metrics.operas-eu.org/twitter/tweets/v1'
-          },
-          references: {
-            nav_counts: ['*'],
-            graphs: {
-              wikipedia_articles: {
-                width: 100,
-                uris: ['https://metrics.operas-eu.org/wikipedia/references/v1']
-              },
-              wordpress: {
-                width: 100,
-                uris: ['https://metrics.operas-eu.org/wordpress/references/v1']
-              }
-            },
-            operas_definition:
-              'https://metrics.operas-eu.org/wikipedia/references/v1'
-          },
-          annotations: {
-            nav_counts: ['*'],
-            graphs: {
-              time_graph: {
-                width: 100,
-                uris: [
-                  'https://metrics.operas-eu.org/hypothesis/annotations/v1'
-                ]
-              },
-              hypothesis: {
-                width: 100,
-                uris: [
-                  'https://metrics.operas-eu.org/hypothesis/annotations/v1'
-                ]
-              }
-            },
-            operas_definition:
-              'https://metrics.operas-eu.org/hypothesis/annotations/v1'
-          },
-          reads: {
-            nav_counts: ['*'],
-            graphs: {
-              time_graph: {
-                width: 100,
-                uris: ['https://metrics.operas-eu.org/up-ga/reads/v1']
-              },
-              country_table: {
-                width: 30,
-                uris: ['https://metrics.operas-eu.org/up-ga/reads/v1']
-              },
-              world_map: {
-                width: 70,
-                hide_label: true,
-                uris: ['https://metrics.operas-eu.org/up-ga/reads/v1']
-              }
-            },
-            operas_definition: 'https://metrics.operas-eu.org/up-ga/reads/v1'
+              'https://metrics.operas-eu.org/up-logs/downloads/v1'
           }
         }
       };

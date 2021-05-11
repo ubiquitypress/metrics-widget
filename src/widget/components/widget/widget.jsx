@@ -10,7 +10,7 @@ import Panel from '../panel';
 import styles from './widget.module.scss';
 
 const Widget = () => {
-  const [data, setData] = useState({ loading: true, tabs: {}, active: null });
+  const [data, setData] = useState({ loading: true, tabs: [], active: null });
   const config = useConfig();
   const { t } = useTranslation();
   const { fetchMetric } = useMetrics();
@@ -23,32 +23,38 @@ const Widget = () => {
   useEffect(() => {
     const getTabs = async () => {
       // Fetch all of the possible measures available to us
-      let measures = await fetchMetric('&aggregation=measure_uri');
+      const measures = await fetchMetric('&aggregation=measure_uri');
 
-      // Pull the tabs from the config
-      const tabs = Object.keys(config.tabs);
-
-      // Remove any measures that we haven't listed as a tab
-      measures = measures.filter(measure => tabs.indexOf(measure.type) !== -1);
-
-      // Remove anything not listed in `nav_counts`
-      measures = measures.filter(measure => {
-        const navCounts = config.tabs[measure.type].nav_counts;
-        return (
-          navCounts.indexOf('*') !== -1 ||
-          navCounts.indexOf(measure.measure_uri) !== -1
-        );
+      // Fetch and sort the tabs by their order
+      let tabs = [];
+      Object.entries(config.tabs).forEach(([key, vals]) => {
+        tabs.splice(vals.order || 0, 0, {
+          name: key,
+          nav_counts: vals.nav_counts,
+          count: 0
+        });
       });
 
-      // Aggregate the measures
-      const aggregate = {};
-      measures.forEach(measure => {
-        aggregate[measure.type] = aggregate[measure.type]
-          ? aggregate[measure.type] + measure.value
-          : measure.value;
+      // Update the tabs with every measure
+      tabs = tabs.map(tab => {
+        // Set the count to be the total number of matching `nav_counts` metrics
+        const count = measures.reduce((acc, curr) => {
+          if (curr.type === tab.name)
+            if (
+              tab.nav_counts.indexOf('*') !== -1 ||
+              tab.nav_counts.indexOf(curr.measure_uri) !== -1
+            )
+              return acc + curr.value;
+          return acc;
+        }, 0);
+        return { ...tab, count };
       });
 
-      setData({ ...data, loading: false, tabs: aggregate });
+      // Remove empty tabs
+      tabs = tabs.filter(tab => tab.count > 0);
+
+      // Return the data
+      setData({ ...data, loading: false, tabs });
     };
 
     getTabs();
@@ -58,15 +64,19 @@ const Widget = () => {
   useEffect(() => {
     if (!data.loading && data.tabs)
       if (deepFind(config, 'settings.first_panel_open_on_ready'))
-        setTab(Object.keys(data.tabs)[0]);
+        setTab(data.tabs[0].name);
   }, [data.tabs]);
 
   if (data.loading) return <Loading message={t('loading.widget')} />;
   return (
     <div className={styles.widget}>
       <Navigation tabs={data.tabs} active={data.active} setTab={setTab} />
-      {Object.keys(data.tabs).map(tab => (
-        <Panel key={tab} name={tab} active={data.active === tab} />
+      {data.tabs.map(tab => (
+        <Panel
+          key={tab.name}
+          name={tab.name}
+          active={data.active === tab.name}
+        />
       ))}
     </div>
   );

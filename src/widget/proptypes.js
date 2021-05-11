@@ -18,6 +18,7 @@ export const configPropTypes = {
   locales: PropTypes.objectOf(PropTypes.any),
   tabs: PropTypes.objectOf(
     PropTypes.shape({
+      order: PropTypes.number,
       nav_counts: PropTypes.arrayOf(PropTypes.string),
       graphs: PropTypes.objectOf(PropTypes.shape(graphPropTypes)),
       operas_definition: PropTypes.string
