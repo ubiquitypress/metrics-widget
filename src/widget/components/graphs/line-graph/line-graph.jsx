@@ -5,6 +5,7 @@ import styles from './line-graph.module.scss';
 
 const LineGraph = ({ data, onReady }) => {
   const { seriesData, seriesName, xAxisCategories } = data;
+  const graphName = seriesName.toLowerCase().replace(/ /g, '-');
 
   const options = {
     series: [{ name: seriesName, data: seriesData }],
@@ -46,7 +47,7 @@ const LineGraph = ({ data, onReady }) => {
     loadScript('apexcharts.min.js', () => {
       // eslint-disable-next-line no-undef
       const chart = new ApexCharts(
-        document.querySelector(`#${seriesName}-line-graph`),
+        document.querySelector(`#${graphName}-line-graph`),
         options
       );
       chart.render();
@@ -55,7 +56,7 @@ const LineGraph = ({ data, onReady }) => {
   }, []);
 
   return (
-    <div id={`${seriesName}-line-graph`} className={styles['line-graph']} />
+    <div id={`${graphName}-line-graph`} className={styles['line-graph']} />
   );
 };
 
