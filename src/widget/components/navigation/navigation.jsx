@@ -4,7 +4,8 @@ import { useTranslation } from '../../contexts/i18n';
 import styles from './navigation.module.scss';
 
 const Navigation = ({ tabs, active, setTab }) => {
-  const { t } = useTranslation();
+  const { lang, t } = useTranslation();
+
 
   return (
     <div
@@ -25,7 +26,7 @@ const Navigation = ({ tabs, active, setTab }) => {
           id={`mw-tab-${name}`}
           onClick={() => setTab(name)}
         >
-          <div className={styles['navigation-count']}>{val}</div>
+          <div className={styles['navigation-count']}>{val.toLocaleString(lang)}</div>
           <div className={styles['navigation-name']}>{t(`tabs.${name}`)}</div>
         </button>
       ))}

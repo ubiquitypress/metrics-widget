@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadScript from '../../../utils/load-script';
+import { useTranslation } from '../../../contexts/i18n';
 import styles from './line-graph.module.scss';
 
 const LineGraph = ({ data, onReady }) => {
   const { seriesData, seriesName, xAxisCategories } = data;
+  const {lang} = useTranslation();
   const graphName = seriesName.toLowerCase().replace(/ /g, '-');
 
   const options = {
@@ -14,7 +16,7 @@ const LineGraph = ({ data, onReady }) => {
     yaxis: {
       tickAmount: 1,
       labels: {
-        formatter: value => Math.round(value) // prevents numbers appearing with decimals (6.0, 7.0, ..)
+        formatter: value => Math.round(value).toLocaleString(lang) // round to nearest whole number, and format with commas
       }
     },
     chart: {

@@ -5,7 +5,7 @@ import { useTranslation } from '../../../contexts/i18n';
 import styles from './key-value-table.module.scss';
 
 const KeyValueTable = ({ data, onReady }) => {
-  const { t } = useTranslation();
+  const { lang, t } = useTranslation();
 
   useEffect(() => {
     if (onReady) onReady();
@@ -21,7 +21,7 @@ const KeyValueTable = ({ data, onReady }) => {
           </div>
           {item.value && (
             <div className={styles['key-value-table-item-value']}>
-              {item.value}
+              {parseInt(item.value, 10).toLocaleString(lang)}
             </div>
           )}
         </li>

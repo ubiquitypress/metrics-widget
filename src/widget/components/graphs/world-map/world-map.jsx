@@ -6,7 +6,7 @@ import styles from './world-map.module.scss';
 
 const WorldMap = ({ data, onReady }) => {
   const { tab, values } = data;
-  const { t } = useTranslation();
+  const { lang, t } = useTranslation();
 
   const options = {
     map: 'world_merc',
@@ -28,7 +28,7 @@ const WorldMap = ({ data, onReady }) => {
     onRegionTipShow: (e, tip, code) => {
       tip.html(
         `<ul><li>${t(`countries.${code}`)}</li><li>${
-          values[code] || '0'
+          values[code] ? values[code].toLocaleString(lang) : '0'
         }</li></ul>`
       );
     },
