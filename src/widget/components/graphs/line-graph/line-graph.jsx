@@ -6,7 +6,7 @@ import styles from './line-graph.module.scss';
 
 const LineGraph = ({ data, onReady }) => {
   const { seriesData, seriesName, xAxisCategories } = data;
-  const {lang} = useTranslation();
+  const { lang } = useTranslation();
   const graphName = seriesName.toLowerCase().replace(/ /g, '-');
 
   const options = {

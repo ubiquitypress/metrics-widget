@@ -6,7 +6,6 @@ import styles from './navigation.module.scss';
 const Navigation = ({ tabs, active, setTab }) => {
   const { lang, t } = useTranslation();
 
-
   return (
     <div
       className={styles.navigation}
@@ -26,7 +25,9 @@ const Navigation = ({ tabs, active, setTab }) => {
           id={`mw-tab-${name}`}
           onClick={() => setTab(name)}
         >
-          <div className={styles['navigation-count']}>{val.toLocaleString(lang)}</div>
+          <div className={styles['navigation-count']}>
+            {val.toLocaleString(lang)}
+          </div>
           <div className={styles['navigation-name']}>{t(`tabs.${name}`)}</div>
         </button>
       ))}

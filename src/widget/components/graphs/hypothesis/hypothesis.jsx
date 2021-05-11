@@ -5,8 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '../../table';
 import LinkWrapper from '../../link-wrapper';
 import getAsset from '../../../utils/get-asset';
 import trimString from '../../../utils/trim-string';
-import styles from './hypothesis.module.scss';
 import formatTimestamp from '../../../utils/format-timestamp';
+import styles from './hypothesis.module.scss';
 
 const Hypothesis = ({ data, onReady }) => {
   const { t } = useTranslation();
@@ -16,37 +16,39 @@ const Hypothesis = ({ data, onReady }) => {
   }, []);
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell head>{t('hypothesis_table.date')}</TableCell>
-          <TableCell head>{t('hypothesis_table.author')}</TableCell>
-          <TableCell head>{t('hypothesis_table.summary')}</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map(item => (
-          <TableRow key={item.id}>
-            <TableCell>{formatTimestamp(t, item.created, 'long')}</TableCell>
-            <TableCell>{item.user.replace('acct:', '')}</TableCell>
-            <TableCell>
-              <LinkWrapper href={item.links.html}>
-                <div className={styles['hypothesis-summary']}>
-                  <img
-                    className={styles['hypothesis-summary-icon']}
-                    role='presentation'
-                    aria-hidden='true'
-                    src={getAsset('hypothesis.jpg')}
-                    alt='Hypothesis'
-                  />
-                  {trimString(t, item.document.title[0] || item.text, 100)}
-                </div>
-              </LinkWrapper>
-            </TableCell>
+    <div className={styles.hypothesis}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell head>{t('hypothesis_table.date')}</TableCell>
+            <TableCell head>{t('hypothesis_table.author')}</TableCell>
+            <TableCell head>{t('hypothesis_table.summary')}</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {data.map(item => (
+            <TableRow key={item.id}>
+              <TableCell>{formatTimestamp(t, item.created, 'long')}</TableCell>
+              <TableCell>{item.user.replace('acct:', '')}</TableCell>
+              <TableCell>
+                <LinkWrapper href={item.links.html}>
+                  <div className={styles['hypothesis-summary']}>
+                    <img
+                      className={styles['hypothesis-summary-icon']}
+                      role='presentation'
+                      aria-hidden='true'
+                      src={getAsset('hypothesis.jpg')}
+                      alt='Hypothesis'
+                    />
+                    {trimString(t, item.document.title[0] || item.text, 100)}
+                  </div>
+                </LinkWrapper>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
