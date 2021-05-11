@@ -36,7 +36,7 @@
     "view_more": "View more",
     "view_more_amount": "View {{amount}} more",
     "trimmed_string": "{{string}}...",
-    "no_data": "No data available",
+    "no_data": "None",
     "operas": "Definition for this metric on the OPERAS website"
   },
   "dates": {
