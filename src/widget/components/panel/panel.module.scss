@@ -1,4 +1,6 @@
 .panel {
+  margin-top: 1em;
+
   &:global(.hidden),
   :global(.hidden) {
     opacity: 0;
