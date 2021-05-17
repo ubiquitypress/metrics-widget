@@ -1,0 +1,14 @@
+.table-cell {
+  display: table-cell;
+  padding: 1em;
+  text-align: left;
+
+  &:global(.th) {
+    font-weight: 500;
+    color: #6f6f6f;
+  }
+
+  &:global(.td) {
+    font-weight: 400;
+  }
+}

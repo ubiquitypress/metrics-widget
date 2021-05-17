@@ -1,0 +1,45 @@
+.loading {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 2em;
+
+  .bars {
+    .loadingBar {
+      background: #506cd3;
+      width: 0.4em;
+      border-radius: 2em;
+      height: 3em;
+      transform: scaleY(0.2);
+      animation: loader-bars 0.5s ease-in infinite alternate;
+      display: inline-block;
+
+      &:not(:last-child) {
+        margin-right: 0.2em;
+      }
+
+      &:nth-child(n) {
+        animation-delay: 0s;
+      }
+      &:nth-child(2n) {
+        animation-delay: 0.1s;
+      }
+      &:nth-child(3n) {
+        animation-delay: 0.2s;
+      }
+    }
+  }
+}
+
+.message {
+  margin-top: 0.5em;
+  opacity: 0.8;
+}
+
+@keyframes loader-bars {
+  0% {
+    transform: scaleY(0.2);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
