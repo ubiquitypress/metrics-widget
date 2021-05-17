@@ -26,14 +26,15 @@ const Widget = () => {
       const measures = await fetchMetric('&aggregation=measure_uri');
 
       // Fetch and sort the tabs by their order
-      let tabs = [];
-      Object.entries(config.tabs).forEach(([key, vals]) => {
-        tabs.splice(vals.order || 0, 0, {
+      let tabs = Object.entries(config.tabs).map(([key, vals]) => {
+        return {
           name: key,
           nav_counts: vals.nav_counts,
+          order: vals.order,
           count: 0
-        });
+        };
       });
+      tabs.sort((a, b) => a.order - b.order);
 
       // Update the tabs with every measure
       tabs = tabs.map(tab => {
