@@ -1,4 +1,5 @@
 import getAsset from './get-asset';
+import config from '../../../../config.json';
 
 const ENV = process.env;
 beforeEach(() => {
@@ -19,6 +20,6 @@ test('returns full path if not on development environment', () => {
   process.env.NODE_ENV = 'production';
 
   expect(getAsset('name.json')).toBe(
-    'https://storage.googleapis.com/operas/metrics-widget-0.1.4/assets/name.json'
+    `https://storage.googleapis.com/operas/metrics-widget-${config.app_version}/assets/name.json`
   );
 });
