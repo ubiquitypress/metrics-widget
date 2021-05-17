@@ -64,7 +64,11 @@ const Graph = ({ type, tab, options, onReady }) => {
       graph = <Tweets {...props} />;
       break;
     default:
-      graph = <p>not implemented</p>;
+      console.error(
+        `'${type}' does not have a matching graph -- please remove from '${tab}'.`
+      );
+      graph = null;
+      break;
   }
   return (
     <GraphWrapper
