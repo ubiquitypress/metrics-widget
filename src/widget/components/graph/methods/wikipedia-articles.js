@@ -6,14 +6,14 @@ const wikipediaArticles = ({ uris }) => {
   // Sort alphabetically
   items.sort();
 
-  // Convert into an object of {key: value} data
+  // Convert into an array of objects
   const data = items.map(uri => {
     // Replace the key to be a string
-    let key = uri.replace(/.*\/wiki\//g, '');
-    key = key.replace(/_/g, ' ');
-    key = decodeURIComponent(key);
+    let name = uri.replace(/.*\/wiki\//g, '');
+    name = name.replace(/_/g, ' ');
+    name = decodeURIComponent(name);
 
-    return { key, link: uri, value: null };
+    return { name, link: uri };
   });
 
   return { data };

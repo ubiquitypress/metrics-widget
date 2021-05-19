@@ -6,14 +6,14 @@ const wordpress = ({ uris }) => {
   // Sort alphabetically
   items.sort();
 
-  // Convert into an object of {key: value} data
+  // Convert into an array of objects
   const data = items.map(uri => {
     // Replace the key to be a string
-    let key = uri.replace(/\/$/, ''); // Remove trailing slash, if present
-    key = key.substr(key.lastIndexOf('/') + 1); // Get all text after the last slash
-    key = key.replace(/-/g, ' ');
+    let name = uri.replace(/\/$/, ''); // Remove trailing slash, if present
+    name = name.substr(name.lastIndexOf('/') + 1); // Get all text after the last slash
+    name = name.replace(/-/g, ' ');
 
-    return { key, link: uri, value: null };
+    return { name, link: uri };
   });
 
   return { data };

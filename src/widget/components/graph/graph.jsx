@@ -12,6 +12,7 @@ import Hypothesis from '../graphs/hypothesis';
 import LineGraph from '../graphs/line-graph';
 import WorldMap from '../graphs/world-map';
 import Tweets from '../graphs/tweets';
+import List from '../graphs/list';
 
 const Graph = ({ type, tab, options, onReady }) => {
   const [data, setData] = useState(null);
@@ -53,9 +54,11 @@ const Graph = ({ type, tab, options, onReady }) => {
       graph = <LineGraph {...props} />;
       break;
     case 'country_table':
+      graph = <KeyValueTable {...props} withBorder />;
+      break;
     case 'wikipedia_articles':
     case 'wordpress':
-      graph = <KeyValueTable {...props} />;
+      graph = <List {...props} />;
       break;
     case 'hypothesis':
       graph = <Hypothesis {...props} />;

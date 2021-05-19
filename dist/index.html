@@ -28,7 +28,7 @@
       const metrics_config = {
         settings: {
           base_url: 'https://metrics-api.operas-eu.org/events',
-          work_uri: 'info:doi:10.5334/bbb',
+          work_uri: 'info:doi:10.5334/bbc',
           language: 'en',
           localise_country_codes: true,
           one_per_row_width: 450,
@@ -37,7 +37,8 @@
         locales: {
           en: {
             tabs: {
-              sessions: 'Abstract Views'
+              sessions: 'Abstract Views',
+              references: 'Online Media'
             }
           }
         },
@@ -90,6 +91,7 @@
           references: {
             order: 7,
             nav_counts: [
+              'https://metrics.operas-eu.org/wordpress/references/v1',
               'https://metrics.operas-eu.org/wikipedia/references/v1'
             ],
             graphs: {

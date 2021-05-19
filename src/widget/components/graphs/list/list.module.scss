@@ -1,0 +1,21 @@
+.list {
+  width: 100%;
+  overflow-y: auto;
+  max-height: 250px;
+  margin: 0;
+  padding: 0 1.25em 0 0;
+}
+
+.list-item {
+  padding: 12px 0;
+  display: flex;
+  color: #000000;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
