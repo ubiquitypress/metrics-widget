@@ -1,4 +1,5 @@
 .panel {
+  position: relative;
   margin-top: 1em;
 
   &:global(.hidden),
@@ -7,5 +8,6 @@
     height: 0;
     overflow: hidden;
     margin-top: 0;
+    z-index: -1;
   }
 }
