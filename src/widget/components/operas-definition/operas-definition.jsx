@@ -9,9 +9,12 @@ const OperasDefinition = ({ link }) => {
   if (!link) return null;
 
   return (
-    <p className={styles['operas-definition']} data-testid='operas-definition'>
+    <div
+      className={styles['operas-definition']}
+      data-testid='operas-definition'
+    >
       <LinkWrapper href={link}>{t('other.operas')}</LinkWrapper>
-    </p>
+    </div>
   );
 };
 
