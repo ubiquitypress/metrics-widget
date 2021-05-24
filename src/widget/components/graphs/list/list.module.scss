@@ -8,8 +8,13 @@
 
 .list-item {
   padding: 12px 0;
-  display: flex;
-  color: #000000;
+  display: list-item;
+
+  &:before {
+    content: '\2022';
+    display: inline-block;
+    margin-right: 0.5em;
+  }
 
   &:first-child {
     padding-top: 0;
