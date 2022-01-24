@@ -4,7 +4,7 @@ import styles from './graph-wrapper.module.scss';
 import { useConfig } from '../../contexts/config';
 import deepFind from '../../utils/deep-find';
 
-const GraphWrapper = ({ width = 100, label, hideLabel, children }) => {
+const GraphWrapper = ({ type, width = 100, label, hideLabel, children }) => {
   const config = useConfig();
   const [windowSmall, setWindowSmall] = useState(false);
   const resizeWidth = deepFind(config, 'settings.one_per_row_width');
@@ -24,6 +24,7 @@ const GraphWrapper = ({ width = 100, label, hideLabel, children }) => {
     <div
       className={styles['graph-wrapper']}
       style={{ width: windowSmall ? '100%' : `${width}%` }}
+      data-type={type}
     >
       <h2
         className={`${styles['graph-wrapper-label']}${
@@ -38,6 +39,7 @@ const GraphWrapper = ({ width = 100, label, hideLabel, children }) => {
 };
 
 GraphWrapper.propTypes = {
+  type: PropTypes.string.isRequired,
   width: PropTypes.number,
   label: PropTypes.string.isRequired,
   hideLabel: PropTypes.bool,

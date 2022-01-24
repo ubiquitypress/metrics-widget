@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphPropTypes } from '../../proptypes';
@@ -13,6 +12,7 @@ import LineGraph from '../graphs/line-graph';
 import WorldMap from '../graphs/world-map';
 import Tweets from '../graphs/tweets';
 import List from '../graphs/list';
+import OperasDefinition from '../operas-definition';
 
 const Graph = ({ type, tab, options, onReady }) => {
   const [data, setData] = useState(null);
@@ -74,6 +74,7 @@ const Graph = ({ type, tab, options, onReady }) => {
   }
   return (
     <GraphWrapper
+      type={type}
       width={options.width}
       label={t(`labels.${type.toLowerCase()}`, {
         name: t(`tabs.${tab.toLowerCase()}`)
@@ -81,6 +82,7 @@ const Graph = ({ type, tab, options, onReady }) => {
       hideLabel={options.hide_label}
     >
       {graph}
+      <OperasDefinition link={options.operas_definition} />
     </GraphWrapper>
   );
 };

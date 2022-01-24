@@ -14,7 +14,11 @@ module.exports = {
   plugins: ['react'],
   rules: {
     'arrow-body-style': 'off',
-    camelcase: 'off'
+    camelcase: 'off',
+    'no-console': [
+      'warn',
+      { allow: ['clear', 'info', 'error', 'dir', 'trace', 'error'] }
+    ]
   },
   overrides: [
     {

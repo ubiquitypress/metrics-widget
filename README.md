@@ -182,14 +182,17 @@ const metrics_config = {
       graphs: {
         wikipedia_articles: {
           width: 50,
-          uris: ['https://metrics.operas-eu.org/wikipedia/references/v1']
+          uris: ['https://metrics.operas-eu.org/wikipedia/references/v1'],
+          operas_definition:
+            'https://metrics.operas-eu.org/wikipedia/references/v1'
         },
         wordpress: {
           width: 50,
-          uris: ['https://metrics.operas-eu.org/wordpress/references/v1']
+          uris: ['https://metrics.operas-eu.org/wordpress/references/v1'],
+          operas_definition:
+            'https://metrics.operas-eu.org/wordpress/references/v1'
         }
-      },
-      operas_definition: 'https://metrics.operas-eu.org/wikipedia/references/v1'
+      }
     }
   }
 };
@@ -221,13 +224,14 @@ The next (and **required**) field is `graphs`: an object containing all of the g
 
 In the example above, the _citations_ metric is showing one graph (_time_graph_), and the _references_ metric is showing two graphs (_wikipedia_articles_ and _wordpress_). These graphs are all valid because they are named after the [Supported Graphs](#supported-graphs).
 
-Each graph can be configured with three properties:
+Each graph can be configured with additional properties:
 
-| field      | type          | required | description                                                                                                                                |
-| ---------- | ------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| width      | number        | yes      | the % width of the graph (max. `100`)<br /> graphs will be rendered inline, so two graphs with a 50 width will display next to each other. |
-| hide_label | boolean       | no       | if `true`, the label for this graph will be hidden<br /> the label can still be seen by assistive technologies for accessibility purposes  |
-| uris       | array[string] | yes      | an array of all URIs that contribute towards the data of this graph                                                                        |
+| field             | type          | required | description                                                                                                                                                                                                            |
+| ----------------- | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| width             | number        | yes      | the % width of the graph (max. `100`)<br /> graphs will be rendered inline, so two graphs with a 50 width will display next to each other.                                                                             |
+| hide_label        | boolean       | no       | if `true`, the label for this graph will be hidden<br /> the label can still be seen by assistive technologies for accessibility purposes                                                                              |
+| uris              | array[string] | yes      | an array of all URIs that contribute towards the data of this graph                                                                                                                                                    |
+| operas_definition | string        | no       | the link to the OPERAS definition for this graph, will be rendered directly beneath it<br />it is recommended to only include this here if your tab contains multiple graphs which fetch data from different endpoints |
 
 The `width` field does exactly what it suggests - it tells the widget the **percentage width** of space that this graph should take up on the page. A graph can have _any width_ up to `100`, which means it will take up an entire row to itself. If you wish to have two graphs sharing the same row, you would set both of their widths to `50` (or any other combination of numbers that equal `100`, like `30`+`70`).
 
@@ -237,7 +241,41 @@ Similarly, specifying additional URIs in the `uris` array will **not** cause add
 
 #### operas_definition
 
-The final (and **optional**) field is `operas_definition`: a string containing a link to the OPERAS definition for this particular graph. This will render text below the graphs that will link to whatever this value is. If the value is not provided, the text will not render.
+The final (and **optional**) field is `operas_definition`: a string containing a link to the OPERAS definition for this particular tab.
+
+As seen above, this string can be included in either the configuration for the tab, or within a graph's configuration. For example:
+
+```json
+downloads: {
+  order: 2,
+  nav_counts: [ ... ],
+  graphs: { ... },
+  operas_definition: 'https://metrics.operas-eu.org/up-ga/downloads/v1'
+}
+```
+
+Above, the OPERAS definition label will appear below all graphs in the "downloads" panel.
+
+```json
+references: {
+  order: 7,
+  nav_counts: [ ... ],
+  graphs: {
+    wikipedia_articles: {
+      width: 100,
+      uris: [ ... ],
+      operas_definition: 'https://metrics.operas-eu.org/wikipedia/references/v1'
+    },
+    wordpress: {
+      width: 100,
+      uris: [ ... ],
+      operas_definition: 'https://metrics.operas-eu.org/wordpress/references/v1'
+    }
+  }
+}
+```
+
+Above, both the `wikipedia_articles` and `wordpress` graphs will have their own definition labels, linking to different locations. The labels will appear below each graph as a child of its wrapper.
 
 ## Supported Languages
 
