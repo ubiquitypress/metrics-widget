@@ -35,7 +35,11 @@ const Tweets = ({ data, onReady }) => {
       </ul>
 
       {limit < data.length && (
-        <button type='button' onClick={increaseLimit}>
+        <button
+          className={styles['tweets-view-more']}
+          type='button'
+          onClick={increaseLimit}
+        >
           {t('other.view_more_amount', { amount: LIMIT_INC })}
         </button>
       )}
