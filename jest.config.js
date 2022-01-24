@@ -3,6 +3,7 @@ module.exports = {
   transform: {
     '\\.(js|jsx)?$': 'babel-jest'
   },
+  testEnvironment: 'jsdom',
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   moduleFileExtensions: ['js', 'jsx'],
   testPathIgnorePatterns: ['/node_modules/', '/public/'],
