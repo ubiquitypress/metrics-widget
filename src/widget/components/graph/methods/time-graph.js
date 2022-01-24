@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import formatTimestamp from '../../../utils/format-timestamp';
 
-const timeGraph = ({ t, tab, uris }) => {
+const timeGraph = ({ t, tab, uris, config }) => {
   // Merge URIs into a single object
   const dates = {};
   uris.forEach(({ timestamp, value }) => {
@@ -56,8 +56,8 @@ const timeGraph = ({ t, tab, uris }) => {
       return 0;
     });
 
-    // If there is only one item, add a zero value for the previous month
-    if (data.length === 1) {
+    // Add a zero value for the previous [day/month] (if enabled in the config, or if there is only one item)
+    if (data.length === 1 || config.settings.start_graphs_from_zero) {
       const prevMonth = dayjs(new Date(data[0].key))
         .subtract(1, countDays ? 'day' : 'month')
         .toISOString();

@@ -108,14 +108,14 @@ const metrics_config = {
 
 Definitions:
 
-| field                     | type    | required | description                                                                                                                                                                                   |
-| ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| base_url                  | string  | yes      | the base URL of where the metrics are hosted.<br /> example: https://metrics-api.operas-eu.org/events                                                                                         |
-| work_uri                  | string  | yes      | the URI scheme and URI to use.<br /> example: `info:doi:10.5334/bay`                                                                                                                          |
-| language                  | string  | no       | the ISO 639-1 language code to display text in.<br /> if your [language is not supported](#supported-languages), please consider contributing.<br /> the default value for this field is `en` |
-| localise_country_codes    | boolean | no       | if `true`, graphs that display country codes will display their localised name instead.<br /> example: `fr` (if _false_), `French` (if \_true)                                                |
-| one_per_row_width         | number  | no       | if provided, all graphs will stretch to 100% width if the window width is less than or equal to this value.                                                                                   |
-| first_panel_open_on_ready | boolean | no       | if `true`, the first navigation panel will open automatically when ready.<br /> the default value for this field is `false`                                                                   |
+| field                  | type    | required | description                                                                                                                                                                                   |
+| ---------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| base_url               | string  | yes      | the base URL of where the metrics are hosted.<br /> example: https://metrics-api.operas-eu.org/events                                                                                         |
+| work_uri               | string  | yes      | the URI scheme and URI to use.<br /> example: `info:doi:10.5334/bay`                                                                                                                          |
+| language               | string  | no       | the ISO 639-1 language code to display text in.<br /> if your [language is not supported](#supported-languages), please consider contributing.<br /> the default value for this field is `en` |
+| localise_country_codes | boolean | no       | if `true`, graphs that display country codes will display their localised name instead.<br /> example: `fr` (if _false_), `French` (if \_true)                                                |
+| one_per_row_width      | number  | no       | if provided, all graphs will stretch to 100% width if the window width is less than or equal to this value.                                                                                   |
+| start_graphs_from_zero | boolean | no       | if `true`, line graphs will have a 0 value added at the start of the graph.<br /> the default value for this field is `false`                                                                 |
 
 The `base_url` field in most cases will be the same as the example provided, unless you are hosting your own metrics service.
 
