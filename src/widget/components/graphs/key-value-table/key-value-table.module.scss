@@ -16,10 +16,6 @@
     padding-top: 0;
   }
 
-  &:last-child {
-    padding-bottom: 0;
-  }
-
   &:not(:last-child) {
     border-bottom: 0.1em solid #c3c3c3;
   }
