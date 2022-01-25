@@ -23,10 +23,6 @@ const Widget = () => {
   useEffect(() => {
     const getTabs = async () => {
       try {
-        //  Call the loading callback
-        if (deepFind(config, 'callbacks.on_load_start'))
-          config.callbacks.on_load_start();
-
         // Fetch all of the possible measures available to us
         const measures = await fetchMetric('&aggregation=measure_uri');
 
@@ -61,17 +57,9 @@ const Widget = () => {
 
         // Return the data
         setData({ ...data, loading: false, tabs });
-
-        // Call the callback
-        if (deepFind(config, 'callbacks.on_load_success'))
-          config.callbacks.on_load_success(tabs);
       } catch (err) {
         // Log the error
         console.error(err);
-
-        // Call the callback
-        if (deepFind(config, 'callbacks.on_load_fail'))
-          config.callbacks.on_load_fail(err);
       }
     };
 

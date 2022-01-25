@@ -89,12 +89,11 @@ If using the file above as reference, please do note that it is primarily used d
 
 The following fields are accepted within the `metrics_config` object:
 
-| field                   | required | description                                                                             |
-| ----------------------- | -------- | --------------------------------------------------------------------------------------- |
-| [settings](#settings)   | yes      | holds all configuration settings for the widget                                         |
-| [callbacks](#callbacks) | no       | contains callback functions that the widget will call during different lifecycle events |
-| [locales](#locales)     | no       | allows overriding locales for existing languages and adding custom language codes       |
-| [tabs](#tabs)           | yes      | contains information about which measures to display and which graphs to use            |
+| field                 | required | description                                                                       |
+| --------------------- | -------- | --------------------------------------------------------------------------------- |
+| [settings](#settings) | yes      | holds all configuration settings for the widget                                   |
+| [locales](#locales)   | no       | allows overriding locales for existing languages and adding custom language codes |
+| [tabs](#tabs)         | yes      | contains information about which measures to display and which graphs to use      |
 
 ### Settings
 
@@ -131,30 +130,6 @@ Definitions:
 The `base_url` field in most cases will be the same as the example provided, unless you are hosting your own metrics service.
 
 The `work_uri` field will depend on the page being viewed - and likely will need to be dynamically implemented. This tells the widget which resource the metrics are being requested for.
-
-### Callbacks
-
-The widget supports sending various JavaScript callbacks depending on its state. The callbacks should be declared in an optional _callbacks_ object within the config. The following fields are supported, and all are optional:
-
-| field           | arguments | description                                                                                                  |
-| --------------- | --------- | ------------------------------------------------------------------------------------------------------------ |
-| on_load_start   | ()        | called when the widget begins to load                                                                        |
-| on_load_success | (tabs)    | called when the widget has successfully loaded<br>the loaded tabs will be provided, and this number may be 0 |
-| on_load_fail    | (err)     | called when the widget fails to load<br>the error message will also be logged to the browser console         |
-
-An example of this in action:
-
-```javascript
-const metrics_config = {
-  callbacks: {
-    on_load_start: () => console.log('Widget loading'),
-    on_load_success: tabs => {
-      if (tabs.length > 0) console.log('Widget ready!');
-    },
-    on_load_fail: err => console.log(err)
-  }
-};
-```
 
 ### Locales
 
