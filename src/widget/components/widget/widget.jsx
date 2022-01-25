@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { useConfig } from '../../contexts/config';
 import { useTranslation } from '../../contexts/i18n';
 import { useMetrics } from '../../contexts/metrics';
+import widgetEvent from '../../events/widget-event';
 import deepFind from '../../utils/deep-find';
 import Loading from '../loading';
 import Navigation from '../navigation';
@@ -57,7 +57,16 @@ const Widget = () => {
 
         // Return the data
         setData({ ...data, loading: false, tabs });
+
+        // Call the `widget_loaded` event with the tabs
+        widgetEvent('widget_loaded', tabs);
       } catch (err) {
+        // Hide the loading screen
+        setData({ ...data, loading: false, tabs: [] });
+
+        // Call the `widget_load_error` event with the tabs
+        widgetEvent('widget_load_error', err);
+
         // Log the error
         console.error(err);
       }

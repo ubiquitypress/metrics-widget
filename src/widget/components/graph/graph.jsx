@@ -67,9 +67,10 @@ const Graph = ({ type, tab, options, onReady }) => {
       graph = <Tweets {...props} />;
       break;
     default:
-      console.error(
-        `'${type}' does not have a matching graph -- please remove from '${tab}'.`
-      );
+      process.env.NODE_ENV !== 'test' &&
+        console.error(
+          `'${type}' does not have a matching graph -- please remove from '${tab}'.`
+        );
       break;
   }
   return (

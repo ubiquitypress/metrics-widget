@@ -1,17 +1,21 @@
 # HIRMEOS Metrics Widget
 
-This documentation aims to offer as much information as possible for getting started with, implementing, and updating the widget.
+This documentation aims to offer as much information as possible for getting started with, implementing, and updating the HIRMEOS metrics widget.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
+  - [With React](#with-react)
 - [Configuration](#configuration)
   - [Settings](#settings)
   - [Locales](#locales)
   - [Tabs](#tabs)
     - [nav_counts](#nav_counts)
     - [graphs](#graphs)
+- [Events](#events)
+  - [Subscribing to events](#subscribing-to-events)
+  - [Unsubscribing from events](#unsubscribing-from-events)
 - [Supported Languages](#supported-languages)
 - [Supported Measures](#supported-measures)
 - [Supported Graphs](#supported-graphs)
@@ -30,17 +34,11 @@ This documentation aims to offer as much information as possible for getting sta
 
 The HIRMEOS metrics widget is a small, embeddable HTML widget which can offer visual information from services such as Google Analytics, OPERAS, and Ubiquity Press in the form of graphs, tables, and numerical figures.
 
-When embedded, users will be able to see a navigation menu with numerical figures for different measures supported by the widget, such as the number of downloads a specific book has. Upon clicking one of the navigation items, the user will then be able to see additional information in the form of graphs, tables, and more.
+The widget is designed to be extremely flexible with its implementation, allowing almost complete configuration to be made without needing to touch the source code. More customisation options will become available over time, and updates to the widget will be made using semantic versioning.
 
-The widget is designed to be extremely flexible with its implementation, allowing almost complete configuration to be made without needing to touch the source code. More customisation options will become available over time, and updates to the widget will be made under new version numbers - giving implementors the ability to test and configure any updates before deploying the changes live.
-
-Implementing the widget requires some knowledge of HTML and JavaScript, and having knowledge on how the metrics URIs and endpoints work will also be beneficial.
-
-This documentation is written assuming the implementor has no prior knowledge of the metrics API endpoints or response body.
+Implementing the widget requires basic knowledge of HTML and JSON. Having knowledge on how metric URIs and endpoints work will be beneficial but not required.
 
 ## Getting Started
-
-To implement the base widget, only two steps are required. A third, configuration, step will later be required to bring the widget to life.
 
 The first step is to determine where the widget should be placed within the webpage. Once you have a suitable location in your HTML structure for the widget, add the following code:
 
@@ -48,17 +46,31 @@ The first step is to determine where the widget should be placed within the webp
 <div id="metrics-block"></div>
 ```
 
-When the widget is initialised, its HTML will be inserted into this container. It is important that the exact _id_ attribute value is used as above, as this is what the widget will look for in the DOM.
+When the widget is initialised, its content will be inserted into this container. The element should have a unique `id` attribute with the value `metrics-block`. The later configuration step will allow you to change this value if preferred.
 
-After adding the `#metrics-block` element to the HTML, the next step is to bring in the compiled JavaScript code which contains everything the widget needs to run, as well as its styling.
-
-The current production version of the widget is `0.1.16`, and is 184KB in size. To embed the widget onto the page, simply add a script tag before the closing `</body>` tag in the HTML:
+The next step is to embed a `<script>` tag onto the page which which will fetch the widget code.
 
 ```html
-<script src="https://storage.googleapis.com/operas/metrics-widget-0.1.16/widget.js"></script>
+<script>
+  window.hirmeoswidget = ((d, t, id) => {
+    const n = d.getElementsByTagName(t)[0];
+    const i = window.hirmeoswidget || {};
+    if (d.getElementById(id)) return i;
+    const s = d.createElement(t);
+    s.id = id;
+    s.src =
+      'https://storage.googleapis.com/operas/metrics-widget-0.1.16/widget.js';
+    n.parentNode.insertBefore(s, n);
+    i.eventQueue = [];
+    i.ready = ev => i.eventQueue.push(ev);
+    return i;
+  })(document, 'script', 'hirmeos-metrics');
+</script>
 ```
 
-As of version 0.1, CSS is now provided in a separate minified file, as opposed to being rendered inline automatically. To embed the widget styling onto the page, simply add a link tag before the closing `</head>` tag in the HTML:
+You can view the unminified version [here](https://gitlab.com/ubiquitypress/metrics-widget/-/blob/master/dist/index.html).
+
+The final step is to import the widget's CSS into the page by adding a `<link>` tag into your document _head_:
 
 ```html
 <link
@@ -67,27 +79,85 @@ As of version 0.1, CSS is now provided in a separate minified file, as opposed t
 />
 ```
 
-After adding both lines, visit the webpage in which the widget is embedded. You should see the following message in the location you placed the `#metrics-block` div.
+The `0.1.16` version number included in the JS and CSS snippets above is currently the latest version.
+
+Refreshing the page should now show the following message within the `#metrics-block` container:
 
 > No configuration found - please check the documentation.
 
-This message means that the widget's code was successfully called and executed, and the widget has been embedded into the correct location on the webpage. The next step is to configure the widget so that we can replace this warning with some numbers and graphs!
+This means that the widget's code is running, and the widget has been embedded into the correct location on the webpage. The next step is to configure the widget so that we can replace this warning with some numbers and graphs!
+
+### With React
+
+If you're using React (or any similar SPA library), the implementation will be slightly different. Whilst the widget is built with React, it is not currently supported as an embeddable component.
+
+Instead, the best approach is to wrap the implementation in a `useEffect` hook that will embed / remove the scripts when needed. Here's an example using Next.js:
+
+```jsx
+export const MetricsWidget = ({ config }) => {
+  const router = useRouter();
+  const scriptId = 'hirmeos-metrics';
+
+  useEffect(() => {
+    if (uuid) {
+      // Embed the config script
+      const configScript = document.createElement('script');
+      configScript.id = 'hirmeos-metrics-config';
+      configScript.type = 'application/json';
+      configScript.text = JSON.stringify(config);
+      document.body.appendChild(configScript);
+
+      // Embed the CSS
+      const widgetCSS = document.createElement('link');
+      widgetCSS.rel = 'stylesheet';
+      widgetCSS.href = `https://storage.googleapis.com/operas/metrics-widget-0.1.16/widget.css`;
+      document.head.appendChild(widgetCSS);
+
+      // Embed the widget script
+      window.hirmeoswidget = ((d, t, id) => {
+        const n = d.getElementsByTagName(t)[0];
+        const i = window.hirmeoswidget || {};
+        if (d.getElementById(id)) return i;
+        const s = d.createElement(t);
+        s.id = id;
+        s.src =
+          'https://storage.googleapis.com/operas/metrics-widget-0.1.16/widget.js';
+        n.parentNode.insertBefore(s, n);
+        i.eventQueue = [];
+        i.ready = ev => i.eventQueue.push(ev);
+        return i;
+      })(document, 'script', scriptId);
+
+      return () => {
+        document.getElementById(scriptId).remove();
+        configScript.remove();
+        widgetCSS.remove();
+      };
+    }
+    return () => {};
+  }, [router.asPath]);
+
+  return uuid ? <Styles.Widget id='metrics-block' /> : null;
+};
+```
 
 ## Configuration
 
-All configuration for the widget is handled within a JavaScript object that should exist on the same page as the `#metrics-block` element. The name of this object should be `metrics_config`, and it can be declared anywhere on the webpage:
+All configuration for the widget is handled within a JavaScript `<script>` tag that should exist on the same page as the widget. It can be declared anywhere on the page:
 
 ```html
-<script>
-  var metrics_config = {};
+<script type="application/json" id="hirmeos-metrics-config">
+  {}
 </script>
 ```
 
-Within the _metrics_config_ object, certain fields are expected by the widget. Each field is explained in depth below, though it is also possible to view a complete example of a fully implemented HTML file [here](https://gitlab.com/ubiquitypress/metrics-widget/-/blob/master/dist/index.html).
+Note that the `id` attribute `hirmeos-metrics-config` is _not_ configurable and must be exact.
 
-If using the file above as reference, please do note that it is primarily used during development as a test environment - and may not always be updated to provide a fully accurate depiction. Similarly, any CSS on the demo page should not be copied into production.
+This script will contain all configuration settings for the widget - everything from which URI to fetch to which language to use.
 
-The following fields are accepted within the `metrics_config` object:
+Each setting is explained in depth below, though it is also possible to view a complete example of a fully implemented configuration [here](https://gitlab.com/ubiquitypress/metrics-widget/-/blob/master/dist/index.html). Please note that this example is used as a _test file_ and may not fully match the configuration you are aiming for. Any CSS on the demo page should not be copied into production.
+
+The following top-level are accepted within the `hirmeos-metrics-config` script:
 
 | field                 | required | description                                                                       |
 | --------------------- | -------- | --------------------------------------------------------------------------------- |
@@ -95,25 +165,21 @@ The following fields are accepted within the `metrics_config` object:
 | [locales](#locales)   | no       | allows overriding locales for existing languages and adding custom language codes |
 | [tabs](#tabs)         | yes      | contains information about which measures to display and which graphs to use      |
 
+eg:
+
+```html
+<script type="application/json" id="hirmeos-metrics-config">
+  {
+    "settings": { ... },
+    "locales": { ... }
+    "tabs": { ... }
+  }
+</script>
+```
+
 ### Settings
 
-The `settings` object is a **required** property of the _metrics_config_ object, and contains all of the widget configuration.
-
-Example:
-
-```javascript
-const metrics_config = {
-  settings: {
-    base_url: 'https://metrics-api.operas-eu.org/events',
-    work_uri: 'info:doi:10.5334/bbc',
-    language: 'en',
-    localise_country_codes: true,
-    one_per_row_width: 450,
-    first_panel_open_on_ready: true,
-    hide_initial_loading_screen: false
-  }
-};
-```
+The `settings` object requires at least two fields in order for the widget to operate, though also accepts many more configuration options:
 
 Definitions:
 
@@ -121,95 +187,127 @@ Definitions:
 | --------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | base_url                    | string  | yes      | the base URL of where the metrics are hosted.<br> example: https://metrics-api.operas-eu.org/events                                                                                       |
 | work_uri                    | string  | yes      | the URI scheme and URI to use.<br> example: `info:doi:10.5334/bay`                                                                                                                        |
+| element_id                  | string  | no       | the `id` of the DOM element that the widget should be attached to.<br>the default value for this field is `metrics-block`                                                                 |
 | language                    | string  | no       | the ISO 639-1 language code to display text in.<br> if your [language is not supported](#supported-languages), please consider contributing.<br> the default value for this field is `en` |
 | localise_country_codes      | boolean | no       | if `true`, graphs that display country codes will display their localised name instead.<br> example: `fr` (if _false_), `French` (if \_true)                                              |
 | one_per_row_width           | number  | no       | if provided, all graphs will stretch to 100% width if the window width is less than or equal to this value.                                                                               |
 | start_graphs_from_zero      | boolean | no       | if `true`, line graphs will have a 0 value added at the start of the graph.<br> the default value for this field is `false`                                                               |
-| hide_initial_loading_screen | boolean | no       | if `true`, the initial "loading metrics" screen will not show, and the widget will only appear when the tabs are ready.<br />the default value for this field is `false`                  |
+| hide_initial_loading_screen | boolean | no       | if `true`, the initial "loading metrics" screen will not show, and the widget will only appear when the tabs are ready.<br>the default value for this field is `false`                    |
 
 The `base_url` field in most cases will be the same as the example provided, unless you are hosting your own metrics service.
 
 The `work_uri` field will depend on the page being viewed - and likely will need to be dynamically implemented. This tells the widget which resource the metrics are being requested for.
 
+Example:
+
+```html
+<script type="application/json" id="hirmeos-metrics-config">
+  {
+    "settings": {
+      "base_url": "https://metrics-api.operas-eu.org/events",
+      "work_uri": "info:doi:10.5334/bbc",
+      "element_id": "metrics-block",
+      "language": "en",
+      "localise_country_codes": true,
+      "one_per_row_width": 450,
+      "first_panel_open_on_ready": true,
+      "hide_initial_loading_screen": false
+    },
+    "locales": { ... }
+    "tabs": { ... }
+  }
+</script>
+```
+
 ### Locales
 
-The `locales` object is an **optional** field within the _metrics_config_ object, and is used to override any strings that are localised within the application.
+The `locales` object is not required, and is used to override any strings that are localised within the application.
 
-For instance, you may want to replace the word 'Sessions' with 'Abstract Views,' or localise spellings from British English to American English without editing the source code.
+For instance, you may want to replace the word 'Sessions' with 'Abstract Views,' or localise spellings from British English to American English without needing to edit the source code.
 
 Example:
 
-```javascript
-const metrics_config = {
-  locales: {
-    en: {
-      tabs: {
-        sessions: 'Abstract Views'
+```html
+<script type="application/json" id="hirmeos-metrics-config">
+  {
+    "settings": { ... },
+    "locales": {
+      "en": {
+        "tabs": {
+          "sessions": "Abstract Views"
+        }
       }
-    }
+    },
+    "tabs": { ... }
   }
-};
+</script>
 ```
 
-The example above will override the English localisation for `tabs.sessions` to read as 'Abstract Views'. This can be done for any amount of strings, and any amount of languages.
+The example above will override the English localisation for `tabs.sessions` to read as 'Abstract Views'. This can be done for any strings and any languages.
 
 To override a language, you will need to first indicate the language code that you are overriding. A list of supported languages can be found [here](#supported-languages), or can be found in the list of filenames in the [GitLab repository](https://gitlab.com/ubiquitypress/metrics-widget/-/tree/master/src/widget/localisation).
 
-In the example above, the language code _en_ is being overriden. Next, you will need to provide the exact same path structure used by the widget for that language. For example, to replace the phrase 'Sessions' with 'Abstract Views', the path in the [en.json](https://gitlab.com/ubiquitypress/metrics-widget/-/blob/master/src/widget/localisation/en.json) file is `tabs.sessions`, so we replicate that above.
+In the example above, the language code _en_ is being overriden. You will need to provide the exact path structure used by the widget for that string. For example, to replace the phrase 'Sessions' with 'Abstract Views', the path in the [en.json](https://gitlab.com/ubiquitypress/metrics-widget/-/blob/master/src/widget/localisation/en.json) file is `tabs.sessions`, which is shown in the example above.
 
 It is also possible to use this functionality to add your own language, such as adding a new `en-us` language override and setting the _language_ [setting](#settings) to be the same value - though please consider contributing if you are looking to add new languages!
 
 ### Tabs
 
-The `tabs` object is a **required** property of the _metrics_config_ object, and contains information about which measures to display (such as downloads, citations, references), and which graphs to use.
+The `tabs` object is also required as it contains information about which measures to display (such as downloads, citations, references), and which graphs to use.
 
 Example:
 
-```javascript
-const metrics_config = {
-  tabs: {
-    citations: {
-      order: 0,
-      nav_counts: ['https://metrics.operas-eu.org/crossref/citations/v1'],
-      graphs: {
-        time_graph: {
-          width: 100,
-          hide_label: true,
-          uris: ['https://metrics.operas-eu.org/crossref/citations/v1']
-        }
-      },
-      operas_definition: 'https://metrics.operas-eu.org/crossref/citations/v1'
-    },
-    references: {
-      order: 1,
-      nav_counts: [
-        'https://metrics.operas-eu.org/wordpress/references/v1',
-        'https://metrics.operas-eu.org/wikipedia/references/v1'
-      ],
-      graphs: {
-        wikipedia_articles: {
-          width: 50,
-          uris: ['https://metrics.operas-eu.org/wikipedia/references/v1'],
-          operas_definition:
-            'https://metrics.operas-eu.org/wikipedia/references/v1'
+```html
+<script type="application/json" id="hirmeos-metrics-config">
+  {
+    "settings": { ... },
+    "locales": { ... },
+    "tabs": {
+      "citations": {
+        "order": 0,
+        "nav_counts": ["https://metrics.operas-eu.org/crossref/citations/v1"],
+        "graphs": {
+          "time_graph": {
+            "width": 100,
+            "hide_label": true,
+            "uris": ["https://metrics.operas-eu.org/crossref/citations/v1"]
+          }
         },
-        wordpress: {
-          width: 50,
-          uris: ['https://metrics.operas-eu.org/wordpress/references/v1'],
-          operas_definition:
-            'https://metrics.operas-eu.org/wordpress/references/v1'
+        "operas_definition": "https://metrics.operas-eu.org/crossref/citations/v1"
+      },
+      "references": {
+        "order": 1,
+        "nav_counts": [
+          "https://metrics.operas-eu.org/wordpress/references/v1",
+          "https://metrics.operas-eu.org/wikipedia/references/v1"
+        ],
+        "graphs": {
+          "wikipedia_articles": {
+            "width": 50,
+            "uris": ["https://metrics.operas-eu.org/wikipedia/references/v1"],
+            "operas_definition": "https://metrics.operas-eu.org/wikipedia/references/v1"
+          },
+          "wordpress": {
+            "width": 50,
+            "uris": ["https://metrics.operas-eu.org/wordpress/references/v1"],
+            "operas_definition": "https://metrics.operas-eu.org/wordpress/references/v1"
+          }
         }
       }
     }
   }
-};
+</script>
 ```
 
-Within the `tabs` object, the next child should always be named after a _measure_ (such as `citations` or `references` in the example above). Whilst the widget has been tested with several [Supported Measures](#supported-measures) (any of which can be plugged in above!), the API you are using may provide additional measures that the widget should support.
+There is admittedly quite a _lot_ to unpack for this one.
+
+Within the `tabs` object, the next child should always be named after a **measure** (such as `citations` or `references` in the example above). You can find out which measures are supported in the [Supported Measures](#supported-measures) table.
+
+Each measure is also an object, which contains:
 
 #### order
 
-The first (and **optional**) field is `order`. This tells the widget what priority to give this measure on the navigation menu, with 0 being the highest priority. In the example above, _citations_ has an order of 0 so will appear before _references_ which has an order of 1.
+The first (and **optional**) field is `order`. This tells the widget what left-to-right priority to give this measure on the navigation menu, with 0 being the highest priority. In the example above, _citations_ has an order of 0 so will appear before _references_ which has an order of 1.
 
 #### nav_counts
 
@@ -217,11 +315,13 @@ The next (and **required**) field is `nav_counts`: an array which tells the navi
 
 In most cases, multiple sources (Google Analytics, OPERAS, Ubiquity Press) will be collecting data, though you may not want to include all of these sources in your figures. As such, you can provide an array of URIs which you _do_ wish to use here.
 
-If your array contains more than one URI, the data will be aggregated into one number. For example, if you use Google Analytics (500 views) and OPERAS (100 views) URIs, the value shown in the navigation would be 600 views, as it is the aggregation of both.
+If your array contains more than one URI, the data will be aggregated into one number. For example, if you include Google Analytics (500 views) and OPERAS (100 views) here, the value shown in the navigation tab will be 600 views, as it is the aggregation of both.
 
 If you are unsure about what measure URIs are available to you, you will be able to find a full list of available measures from the API. Replacing this link with the values from your _metrics_config_ object, you can find all of the URIs from the JSON response:
 
 > **{{base_url}}**?filter=**{{work_uri}}**&aggregation=measure_uri
+
+_(It's recommended to have a browser extension that formats JSON responses)_.
 
 The `nav_counts` array also supports use of a wildcard item (`['*']`) which will tell the navigation menu to use _all available_ URIs when calculating the totals. It is recommended to only use this if you are completely sure that there will not be any overlap in your data that could cause inflated numbers.
 
@@ -283,6 +383,62 @@ references: {
 ```
 
 Above, both the `wikipedia_articles` and `wordpress` graphs will have their own definition labels, linking to different locations. The labels will appear below each graph as a child of its wrapper.
+
+## Events
+
+Because we don't know ahead of time whether the widget will have content or not, the widget provides a series of subscribable events to help design your site around this.
+
+The widget has a variety of different events that can be subscribed to.
+
+| event name        | arguments | description                                                                                                                                            |
+| ----------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| widget_loading    | ()        | a configuration file has been found and the widget is now loading                                                                                      |
+| widget_loaded     | (`tabs`)  | the widget has been loaded successfully.<br>provides an array of all _non-empty_ navigation `tabs` loaded, which could be empty                        |
+| widget_load_error | (`err`)   | the widget could not be loaded.<br>provides the `err` message thrown.<br>the error message will also be logged to the console                          |
+| tab_panel_loading | (`name`)  | one of the tab panels is being loaded for the first time.<br>provides the `name` of the tab panel, which will match the name provided in `config.tabs` |
+| tab_panel_loaded  | (`name`)  | one of the tab panels has loaded for the first time.<br>provides the `name` of the tab panel, which will match the name provided in `config.tabs`      |
+
+### Subscribing to events
+
+To subscribe to an event, you'll need to add some more JavaScript code beneath the minified code added in added in [Getting Started](#getting-started). Alternatively, you can wrap it in a new `<script>` tag below that one:
+
+```html
+<script>
+  window.hirmeoswidget.ready(w => {
+    w.events.subscribe('widget_loading', () => ...);
+    w.events.subscribe('widget_loaded', (tabs) => ...);
+    // as many events as you need!
+  });
+</script>
+```
+
+When the condition matching an event is met, the callback function will be called.
+
+One example use-case for this may be that you wish to display a heading tag above the widget only if it _does_ have content, and not show the widget or heading at all if not.
+
+By first setting `hide_initial_loading_screen` in the [settings](#settings), the widget will only appear once it's fully loaded.
+
+You can then subscribe to the `widget_loaded` event, which provides an array of tabs that will be shown in the navigation menu. If that array is [not] empty, you can execute some logic to hide/show your wrapping UI:
+
+```html
+<script>
+  window.hirmeoswidget.ready(w => {
+    w.events.subscribe('widget_loaded', tabs => {
+      if (tabs.length > 0) {
+        document
+          .getElementById('metrics-widget-heading')
+          .classList.remove('hidden');
+      }
+    });
+  });
+</script>
+```
+
+Here, only when the widget is loaded _and_ is confirmed to contain content will we show the H2 heading element above it. It's great for accessibility.
+
+### Unsubscribing from events
+
+You can also unsubscribe from events by using the same logic above, but replacing `subscribe` with `unsubscribe`.
 
 ## Supported Languages
 

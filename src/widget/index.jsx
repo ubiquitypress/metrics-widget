@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import widgetEvent from './events/widget-event';
 import ConfigProvider from './contexts/config';
 import Widget from './components/widget';
 import MetricsProvider from './contexts/metrics';
@@ -8,13 +9,17 @@ import { configPropTypes } from './proptypes';
 import './polyfills';
 
 const Main = ({ config }) => {
+  // No configuration found - throw a gentle error
   if (!config)
     return <p>No configuration found - please check the documentation.</p>;
 
+  // Call the `widget_loading` event
+  widgetEvent('widget_loading');
+
   return (
     <ConfigProvider config={config}>
-      <MetricsProvider config={config}>
-        <I18nProvider config={config}>
+      <MetricsProvider>
+        <I18nProvider>
           <Widget />
         </I18nProvider>
       </MetricsProvider>
@@ -23,7 +28,10 @@ const Main = ({ config }) => {
 };
 
 Main.propTypes = {
-  config: PropTypes.shape(configPropTypes).isRequired
+  config: PropTypes.shape(configPropTypes)
+};
+Main.defaultProps = {
+  config: undefined
 };
 
 export default Main;

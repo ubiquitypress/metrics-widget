@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { configPropTypes } from '../../proptypes';
+import { useConfig } from '../config';
 import getLanguage from './get-language';
 import deepFind from '../../utils/deep-find';
 
 const I18nContext = createContext({});
 
-const I18nProvider = ({ config, children }) => {
+const I18nProvider = ({ children }) => {
+  const config = useConfig();
   const [data, setData] = useState({
     lang: undefined,
     dictionary: {}
@@ -42,7 +43,6 @@ const I18nProvider = ({ config, children }) => {
 export const useTranslation = () => useContext(I18nContext);
 
 I18nProvider.propTypes = {
-  config: PropTypes.shape(configPropTypes).isRequired,
   children: PropTypes.node.isRequired
 };
 

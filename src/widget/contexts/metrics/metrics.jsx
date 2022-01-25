@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { configPropTypes } from '../../proptypes';
+import { useConfig } from '../config';
 
 const MetricsContext = createContext({});
 
-const MetricsProvider = ({ config, children }) => {
-  const [_config] = useState(config);
+const MetricsProvider = ({ children }) => {
+  const config = useConfig();
   const [metricsData] = useState({});
 
   // Function to fetch metric data
@@ -15,7 +15,7 @@ const MetricsProvider = ({ config, children }) => {
       if (metricsData[measure]) return metricsData[measure];
 
       // Get the data from the API
-      const url = `${_config.settings.base_url}?filter=work_uri:${_config.settings.work_uri}${measure}`;
+      const url = `${config.settings.base_url}?filter=work_uri:${config.settings.work_uri}${measure}`;
       const res = await fetch(url);
       const { data } = await res.json();
 
@@ -40,7 +40,6 @@ const MetricsProvider = ({ config, children }) => {
 export const useMetrics = () => useContext(MetricsContext);
 
 MetricsProvider.propTypes = {
-  config: PropTypes.shape(configPropTypes).isRequired,
   children: PropTypes.node.isRequired
 };
 

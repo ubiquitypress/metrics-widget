@@ -6,6 +6,7 @@ import { render as rtlRender, waitFor, act } from '@testing-library/react';
 import mockLoadScript from '../load-script/load-script';
 import { useMetrics as mockUseMetrics } from '../../contexts/metrics';
 import { useConfig as mockConfig } from '../../contexts/config';
+import { WINDOW_WIDGET_NAME } from '../../consts';
 
 export const render = ui => ({ ...rtlRender(ui) });
 
@@ -28,5 +29,8 @@ mockConfig.mockImplementation(() => ({ tabs: [] }));
 afterEach(() => {
   jest.clearAllMocks();
 });
+
+// mock the window
+window[WINDOW_WIDGET_NAME] = {};
 
 export { waitFor, act, mockLoadScript, mockUseMetrics, mockConfig };

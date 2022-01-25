@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import styles from './panel.module.scss';
 import { useConfig } from '../../contexts/config';
 import deepFind from '../../utils/deep-find';
 import Graph from '../graph';
+import widgetEvent from '../../events/widget-event';
 import { useTranslation } from '../../contexts/i18n';
 import Loading from '../loading';
 import OperasDefinition from '../operas-definition';
@@ -20,16 +21,27 @@ const Panel = ({ name, active }) => {
     graphs: deepFind(config, `tabs.${name}.graphs`),
     definition: deepFind(config, `tabs.${name}.operas_definition`)
   });
-  const isLoaded = status.loaded === Object.keys(data.graphs).length;
 
-  // Called when a graph is fully loaded
+  // Called when one child graph is fully loaded
   const onGraphReady = () =>
     setStatus(prevState => ({ ...prevState, loaded: prevState.loaded + 1 }));
 
   // Once the panel has been opened once, keep its content permanently rendered
   useEffect(() => {
-    if (active && !status.opened) setStatus({ ...status, opened: true });
+    if (active && !status.opened) {
+      widgetEvent('tab_panel_loading', name);
+      setStatus({ ...status, opened: true });
+    }
   }, [active]);
+
+  // Store the loaded status
+  const isLoaded = useMemo(() => {
+    if (status.loaded === Object.keys(data.graphs).length) {
+      widgetEvent('tab_panel_loaded', name);
+      return true;
+    }
+    return false;
+  }, [status.loaded]);
 
   return (
     <div
