@@ -15,9 +15,10 @@ module.exports = {
   rules: {
     'arrow-body-style': 'off',
     camelcase: 'off',
+    'no-restricted-exports': 'off',
     'no-console': [
       'warn',
-      { allow: ['clear', 'info', 'error', 'dir', 'trace', 'error'] }
+      { allow: ['clear', 'info', 'error', 'dir', 'trace'] }
     ]
   },
   overrides: [
