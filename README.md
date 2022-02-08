@@ -193,6 +193,7 @@ Definitions:
 | one_per_row_width           | number  | no       | if provided, all graphs will stretch to 100% width if the window width is less than or equal to this value.                                                                               |
 | start_graphs_from_zero      | boolean | no       | if `true`, line graphs will have a 0 value added at the start of the graph.<br> the default value for this field is `false`                                                               |
 | hide_initial_loading_screen | boolean | no       | if `true`, the initial "loading metrics" screen will not show, and the widget will only appear when the tabs are ready.<br>the default value for this field is `false`                    |
+| base_y_axis_always_zero     | boolean | no       | if `true`, the bottom-left value of the y-axis on all line graphs will always be 0.<br>the default value for this field is `true`                                                         |
 
 The `base_url` field in most cases will be the same as the example provided, unless you are hosting your own metrics service.
 

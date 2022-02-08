@@ -11,9 +11,9 @@ import styles from './widget.module.scss';
 
 const Widget = () => {
   const [data, setData] = useState({ loading: true, tabs: [], active: null });
-  const config = useConfig();
-  const { t } = useTranslation();
   const { fetchMetric } = useMetrics();
+  const { t } = useTranslation();
+  const config = useConfig();
 
   // Sets the active tab
   const setTab = name =>

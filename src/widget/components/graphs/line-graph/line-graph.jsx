@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadScript from '../../../utils/load-script';
 import { useTranslation } from '../../../contexts/i18n';
+import { useConfig } from '../../../contexts/config';
 import styles from './line-graph.module.scss';
+import deepFind from '../../../utils/deep-find';
 
 const LineGraph = ({ data, onReady }) => {
   const { seriesData, seriesName, xAxisCategories } = data;
   const { t, lang } = useTranslation();
+  const config = useConfig();
   const graphName = seriesName && seriesName.toLowerCase().replace(/ /g, '-');
 
   useEffect(() => {
@@ -46,6 +49,8 @@ const LineGraph = ({ data, onReady }) => {
             scales: {
               x: { ticks: { maxTicksLimit: 10 } },
               y: {
+                beginAtZero:
+                  deepFind(config, 'settings.base_y_axis_always_zero') ?? true,
                 ticks: {
                   callback: value => value.toLocaleString(lang),
                   precision: 0
@@ -90,7 +95,8 @@ const LineGraph = ({ data, onReady }) => {
 
                     // Set the position
                     const { offsetTop, offsetLeft } = context.chart.canvas;
-                    const position = context.chart.canvas.getBoundingClientRect();
+                    const position =
+                      context.chart.canvas.getBoundingClientRect();
                     const left = offsetLeft + tooltipModel.caretX;
                     const right =
                       offsetLeft + (position.width - tooltipModel.caretX);
