@@ -162,6 +162,7 @@ The following top-level are accepted within the `hirmeos-metrics-config` script:
 | field                 | required | description                                                                       |
 | --------------------- | -------- | --------------------------------------------------------------------------------- |
 | [settings](#settings) | yes      | holds all configuration settings for the widget                                   |
+| [theme](#theme)       | no       | stores configuration for theming of graphs                                        |
 | [locales](#locales)   | no       | allows overriding locales for existing languages and adding custom language codes |
 | [tabs](#tabs)         | yes      | contains information about which measures to display and which graphs to use      |
 
@@ -171,7 +172,8 @@ eg:
 <script type="application/json" id="hirmeos-metrics-config">
   {
     "settings": { ... },
-    "locales": { ... }
+    "locales": { ... },
+    "theme": { ... },
     "tabs": { ... }
   }
 </script>
@@ -214,10 +216,36 @@ Example:
       "first_panel_open_on_ready": true,
       "hide_initial_loading_screen": false
     },
-    "locales": { ... }
+    "theme": { ... },
+    "locales": { ... },
     "tabs": { ... }
   }
 </script>
+```
+
+### Theme
+
+The `theme` object is not required, and stores variables which will be used to control the colours of graphs.
+
+Because the widget does not use any inline CSS, this will not affect colours that can be overriden by CSS classes. Instead, it will focus on updating graphs that have gradients or colours that cannot easily be modified via CSS.
+
+Definitions
+
+| field         | type           | required | description                                                                                                                                          |
+| ------------- | -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| graph_primary | string (color) | no       | the primary colour of line graphs and map graphs, all lighter/darker colours will be based on this.<br>the default value for this field is `#506cd3` |
+
+Example
+
+```
+{
+    "settings": { ... },
+    "theme": {
+      "graph_primary": "#ee4949"
+    },
+    "locales": { ... },
+    "tabs": { ... }
+  }
 ```
 
 ### Locales
@@ -232,6 +260,7 @@ Example:
 <script type="application/json" id="hirmeos-metrics-config">
   {
     "settings": { ... },
+    "theme": { ... },
     "locales": {
       "en": {
         "tabs": {
@@ -262,6 +291,7 @@ Example:
 <script type="application/json" id="hirmeos-metrics-config">
   {
     "settings": { ... },
+    "theme": { ... },
     "locales": { ... },
     "tabs": {
       "citations": {

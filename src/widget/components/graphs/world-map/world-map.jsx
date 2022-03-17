@@ -1,12 +1,23 @@
 import React, { useEffect } from 'react';
+import { lighten } from 'polished';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../../../contexts/i18n';
+import { useConfig } from '../../../contexts/config';
 import loadScript from '../../../utils/load-script';
 import styles from './world-map.module.scss';
+import deepFind from '../../../utils/deep-find';
 
 const WorldMap = ({ data, onReady }) => {
   const { tab, values } = data;
   const { lang, t } = useTranslation();
+  const config = useConfig();
+
+  const colors = {
+    primary: deepFind(config, 'theme.graph_primary') || '#506cd3'
+  };
+  const shades = {
+    primary_light: lighten(0.3, colors.primary)
+  };
 
   const options = {
     map: 'world_merc',
@@ -14,13 +25,13 @@ const WorldMap = ({ data, onReady }) => {
     zoomOnScroll: false,
     regionStyle: {
       initial: {
-        fill: '#dce1f6',
+        fill: shades.primary_light,
         stroke: 'none',
         'stroke-width': 0,
         'stroke-opacity': 0
       },
       hover: {
-        fill: '#174ea6'
+        'fill-opacity': 0.8
       },
       selected: {},
       selectedHover: {}
@@ -36,7 +47,7 @@ const WorldMap = ({ data, onReady }) => {
       regions: [
         {
           values,
-          scale: ['#dce1f6', '#8596e1'],
+          scale: [shades.primary_light, colors.primary],
           normalizeFunction: 'polynomial'
         }
       ]

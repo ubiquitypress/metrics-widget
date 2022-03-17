@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { transparentize } from 'polished';
 import PropTypes from 'prop-types';
 import loadScript from '../../../utils/load-script';
 import { useTranslation } from '../../../contexts/i18n';
@@ -12,6 +13,13 @@ const LineGraph = ({ data, onReady }) => {
   const config = useConfig();
   const graphName = seriesName && seriesName.toLowerCase().replace(/ /g, '-');
 
+  const colors = {
+    primary: deepFind(config, 'theme.graph_primary') || '#506cd3'
+  };
+  const shades = {
+    primary_transparent: transparentize(0.6, colors.primary)
+  };
+
   useEffect(() => {
     if (seriesData.length === 0) return onReady();
     return loadScript('chart.js', () => {
@@ -23,7 +31,7 @@ const LineGraph = ({ data, onReady }) => {
 
         // Declare the gradient fill colour
         const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
-        gradientFill.addColorStop(0, 'rgba(80, 108, 211, 0.3)');
+        gradientFill.addColorStop(0, shades.primary_transparent);
         gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0');
 
         // eslint-disable-next-line no-new
@@ -35,7 +43,7 @@ const LineGraph = ({ data, onReady }) => {
               {
                 label: seriesName,
                 backgroundColor: gradientFill,
-                borderColor: '#506CD3',
+                borderColor: colors.primary,
                 data: seriesData,
                 fill: 'origin',
                 pointRadius: 0,
@@ -49,8 +57,10 @@ const LineGraph = ({ data, onReady }) => {
             scales: {
               x: { ticks: { maxTicksLimit: 10 } },
               y: {
-                beginAtZero:
-                  deepFind(config, 'settings.base_y_axis_always_zero') ?? true,
+                beginAtZero: deepFind(
+                  config,
+                  'settings.base_y_axis_always_zero'
+                ),
                 ticks: {
                   callback: value => value.toLocaleString(lang),
                   precision: 0
