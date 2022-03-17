@@ -3,8 +3,7 @@ import mergeDeep from '../../utils/merge-deep';
 import getLanguageFile from './get-language-file';
 
 const getLanguage = config => {
-  // Pull the user's chosen language, or default to 'en'
-  let lang = (deepFind(config, 'settings.language') || 'en').toLowerCase();
+  let lang = deepFind(config, 'settings.language').toLowerCase();
 
   // Get the dictionary for the closest language
   let dictionary = getLanguageFile(lang);

@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { configPropTypes } from '../../proptypes';
+import mergeDeep from '../../utils/merge-deep';
+import defaultConfig from './default';
 
 const ConfigContext = createContext({});
 
 const ConfigProvider = ({ config, children }) => {
-  const [configData] = useState(config);
+  const [configData] = useState(mergeDeep(defaultConfig, config));
 
   return (
     <ConfigContext.Provider value={{ ...configData }}>
