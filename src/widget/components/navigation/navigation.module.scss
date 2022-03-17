@@ -6,7 +6,7 @@
 
 .navigation-button {
   border: 0.1em solid transparent;
-  background: transparent;
+  background-color: transparent;
   padding: 0.2em 1em;
   border-radius: 0.4em;
   transition: background-color 0.2s ease;
@@ -29,17 +29,13 @@
   &:global(.active),
   &:hover {
     cursor: pointer;
-    background: #edf0fb;
+    background-color: #edf0fb;
   }
 
   &:focus {
     border-color: #506bd3;
     outline: none;
   }
-}
-
-.navigation-button.active {
-  background: red;
 }
 
 .navigation-count {
@@ -50,5 +46,5 @@
 }
 
 .navigation-name {
-  color: #000;
+  color: inherit;
 }
