@@ -57,7 +57,9 @@ const Widget = () => {
           tab.nav_counts.forEach(uri => {
             if (uri !== '*') {
               const [match] = measures.filter(m => m.measure_uri === uri);
-              count += match.value;
+              if (match) {
+                count += match.value;
+              }
             }
           });
 
