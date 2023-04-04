@@ -1,4 +1,4 @@
-image: eu.gcr.io/ubiquity-ci/gitlab-base:43
+image: registry.gitlab.com/ubiquitypress/metrics-widget:ci-baseimage-46
 
 stages:
   - k8s-scripts
