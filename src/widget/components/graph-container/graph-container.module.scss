@@ -1,0 +1,9 @@
+.graph-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.graph {
+  flex-grow: 1;
+}

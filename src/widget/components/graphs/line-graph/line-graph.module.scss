@@ -1,43 +1,43 @@
-.line-graph {
-  position: relative; // prevent the tooltip leaving
-  height: 250px;
+.line-graph-container {
+  position: relative;
+  height: 100%;
 }
 
 .line-graph-tooltip {
   opacity: 0;
-  position: absolute;
-  border: 1px solid #ccc;
-  box-shadow: rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-  padding: 1.1em;
-  pointer-events: none;
-  background-color: #fff;
-  border-radius: 0.5em;
-  font-size: smaller;
-  transition: all 0.1s ease;
-  color: #3c4043;
-}
-
-.line-graph-tooltip-content {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: rgb(60 64 67 / 15%) 0px 2px 6px 2px;
+  padding: 1.1em;
+  pointer-events: none;
+  border-radius: 4px;
+  color: #3c4043;
+  font-size: smaller;
+  transition: all 0.1s ease;
+  z-index: 2;
 }
 
-.line-graph-tooltip-date {
-  color: #5f6368;
-  margin-bottom: 0.5em;
-}
-
-.line-graph-tooltip-data {
+.line-graph-tooltip-container {
   display: flex;
   justify-content: space-between;
-}
-
-.line-graph-tooltip-name {
-  padding-right: 0.5em;
-  white-space: nowrap;
+  gap: 2rem;
 }
 
 .line-graph-tooltip-value {
-  margin-left: 2em;
+  font-weight: bold;
+}
+
+.line-graph-tooltip-scope {
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: smaller;
+  opacity: 0.7;
+
+  &:empty {
+    display: none;
+  }
 }

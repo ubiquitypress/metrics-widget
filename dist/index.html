@@ -1,13 +1,181 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Metrics Widget</title>
   </head>
+
   <body>
+    <script type="application/json" id="operas-metrics-config">
+      {
+        "settings": {
+          "base_url": "https://metrics-api.operas-eu.org/events",
+          "element_id": "metrics-widget",
+          "locale": "en-US",
+          "cdn_scripts_url": "https://storage.googleapis.com/operas/metrics-widget/v{major}/{version}/scripts",
+          "cdn_images_url": "https://storage.googleapis.com/operas/metrics-widget/v{major}/{version}/images"
+        },
+        "options": {
+          "default_graph_width": 100,
+          "hide_initial_loading_screen": false,
+          "load_graph_data_immediately": true,
+          "open_first_tab_by_default": false,
+          "locale_fallback_type": "mixed",
+          "text_graph_variable_regex": "{(.*?)}",
+          "text_graph_html_support": "safe"
+        },
+        "tabs": [
+          {
+            "id": "downloads",
+            "name": "Downloads",
+            "order": 2,
+            "scopes": {
+              "book_downloads_up_ga": {
+                "title": "Book downloads (UP-GA)",
+                "works": ["info:doi:10.5334/bct"],
+                "measures": ["up-ga/downloads"]
+              },
+              "book_downloads_oapen": {
+                "title": "Book downloads (OAPEN)",
+                "works": ["info:doi:10.5334/bct"],
+                "measures": ["oapen/downloads"]
+              }
+            },
+            "graphs": [
+              {
+                "id": "line_graph",
+                "type": "line",
+                "title": "Downloads over time",
+                "scopes": ["book_downloads_oapen", "book_downloads_up_ga"],
+                "options": {
+                  "width": 100
+                },
+                "config": {
+                  "stacked": true,
+                  "range": "auto",
+                  "artificial_zero": false,
+                  "begin_at_zero": false
+                }
+              },
+              {
+                "id": "country_table",
+                "type": "country_table",
+                "title": "Downloads by country",
+                "scopes": ["book_downloads", "chapter_downloads"],
+                "options": {
+                  "width": 45
+                }
+              },
+              {
+                "id": "world_map",
+                "type": "world_map",
+                "scopes": ["book_downloads", "chapter_downloads"],
+                "options": {
+                  "width": 55
+                }
+              },
+              {
+                "id": "operas_definition",
+                "type": "text",
+                "config": {
+                  "content": "Definition for this metric on the <a href=\"https://metrics.operas-eu.org/up-ga/downloads/v1\">OPERAS</a> website"
+                },
+                "options": {
+                  "width": 100,
+                  "class": "subtext"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- Unminified version -->
+    <!-- NOTE: If modifying this, be sure to update the minified version on the docs! -->
+    <script>
+      window.operaswidget = (id => {
+        // Make sure the widget isn't already embedded
+        if (document.getElementById(id)) return widget;
+
+        // Create the script for embedding
+        const script = document.createElement('script');
+        script.id = id;
+        script.src = './widget.js';
+
+        // Insert the script at the bottom of the <body>
+        const body = document.getElementsByTagName('body')[0];
+        body.appendChild(script);
+
+        // Create an `eventQueue` array to store events before the widget is ready
+        // When the `getWindowEvents()` (widget) function is called, it will add two
+        // methods to this object: `on` and `off`, which will then allow the queued
+        // events to be handled by the widget.
+        const widget = window.operaswidget || {};
+        widget.eventQueue = [];
+        widget.ready = f => {
+          widget.eventQueue.push(f);
+        };
+
+        // Return the object
+        return widget;
+      })('operas-metrics');
+    </script>
+
+    <script>
+      // Store events to be called by the widget when it is ready
+      operaswidget.ready(w => {
+        w.events.on('widget_loading', () => {
+          console.log('the widget is loading');
+        });
+        w.events.on('widget_loading', () => {
+          console.log('the widget is loading again');
+        });
+        w.events.on('widget_ready', tabs => {
+          console.log('the widget has been loaded', tabs);
+        });
+        w.events.on('widget_ready', tabs => {
+          console.log('the widget has been loaded x2', tabs);
+        });
+        w.events.on('widget_ready', tabs => {
+          console.log('the widget has been loaded x3', tabs);
+        });
+        w.events.on('tab_panel_loading', tab => {
+          console.log('the panel is loading', tab);
+        });
+        w.events.on('tab_panel_ready', tab => {
+          console.log('the panel has been loaded', tab);
+        });
+        w.events.on('graph_loading', graph => {
+          console.log('the graph is loading', graph);
+        });
+        w.events.on('graph_ready', graph => {
+          console.log('the graph has been loaded', graph);
+        });
+      });
+    </script>
+
+    <div id="metrics-widget"></div>
+    <link rel="stylesheet" href="./widget.css" />
+
+    <!-- TESTING PURPOSES ONLY -- DON'T COPY THESE STYLES -->
+    <style>
+      #metrics-widget {
+        --color-primary: #506cd3;
+        --color-primary-light: #edf0fb;
+        --color-primary-dark: #506bd3;
+        --color-line-graph-1: #506cd3;
+        --color-line-graph-2: #f5a623;
+        --color-world-map: #dbe1f6;
+        --color-world-map-dark: #899de2;
+      }
+    </style>
     <style>
       @media (max-width: 700px) {
         body {
           width: 100% !important;
+          padding: 0 !important;
         }
       }
       * {
@@ -16,245 +184,42 @@
       }
       body {
         margin: 0;
-        width: 700px;
-        padding: 100px; /* allows us to ensure positions are all relative to the container  */
+        width: 800px;
+        padding: 20px; /* allows us to ensure positions are all relative to the container  */
         font-size: 14px;
+        border: 1px solid #000;
       }
       a {
         color: blue;
       }
-    </style>
 
-    <script type="application/json" id="hirmeos-metrics-config">
-      {
-        "settings": {
-          "base_url": "https://metrics-api.operas-eu.org/events",
-          "work_uri": "info:doi:10.5334/bbc",
-          "work_title": "Faculty Development Program Models to Advance Teaching and Learning Within Health Science Programs",
-          "element_id": "metrics-block",
-          "language": "en",
-          "localise_country_codes": true,
-          "one_per_row_width": 450,
-          "first_panel_open_on_ready": false,
-          "start_graphs_from_zero": false,
-          "base_y_axis_always_zero": true,
-          "hide_initial_loading_screen": false,
-          "show_google_scholar_citation_link": true
-        },
-        "theme": {
-          "graph_primary": "#506cd3"
-        },
-        "locales": {
-          "en": {
-            "tabs": {
-              "sessions": "Abstract Views",
-              "references": "Online Media"
-            }
-          }
-        },
-        "tabs": {
-          "downloads": {
-            "order": 2,
-            "nav_counts": [
-              "https://metrics.operas-eu.org/up-ga/downloads/v1",
-              "https://metrics.operas-eu.org/oapen/downloads/v1"
-            ],
-            "graphs": {
-              "time_graph": {
-                "width": 100,
-                "uris": [
-                  "https://metrics.operas-eu.org/up-ga/downloads/v1",
-                  "https://metrics.operas-eu.org/oapen/downloads/v1"
-                ]
-              },
-              "country_table": {
-                "width": 40,
-                "uris": [
-                  "https://metrics.operas-eu.org/up-ga/downloads/v1",
-                  "https://metrics.operas-eu.org/oapen/downloads/v1"
-                ]
-              },
-              "world_map": {
-                "width": 60,
-                "hide_label": true,
-                "uris": [
-                  "https://metrics.operas-eu.org/up-ga/downloads/v1",
-                  "https://metrics.operas-eu.org/oapen/downloads/v1"
-                ]
-              }
-            },
-            "operas_definition": "https://metrics.operas-eu.org/up-ga/downloads/v1"
-          },
-          "citations": {
-            "order": 5,
-            "nav_counts": [
-              "https://metrics.operas-eu.org/crossref/citations/v1"
-            ],
-            "graphs": {
-              "time_graph": {
-                "width": 100,
-                "uris": ["https://metrics.operas-eu.org/crossref/citations/v1"],
-                "operas_definition": "https://metrics.operas-eu.org/crossref/citations/v1"
-              }
-            }
-          },
-          "references": {
-            "order": 7,
-            "nav_counts": [
-              "https://metrics.operas-eu.org/wordpress/references/v1",
-              "https://metrics.operas-eu.org/wikipedia/references/v1"
-            ],
-            "graphs": {
-              "wikipedia_articles": {
-                "width": 100,
-                "uris": [
-                  "https://metrics.operas-eu.org/wikipedia/references/v1"
-                ],
-                "operas_definition": "https://metrics.operas-eu.org/wikipedia/references/v1"
-              },
-              "wordpress": {
-                "width": 100,
-                "uris": [
-                  "https://metrics.operas-eu.org/wordpress/references/v1"
-                ],
-                "operas_definition": "https://metrics.operas-eu.org/wordpress/references/v1"
-              }
-            }
-          },
-          "sessions": {
-            "order": 1,
-            "nav_counts": ["https://metrics.operas-eu.org/up-ga/sessions/v1"],
-            "graphs": {
-              "time_graph": {
-                "width": 100,
-                "uris": ["https://metrics.operas-eu.org/up-ga/sessions/v1"]
-              },
-              "country_table": {
-                "width": 40,
-                "uris": ["https://metrics.operas-eu.org/up-ga/sessions/v1"]
-              },
-              "world_map": {
-                "width": 60,
-                "hide_label": true,
-                "uris": ["https://metrics.operas-eu.org/up-ga/sessions/v1"]
-              }
-            },
-            "operas_definition": "https://metrics.operas-eu.org/up-ga/sessions/v1"
-          },
-          "reads": {
-            "order": 3,
-            "nav_counts": ["https://metrics.operas-eu.org/up-ga/reads/v1"],
-            "graphs": {
-              "time_graph": {
-                "width": 100,
-                "uris": ["https://metrics.operas-eu.org/up-ga/reads/v1"]
-              },
-              "country_table": {
-                "width": 40,
-                "uris": ["https://metrics.operas-eu.org/up-ga/reads/v1"]
-              },
-              "world_map": {
-                "width": 60,
-                "hide_label": true,
-                "uris": ["https://metrics.operas-eu.org/up-ga/reads/v1"]
-              }
-            },
-            "operas_definition": "https://metrics.operas-eu.org/up-ga/reads/v1"
-          },
-          "annotations": {
-            "order": 4,
-            "nav_counts": [
-              "https://metrics.operas-eu.org/hypothesis/annotations/v1"
-            ],
-            "graphs": {
-              "time_graph": {
-                "width": 100,
-                "uris": [
-                  "https://metrics.operas-eu.org/hypothesis/annotations/v1"
-                ]
-              },
-              "hypothesis": {
-                "width": 100,
-                "uris": [
-                  "https://metrics.operas-eu.org/hypothesis/annotations/v1"
-                ]
-              }
-            },
-            "operas_definition": "https://metrics.operas-eu.org/hypothesis/annotations/v1"
-          },
-          "tweets": {
-            "order": 6,
-            "nav_counts": ["https://metrics.operas-eu.org/twitter/tweets/v1"],
-            "graphs": {
-              "tweets": {
-                "width": 50,
-                "uris": ["https://metrics.operas-eu.org/twitter/tweets/v1"]
-              },
-              "time_graph": {
-                "width": 50,
-                "uris": ["https://metrics.operas-eu.org/twitter/tweets/v1"],
-                "operas_definition": "https://metrics.operas-eu.org/twitter/tweets/v1"
-              }
-            }
-          }
-        }
+      .individual-source-label {
+        width: max-content !important;
+        padding: 10px;
+        border: 1px solid #d2d2d2;
+        border-radius: 3px;
       }
-    </script>
 
-    <!-- Uncompressed script for documentation -->
-    <script>
-      window.hirmeoswidget = ((document, type, id) => {
-        // Get the first script
-        const first = document.getElementsByTagName(type)[0];
+      .subtext {
+        margin: 0.5em;
+        padding: 1.5em 1.5em 0 1.5em;
+        font-size: smaller;
+        border-top: 1px solid #eee;
+      }
 
-        // Make sure the widget isn't already embedded
-        const widget = window.hirmeoswidget || {};
-        if (document.getElementById(id)) return widget;
+      #mw-tab-panel-tweets .mw__tab-panel-row[data-index='1'] {
+        align-items: flex-start;
+      }
 
-        // Create the script for embedding
-        const script = document.createElement(type);
-        script.id = id;
-        script.src = './widget.js';
-
-        // Insert the script
-        first.parentNode.insertBefore(script, first);
-
-        // Queue any event calls for when the widget is ready
-        // (Calling widget.ready() will push to the eventQueue, handled by the widget)
-        widget.eventQueue = [];
-        widget.ready = f => {
-          widget.eventQueue.push(f);
-        };
-
-        // Return the object
-        return widget;
-      })(document, 'script', 'hirmeos-metrics');
-    </script>
-
-    <script>
-      // Store events to be called by the widget when it is ready
-      hirmeoswidget.ready(function (w) {
-        w.events.subscribe('widget_loading', () => {
-          console.log('the widget is loading');
-        });
-        w.events.subscribe('widget_loading', () => {
-          console.log('the widget is loading again');
-        });
-        w.events.subscribe('widget_loaded', tabs => {
-          console.log('the widget has been loaded', tabs);
-        });
-        w.events.subscribe('widget_load_error', err => {
-          console.log('the widget could not be loaded', err);
-        });
-        w.events.subscribe('tab_panel_loading', name => {
-          console.log('the panel is loading', name);
-        });
-        w.events.subscribe('tab_panel_loaded', name => {
-          console.log('the panel has been loaded', name);
-        });
-      });
-    </script>
-
-    <div id="metrics-block"></div>
+      .operas-definition-with-version {
+        flex-direction: column;
+        gap: 0;
+      }
+      .operas-definition-with-version .version {
+        border: none;
+        padding-top: 0;
+        opacity: 0.6;
+      }
+    </style>
   </body>
 </html>

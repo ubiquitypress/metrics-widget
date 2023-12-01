@@ -1,0 +1,17 @@
+{
+  "loading": "Loading...",
+  "navigation": {
+    "label": "Navigation"
+  },
+  "graphs": {
+    "empty": "No data available",
+    "hypothesis": {
+      "date": "Date",
+      "author": "Author",
+      "summary": "Summary"
+    },
+    "tweets": {
+      "load_more": "More tweets"
+    }
+  }
+}

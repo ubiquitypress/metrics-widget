@@ -1,2 +1,8 @@
-dist/widget.js
+# npm
 node_modules
+package-lock.json
+
+# next.js
+.next
+build
+public

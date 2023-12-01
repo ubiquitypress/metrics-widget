@@ -1,0 +1,22 @@
+.hypothesis-table {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.hypothesis-date {
+  white-space: nowrap;
+}
+
+.hypothesis-author {
+  font-weight: initial;
+}
+
+.hypothesis-summary {
+  font-weight: initial;
+}
+
+.hypothesis-summary-data {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}

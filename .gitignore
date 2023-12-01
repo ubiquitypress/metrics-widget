@@ -1,2 +1,8 @@
+# Dist
+dist/widget.js*
+
+# Node
 node_modules
+
+# MacOS
 .DS_Store

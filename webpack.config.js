@@ -1,20 +1,22 @@
+const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/index.jsx',
+  entry: './src/entry.tsx',
   output: {
+    path: path.resolve(__dirname, './dist'),
     filename: 'widget.js'
   },
   devServer: {
-    static: './dist'
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
+    static: {
+      directory: path.resolve(__dirname, './dist')
+    }
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|ts)x?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'
@@ -23,14 +25,9 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Use `style-loader` to render things during development, but we want to separate
-          // the CSS from the JS when building, so we'll use the MiniCssExtractPlugin for that
           process.env.NODE_ENV === 'development'
             ? 'style-loader'
             : MiniCssExtractPlugin.loader,
-
-          // We're telling `css-loader` to rename our classes `mw__[local]` so they can be
-          // overriden by anyone using the widget - just be careful of conflicts.
           {
             loader: 'css-loader',
             options: {
@@ -39,12 +36,14 @@ module.exports = {
               }
             }
           },
-
-          // Using `sass-loader` allows us to use .scss files, making things much cleaner
           'sass-loader'
         ]
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+    plugins: [new TsconfigPathsPlugin()]
   },
   plugins: [
     new MiniCssExtractPlugin({
