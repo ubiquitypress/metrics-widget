@@ -4,6 +4,7 @@ import { getCountryCodeFromUri } from '@/utils';
 export const mapCountryTableData = (data: GraphData, config: Config) => {
   // Store each country's data in an object
   const countries: Record<string, number> = {};
+  let unknown = 0;
 
   // Loop through each country
   data.merged.forEach(event => {
@@ -20,6 +21,8 @@ export const mapCountryTableData = (data: GraphData, config: Config) => {
           countries[code] = event.value;
         }
       }
+    } else {
+      unknown += event.value;
     }
   });
 
@@ -34,6 +37,11 @@ export const mapCountryTableData = (data: GraphData, config: Config) => {
       value
     };
   });
+
+  // Add the unknown country to the list (we leave the key empty for this one)
+  if (unknown) {
+    list.push({ key: '', value: unknown });
+  }
 
   // Sort the countries by value
   list.sort((a, b) => b.value - a.value);
