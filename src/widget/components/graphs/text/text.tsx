@@ -25,7 +25,7 @@ export const Text = (props: TextProps) => {
 
   // Make a dictionary of all text replacements
   const replacements = {
-    app_version: getAppVersion(),
+    app_version: getAppVersion().version,
 
     // get the `total` from each `data.data` object
     ...Object.fromEntries(
