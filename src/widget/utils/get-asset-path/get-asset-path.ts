@@ -38,5 +38,5 @@ export const getAssetPath = (type: AssetType, path: string, config: Config) => {
   }
 
   // Return the full URL
-  return new URL(path, url).toString();
+  return `${url}/${path}`;
 };
