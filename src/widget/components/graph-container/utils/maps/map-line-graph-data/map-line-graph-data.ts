@@ -60,7 +60,11 @@ export const mapLineGraphData = (
   // Convert each scope into a dataset
   const datasets: Dataset[] = graph.scopes.map(scope => {
     // Extract relevant data for the scope and generate a lookup object
-    const scopeData = data.data[scope].data;
+    const scopeData = data.data[scope]?.data;
+    if (!scopeData) {
+      return { label: scope, data: [] };
+    }
+
     const scopeDataLookup = processScopeData(scopeData, range, config);
 
     // Map each timestamp to its respective data value (or 0 if not present)

@@ -80,7 +80,7 @@ export interface GraphData {
     [key: string]: {
       total: number;
       data: APIEvent[];
-    };
+    } | null;
   };
   merged: APIEvent[];
 }
