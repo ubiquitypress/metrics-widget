@@ -19,66 +19,49 @@
             "scopes": {
               "book_sessions_ga": {
                 "title": "Book views (press: GA)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-ga/sessions"]
               },
               "book_sessions_up": {
                 "title": "Book views (press: logs)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-logs/sessions"],
                 "startDate": "2023-07-01"
               },
               "book_sessions_figshare": {
                 "title": "Book views (Figshare)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["figshare/views"]
               },
               "book_sessions_uplo": {
                 "title": "Book views (UPLO)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["uplo/sessions"]
+              },
+              "book_sessions_google_books": {
+                "title": "Book views (Google Books)",
+                "works": ["info:doi:10.5334/bcc"],
+                "measures": ["google-books/views"]
               },
               "chapter_sessions": {
                 "title": "Chapter views (press: logs)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["up-logs/sessions"]
               },
               "chapter_sessions_figshare": {
                 "title": "Chapter views (Figshare)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["figshare/views"]
               },
               "chapter_sessions_uplo": {
                 "title": "Chapter views (UPLO)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["uplo/sessions"]
+              },
+              "chapter_sessions_google_books": {
+                "title": "Chapter views (Google Books)",
+                "works": [],
+                "measures": ["google-books/views"]
               }
             },
             "graphs": [
@@ -91,9 +74,11 @@
                   "book_sessions_up",
                   "book_sessions_figshare",
                   "book_sessions_uplo",
+                  "book_sessions_google_books",
                   "chapter_sessions",
                   "chapter_sessions_figshare",
-                  "chapter_sessions_uplo"
+                  "chapter_sessions_uplo",
+                  "chapter_sessions_google_books"
                 ],
                 "options": { "width": 100 },
                 "config": { "stacked": true, "begin_at_zero": true }
@@ -106,9 +91,11 @@
                   "book_sessions_up",
                   "book_sessions_figshare",
                   "book_sessions_uplo",
+                  "book_sessions_google_books",
                   "chapter_sessions",
                   "chapter_sessions_figshare",
-                  "chapter_sessions_uplo"
+                  "chapter_sessions_uplo",
+                  "chapter_sessions_google_books"
                 ],
                 "options": { "width": 50 }
               },
@@ -120,9 +107,11 @@
                   "book_sessions_up",
                   "book_sessions_figshare",
                   "book_sessions_uplo",
+                  "book_sessions_google_books",
                   "chapter_sessions",
                   "chapter_sessions_figshare",
-                  "chapter_sessions_uplo"
+                  "chapter_sessions_uplo",
+                  "chapter_sessions_google_books"
                 ],
                 "options": { "width": 50 }
               },
@@ -148,70 +137,43 @@
             "scopes": {
               "book_downloads": {
                 "title": "Book downloads (press: GA)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-ga/downloads"]
               },
               "book_downloads_up": {
                 "title": "Book downloads (press: logs)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-logs/downloads"],
                 "startDate": "2023-07-01"
               },
               "book_downloads_oapen": {
                 "title": "Book downloads (OAPEN)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["oapen/downloads"]
               },
               "book_downloads_figshare": {
                 "title": "Book downloads (Figshare)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["figshare/downloads"]
               },
               "book_downloads_uplo": {
                 "title": "Book downloads (UPLO)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["uplo/downloads"]
               },
               "chapter_downloads": {
                 "title": "Chapter downloads (press: logs)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["up-logs/downloads"]
               },
               "chapter_downloads_figshare": {
                 "title": "Chapter downloads (Figshare)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["figshare/downloads"]
               },
               "chapter_downloads_uplo": {
                 "title": "Chapter downloads (UPLO)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["uplo/downloads"]
               }
             },
@@ -280,19 +242,24 @@
             "scopes": {
               "reads_ga": {
                 "title": "Book reads (press: GA)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-ga/reads"]
               },
               "reads_up": {
                 "title": "Book reads (press: logs)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["up-logs/reads"],
                 "startDate": "2023-07-01"
               },
               "reads_uplo": {
                 "title": "Book reads (UPLO)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["uplo/reads"]
+              },
+              "reads_google_books": {
+                "title": "Book reads (Google Books)",
+                "works": ["info:doi:10.5334/bcc"],
+                "measures": ["google-books/reads"]
               }
             },
             "graphs": [
@@ -300,20 +267,35 @@
                 "id": "line_graph",
                 "type": "line",
                 "title": "Reads over time",
-                "scopes": ["reads_ga", "reads_up", "reads_uplo"],
+                "scopes": [
+                  "reads_ga",
+                  "reads_up",
+                  "reads_uplo",
+                  "reads_google_books"
+                ],
                 "options": { "width": 100 },
                 "config": { "stacked": true, "begin_at_zero": true }
               },
               {
                 "id": "table",
                 "type": "country_table",
-                "scopes": ["reads_ga", "reads_up", "reads_uplo"],
+                "scopes": [
+                  "reads_ga",
+                  "reads_up",
+                  "reads_uplo",
+                  "reads_google_books"
+                ],
                 "options": { "width": 50 }
               },
               {
                 "id": "map",
                 "type": "world_map",
-                "scopes": ["reads_ga", "reads_up", "reads_uplo"],
+                "scopes": [
+                  "reads_ga",
+                  "reads_up",
+                  "reads_uplo",
+                  "reads_google_books"
+                ],
                 "options": { "width": 50 }
               },
               {
@@ -333,7 +315,7 @@
             "scopes": {
               "hypothesis": {
                 "title": "Hypothesis",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["hypothesis/annotations"]
               }
             },
@@ -370,21 +352,12 @@
             "scopes": {
               "book_citations": {
                 "title": "Book citations",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["crossref/citations"]
               },
               "chapter_citations": {
                 "title": "Chapter citations",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["crossref/citations"]
               }
             },
@@ -418,7 +391,9 @@
               {
                 "id": "operas_definition",
                 "type": "text",
-                "config": { "content": "" },
+                "config": {
+                  "content": "OPERAS Definitions: <a href=\"https://metrics.operas-eu.org/crossref/citations/v1\">Citations</a>"
+                },
                 "options": { "width": 100, "class": "subtext" }
               }
             ]
@@ -430,21 +405,12 @@
             "scopes": {
               "book_tweets": {
                 "title": "Book tweets",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["twitter/tweets"]
               },
               "chapter_tweets": {
                 "title": "Chapter tweets",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["twitter/tweets"]
               }
             },
@@ -498,40 +464,22 @@
             "scopes": {
               "book_references_wordpress": {
                 "title": "Book references (Wordpress)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["wordpress/references"]
               },
               "book_references_wikipedia": {
                 "title": "Book references (Wikipedia)",
-                "works": ["info:doi:10.1525/luminos.150"],
+                "works": ["info:doi:10.5334/bcc"],
                 "measures": ["wikipedia/references"]
               },
               "chapter_references_wordpress": {
                 "title": "Chapter references (Wordpress)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["wordpress/references"]
               },
               "chapter_references_wikipedia": {
                 "title": "Chapter references (Wikipedia)",
-                "works": [
-                  "info:doi:10.1525/luminos.150.a",
-                  "info:doi:10.1525/luminos.150.b",
-                  "info:doi:10.1525/luminos.150.c",
-                  "info:doi:10.1525/luminos.150.d",
-                  "info:doi:10.1525/luminos.150.e",
-                  "info:doi:10.1525/luminos.150.f",
-                  "info:doi:10.1525/luminos.150.g",
-                  "info:doi:10.1525/luminos.150.h"
-                ],
+                "works": [],
                 "measures": ["wikipedia/references"]
               }
             },
