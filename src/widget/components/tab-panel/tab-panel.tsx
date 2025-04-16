@@ -117,6 +117,7 @@ export const TabPanel = (props: TabPanelProps) => {
         className={styles['tab-panel-loading']}
         data-hidden={!state.loading || undefined}
         aria-hidden={!state.loading || undefined}
+        inert={state.loading}
       >
         {config.components?.tab_panel_loading_screen || t('loading')}
       </div>

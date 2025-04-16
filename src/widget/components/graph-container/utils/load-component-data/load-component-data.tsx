@@ -76,10 +76,10 @@ const loader: Record<Graphs, Loader> = {
       hasData: res.length > 0
     };
   },
-  world_map: ({ id, data }: LoaderData<IWorldMap>) => {
+  world_map: ({ id, data, graph }: LoaderData<IWorldMap>) => {
     const res = mapWorldMapData(data);
     return {
-      Component: <WorldMap id={id} data={res} />,
+      Component: <WorldMap id={id} data={res} graph={graph} />,
       hasData: Object.keys(res).length > 0
     };
   },

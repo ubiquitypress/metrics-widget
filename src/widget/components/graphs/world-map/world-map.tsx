@@ -1,12 +1,15 @@
 import { GraphEmptyMessage } from '@/components/common';
 import { useConfig } from '@/config';
+import type { WorldMap as IWorldMap } from '@/types';
 import { formatNumber, getWidgetStyle } from '@/utils';
 import { useEffect, useMemo } from 'react';
+import { WorldMapTable } from './world-map-table';
 import styles from './world-map.module.scss';
 
-interface WorldMapProps {
+export interface WorldMapProps {
   id: string;
   data: Record<string, number>;
+  graph: IWorldMap;
 }
 
 export const WorldMap = (props: WorldMapProps) => {
@@ -99,10 +102,15 @@ export const WorldMap = (props: WorldMapProps) => {
     return <GraphEmptyMessage />;
   }
   return (
-    <div
-      id={canvasId}
-      className={styles['world-map']}
-      data-testid='world-map'
-    />
+    <>
+      <div
+        id={canvasId}
+        className={styles['world-map']}
+        data-testid='world-map'
+        aria-hidden
+      />
+
+      <WorldMapTable {...props} />
+    </>
   );
 };

@@ -5,6 +5,10 @@
   },
   "graphs": {
     "empty": "No data available",
+    "line_graph": {
+      "date_label": "Date",
+      "total_label": "Total"
+    },
     "hypothesis": {
       "title": "Hypothesis",
       "date": "Date",
@@ -13,6 +17,11 @@
     },
     "country_table": {
       "unknown": "Unknown"
+    },
+    "world_map": {
+      "country_label": "Country",
+      "value_label": "Value",
+      "total_label": "Total"
     },
     "tweets": {
       "load_more": "More tweets"

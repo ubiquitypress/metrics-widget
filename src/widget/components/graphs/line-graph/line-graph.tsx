@@ -4,10 +4,11 @@ import type { Dataset, LineGraph as ILineGraph } from '@/types';
 import { formatNumber, getWidgetStyle } from '@/utils';
 import { transparentize } from 'polished';
 import { useEffect } from 'react';
+import { LineGraphTable } from './line-graph-table';
 import styles from './line-graph.module.scss';
 import { tooltipConfig } from './utils';
 
-interface LineGraphProps {
+export interface LineGraphProps {
   id: string;
   labels: string[];
   datasets: Dataset[];
@@ -154,8 +155,9 @@ export const LineGraph = (props: LineGraphProps) => {
   }
   return (
     <div className={styles['line-graph-container']}>
-      <canvas id={canvasId} className={styles['line-graph']} />
-      <div id={tooltipId} className={styles['line-graph-tooltip']}>
+      {/* Canvas and tooltip */}
+      <canvas id={canvasId} className={styles['line-graph']} aria-hidden />
+      <div id={tooltipId} className={styles['line-graph-tooltip']} aria-hidden>
         <div
           id={tooltipScopeId}
           className={styles['line-graph-tooltip-scope']}
@@ -174,6 +176,9 @@ export const LineGraph = (props: LineGraphProps) => {
           />
         </div>
       </div>
+
+      {/* Render contents into a visually hidden table for screen readers */}
+      <LineGraphTable {...props} />
     </div>
   );
 };
