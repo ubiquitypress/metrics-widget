@@ -745,14 +745,14 @@ Alternatively, the widget will still fully function even if you choose to not im
 
 ## Installation
 
-1. Use `yarn` to install the necessary dependencies.
-2. Run `yarn start` to start the development server.
+1. Run `npm install` to install the necessary dependencies.
+2. Run `npm run start` to start the development server.
 
 ## Building
 
-1. Run `yarn check` to make sure there are no linting issues.
+1. Run `npm run lint` to make sure there are no linting issues.
 2. Update the version in the `package.json` file. Sub-versions can be denoted using hyphens, such as `1.0.0-beta.12`.
-3. Run `yarn build` to build the application. This must be done _after_ changing the version.
+3. Run `npm run build` to build the application. This must be done _after_ changing the version.
 
 ## Deploying
 
