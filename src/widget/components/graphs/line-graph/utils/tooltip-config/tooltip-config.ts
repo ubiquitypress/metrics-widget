@@ -56,7 +56,7 @@ export const tooltipConfig = (
     // Set the scope text
     const scopeEl = document.querySelector(`#${tooltipScopeId}`);
     if (scopeEl && graph.config?.stacked) {
-      scopeEl.innerHTML = dataset.label;
+      scopeEl.innerHTML = dataset.label ?? '';
     }
 
     // Set the opacity

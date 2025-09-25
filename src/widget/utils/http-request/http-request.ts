@@ -24,7 +24,7 @@ export const HTTPRequest = async <T>(
 
     // Create a new cache entry for this request
     if (shouldCache) {
-      createCache<T>(url);
+      createCache(url);
     }
 
     // Make the request
