@@ -68,7 +68,6 @@
         "useHookAtTopLevel": "error"
       },
       "nursery": {
-        "noSecrets": "off",
         "useExplicitType": "off"
       },
       "performance": {
