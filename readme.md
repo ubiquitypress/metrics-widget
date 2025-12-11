@@ -41,6 +41,8 @@ export const Example = () => <MetricsWidget config={config} />;
 
 If you are not using React, use the HTML embed below.
 
+> Note: The npm package ships the React entrypoint and CSS (from `dist/npm`). The script-tag/UMD bundle for HTML embeds is served via the published CDN/GCS paths (or from the built `dist/` artifacts), not via the npm tarball.
+
 ## HTML embed (non-React)
 
 The first step is to add a HTML element to the page which will contain the widget:
