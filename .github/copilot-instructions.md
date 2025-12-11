@@ -15,8 +15,8 @@ This repository contains the **OPERAS Metrics Widget** - an embeddable HTML/Reac
 ## Critical Setup Instructions
 
 ### Environment Requirements
-- **Node.js:** v20.x (confirmed working with v20.19.6)
-- **npm:** v10.x (confirmed working with v10.8.2)
+- **Node.js:** v20.x (tested with v20.19.6 but any v20.x should work)
+- **npm:** v10.x (tested with v10.8.2 but any v10.x should work)
 - **Package Manager:** npm (uses package-lock.json)
 
 ### Installation Process
@@ -160,7 +160,9 @@ dist/
 
 ## CI/CD Pipeline (.github/workflows/ci.yml)
 
-**Trigger:** Only on git tags matching `v*` pattern (e.g., `v1.1.7`)
+**Trigger:** Git tags matching `v*` pattern (e.g., `v1.1.7`)
+
+**Note:** Some jobs have additional conditions - `build_embed` and `build_npm` also run on pushes to `main` branch, but `publish_npm` and `upload_cdn` only run on tags.
 
 **Jobs (in order):**
 
@@ -242,18 +244,20 @@ src/
 ### Git Ignore Patterns
 
 From `.gitignore`:
-- `dist/widget.js*` and `dist/*.widget.js*` - Build artifacts (main bundle and chunked bundles like 304.widget.js, 349.widget.js, etc.)
+- `dist/widget.js*` - Matches source maps and other widget.js derivatives (e.g., `widget.js.map`) but NOT `widget.js` itself
+- `dist/*.widget.js*` - Matches chunked bundles (e.g., `304.widget.js`, `349.widget.js`) and their derivatives
 - `dist/npm/` - npm package build artifacts
 - `node_modules/` - Dependencies
 - `.DS_Store` - MacOS files
 
-**IMPORTANT:** The following dist files ARE intentionally committed:
+**IMPORTANT:** The following dist files ARE intentionally committed and tracked in git:
+- `dist/widget.js` - Main UMD bundle (the base file without extensions)
 - `dist/widget.css` - CSS file for the widget
 - `dist/widget.js.LICENSE.txt` - License information
 - `dist/index.html` - Development test page with sample configuration
 - `dist/images/` - Widget assets (e.g., hypothesis-logo.svg)
 
-These files are tracked in git because they serve as examples/documentation and are needed for development.
+The gitignore patterns specifically exclude source maps and chunked bundles while keeping the main artifacts for reference.
 
 ## Testing
 
@@ -306,18 +310,18 @@ npm run dev
 
 **Runtime dependencies (bundled):**
 - React 19 & React DOM 19 (peer dependencies for npm package, bundled for HTML embed)
-- chart.js 4.x - Charts rendering
-- axios 1.x - HTTP requests
-- jquery 3.x - jvectormap dependency
-- jvectormap 2.x - World map rendering
-- dompurify 3.x - HTML sanitization
-- date-fns 4.x - Date utilities
-- twitter-widgets 2.x - Tweet embeds
+- chart.js ^4.1.2 - Charts rendering
+- axios ^1.13.2 - HTTP requests  
+- jquery ^3.7.1 - jvectormap dependency
+- jvectormap ^2.0.4 - World map rendering
+- dompurify ^3.3.1 - HTML sanitization
+- date-fns ^4.1.0 - Date utilities
+- twitter-widgets ^2.0.0 - Tweet embeds
 
 **Build dependencies:**
 - webpack 5.x + loaders (babel, sass, css, style)
-- Biome 2.x - Linting and formatting
-- TypeScript 5.9 - Type checking and declaration generation
+- Biome ^2.3.8 - Linting and formatting
+- TypeScript 5.9.3 - Type checking and declaration generation
 - Babel 7.x - Transpilation with React and TypeScript presets
 
 **Package installation notes:**
@@ -384,7 +388,7 @@ npm run dev
 
 9. **The `prepare` script in package.json runs `npm run build` after install.** This is intentional for npm publishing. When users install the package, it builds automatically.
 
-10. **dist/ files are partially committed:** Several dist files ARE intentionally committed: `dist/widget.css`, `dist/widget.js.LICENSE.txt`, `dist/index.html`, and `dist/images/`. However, the built bundles matching `dist/widget.js*` and `dist/*.widget.js*` patterns (like widget.js, 304.widget.js, etc.) are gitignored as build artifacts. The `dist/npm/` directory is also ignored. Check `.gitignore` for the exact patterns.
+10. **dist/ files are partially committed:** Several dist files ARE intentionally committed: `dist/widget.js` (main bundle), `dist/widget.css`, `dist/widget.js.LICENSE.txt`, `dist/index.html`, and `dist/images/`. The gitignore patterns `dist/widget.js*` and `dist/*.widget.js*` exclude source maps and chunked bundles (like `widget.js.map`, `304.widget.js`) but NOT the base `widget.js` file itself. The `dist/npm/` directory is also ignored. Check `.gitignore` for exact patterns.
 
 11. **Two separate entrypoints:**
     - `src/entry.tsx` - HTML embed version (reads config from DOM script tag)
