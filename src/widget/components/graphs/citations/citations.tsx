@@ -142,7 +142,9 @@ export const Citations = (props: CitationsProps) => {
     <div id={id} className={styles.citations}>
       <div className={styles.header}>
         {showInlineTitle && (
-          <div className={styles.title}>{t('graphs.citations.title')}</div>
+          <div className={styles.headerTitle}>
+            {t('graphs.citations.title')}
+          </div>
         )}
         <div className={styles.meta}>
           {t('graphs.citations.showing', {
@@ -174,7 +176,7 @@ export const Citations = (props: CitationsProps) => {
                     <TypeIcon type={typeLabel} />
                     <span>{typeLabel}</span>
                   </div>
-                  <div className={styles.title}>{item.title}</div>
+                  <div className={styles.citationTitle}>{item.title}</div>
                   {(item.authors || item.editors || item.year) && (
                     <div className={styles.byline}>
                       {item.authors || item.editors || ''}
@@ -198,7 +200,10 @@ export const Citations = (props: CitationsProps) => {
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.pagination}>
+        <nav
+          className={styles.pagination}
+          aria-label={t('graphs.citations.pagination_label')}
+        >
           <button
             type='button'
             onClick={() => setPage(Math.max(1, page - 1))}
@@ -243,7 +248,7 @@ export const Citations = (props: CitationsProps) => {
           >
             <ChevronRight aria-hidden='true' />
           </button>
-        </div>
+        </nav>
         {viewAllLink && (
           <a
             className={styles.viewAll}
