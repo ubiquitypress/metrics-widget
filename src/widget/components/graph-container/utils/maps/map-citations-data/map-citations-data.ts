@@ -1,5 +1,5 @@
 import type { CitationRecord } from '@/components';
-import type { Config, GraphData, Tab } from '@/types';
+import type { APIEvent, Config, GraphData, Tab } from '@/types';
 
 export const mapCitationsData = (
   data: GraphData,
@@ -43,22 +43,8 @@ export const mapCitationsData = (
     return people.map(formatPerson).filter(Boolean).join('; ');
   };
 
-  const items: CitationRecord[] = data.merged.map(entry => {
-    // entry is APIEvent; the citation-specific fields are in event data payload
-    // We expect the server to return fields directly; fallback to parsing event payload if necessary.
-    const citation = entry as unknown as Partial<{
-      authors: NameInput[];
-      editors: NameInput[];
-      year: number;
-      title: string;
-      source: string;
-      volume: string | null;
-      issue: string | null;
-      page: string | null;
-      doi: string | null;
-      url: string | null;
-      type: string | null;
-    }>;
+  const items: CitationRecord[] = data.merged.map((entry: APIEvent) => {
+    const citation = entry as Partial<APIEvent>;
 
     return {
       title: citation.title || '',
