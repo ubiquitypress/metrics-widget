@@ -242,12 +242,18 @@ src/
 ### Git Ignore Patterns
 
 From `.gitignore`:
-- `dist/widget.js*` and `dist/*.widget.js*` - Build artifacts (chunked bundles)
+- `dist/widget.js*` and `dist/*.widget.js*` - Build artifacts (main bundle and chunked bundles like 304.widget.js, 349.widget.js, etc.)
 - `dist/npm/` - npm package build artifacts
 - `node_modules/` - Dependencies
 - `.DS_Store` - MacOS files
 
-**NOTE:** Some dist files like `dist/images/` and `dist/index.html` ARE committed (used for development/examples).
+**IMPORTANT:** The following dist files ARE intentionally committed:
+- `dist/widget.css` - CSS file for the widget
+- `dist/widget.js.LICENSE.txt` - License information
+- `dist/index.html` - Development test page with sample configuration
+- `dist/images/` - Widget assets (e.g., hypothesis-logo.svg)
+
+These files are tracked in git because they serve as examples/documentation and are needed for development.
 
 ## Testing
 
@@ -378,13 +384,13 @@ npm run dev
 
 9. **The `prepare` script in package.json runs `npm run build` after install.** This is intentional for npm publishing. When users install the package, it builds automatically.
 
-10. **dist/ files are partially committed:** The `dist/images/` and some reference files ARE committed. The built bundles (`dist/*.js`, `dist/npm/`) are ignored. Check `.gitignore` before questioning this.
+10. **dist/ files are partially committed:** Several dist files ARE intentionally committed: `dist/widget.css`, `dist/widget.js.LICENSE.txt`, `dist/index.html`, and `dist/images/`. However, the built bundles matching `dist/widget.js*` and `dist/*.widget.js*` patterns (like widget.js, 304.widget.js, etc.) are gitignored as build artifacts. The `dist/npm/` directory is also ignored. Check `.gitignore` for the exact patterns.
 
 11. **Two separate entrypoints:**
     - `src/entry.tsx` - HTML embed version (reads config from DOM script tag)
     - `src/react.tsx` - npm package version (accepts config as React prop)
 
-12. **Configuration format:** Widget expects extensive JSON configuration with `settings`, `options`, `tabs`, `locales`, and `components` fields. See `dist/index.html` for full example or README for documentation.
+12. **Configuration format:** Widget expects extensive JSON configuration with `settings`, `options`, `tabs`, `locales`, and `components` fields. See `dist/index.html` (committed to repository) for a full working example or README.md for comprehensive documentation.
 
 ## Trust These Instructions
 
