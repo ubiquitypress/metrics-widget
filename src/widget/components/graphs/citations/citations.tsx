@@ -11,7 +11,7 @@ import {
   FileText,
   Info
 } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './citations.module.scss';
 
 export interface CitationRecord {
@@ -67,6 +67,7 @@ const formatMeta = (item: CitationRecord) => {
   if (item.issue) {
     volIssue.push(item.issue);
   }
+  // When both volume and issue exist, render as "volume(issue)"; otherwise show the single value.
   if (volIssue.length === 2) {
     parts.push(`${volIssue[0]}(${volIssue[1]})`);
   } else if (volIssue.length === 1) {
@@ -105,6 +106,12 @@ export const Citations = (props: CitationsProps) => {
     const end = start + pageSize;
     return data.slice(start, end);
   }, [data, page, pageSize]);
+
+  // Reset pagination when data set changes to avoid empty pages after filter changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally rerun when data payload changes
+  useEffect(() => {
+    setPage(1);
+  }, [data, total]);
 
   const pageItems = useMemo(() => {
     if (pageCount <= 7) {
@@ -230,7 +237,9 @@ export const Citations = (props: CitationsProps) => {
                   setPage(p);
                   listRef.current?.scrollTo({ top: 0 });
                 }}
-                aria-label={t('graphs.citations.go_to_page', { page: p })}
+                aria-label={t('graphs.citations.go_to_page', {
+                  page: formatNumber(p)
+                })}
                 aria-current={p === page ? 'page' : undefined}
               >
                 {p}
