@@ -547,7 +547,6 @@ Renders a paginated list of citing sources (articles, books, etc.) with metadata
 | -------------------- | --------- | ------------------------------------------------------------------------------------------- |
 | `page_size`          | `number`  | how many citations to show per page (defaults to `5`)                                       |
 | `view_all_url`       | `string`  | optional URL for a “View all citations” link                                                |
-| `enrich_from_crossref` | `boolean` | reserved for future use; when implemented will allow enriching citation metadata via Crossref |
 | `show_inline_title`  | `boolean` | show the inline title inside the citations component (defaults to `true`)                   |
 
 ### Custom Rows
