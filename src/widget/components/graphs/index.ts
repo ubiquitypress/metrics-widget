@@ -1,3 +1,4 @@
+export * from './citations';
 export * from './country-table';
 export * from './hypothesis-table';
 export * from './line-graph';

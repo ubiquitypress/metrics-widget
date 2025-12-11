@@ -1,6 +1,15 @@
-import type { Config, NavCount } from '@/types';
+import type { Config, Graph, GraphRowObject, NavCount } from '@/types';
 import { HTTPRequest, log } from '@/utils';
 import type { APIResponse } from './types';
+
+const EVENTS_ENDPOINT_REGEX = /\/events$/;
+
+const flattenGraphs = (graphs: Graph | GraphRowObject) => {
+  if ('graphs' in graphs) {
+    return graphs.graphs;
+  }
+  return [graphs];
+};
 
 /**
  * Fetches the `measure_uri` aggregation for each metric, returning the
@@ -21,20 +30,81 @@ export const getNavCounts = async (config: Config): Promise<NavCount[]> => {
       counts: {}
     };
 
+    const citationScopes = new Set<string>();
+    const graphs = (tab.graphs as (Graph | GraphRowObject)[]).flatMap(
+      flattenGraphs
+    );
+    for (const graph of graphs) {
+      if (graph.type === 'citations') {
+        graph.scopes?.forEach(scope => {
+          citationScopes.add(scope);
+        });
+      }
+    }
+
     // Fetch the data for each metric
     await Promise.all(
       Object.keys(tab.scopes).map(async scope => {
         try {
           // Get the values
-          const { measures, works } = tab.scopes[scope];
+          const { measures = [], works = [] } = tab.scopes[scope];
+          const filteredWorks = works.filter(Boolean);
+
+          const isCitationScope = citationScopes.has(scope);
 
           // If there are no works, skip this metric (since otherwise it will return all events)
-          if (works.filter(work => !!work).length === 0) {
+          if (filteredWorks.length === 0) {
+            return;
+          }
+
+          if (isCitationScope) {
+            const query = filteredWorks
+              .map(work => `work_uri=${encodeURIComponent(work)}`)
+              .join('&');
+            const citationsUrl =
+              config.settings.citations_url ||
+              config.settings.base_url.replace(
+                EVENTS_ENDPOINT_REGEX,
+                '/citations'
+              );
+
+            const res = await HTTPRequest<APIResponse>({
+              method: 'GET',
+              url: `${citationsUrl}?${query}`
+            });
+
+            const filtered = (res.data || []).filter(event => {
+              const startDate = tab.scopes[scope].startDate;
+              const endDate = tab.scopes[scope].endDate;
+              if (
+                startDate &&
+                event.timestamp &&
+                new Date(event.timestamp) < new Date(startDate)
+              ) {
+                return false;
+              }
+              if (
+                endDate &&
+                event.timestamp &&
+                new Date(event.timestamp) >= new Date(endDate)
+              ) {
+                return false;
+              }
+              return true;
+            });
+
+            const total = filtered.reduce(
+              (sum, event) => sum + (event.value ?? 1),
+              0
+            );
+
+            data.total += total;
+            data.counts[scope] = (data.counts[scope] || 0) + total;
             return;
           }
 
           // Merge the `works` into a single string
-          const query = works.map(work => `work_uri:${work}`).join(',');
+          const query = filteredWorks.map(work => `work_uri:${work}`).join(',');
 
           // Make a request for the data
           const res = await HTTPRequest<APIResponse>({

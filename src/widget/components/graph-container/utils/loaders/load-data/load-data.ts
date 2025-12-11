@@ -2,9 +2,12 @@ import type { Config, Graph, GraphData, Tab } from '@/types';
 import { HTTPRequest } from '@/utils';
 import type { APIResponse } from './types';
 
+const EVENTS_ENDPOINT_REGEX = /\/events$/;
+
 export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
   // Get the list of sources, which will tell us which data to load
   const { scopes = [] } = graph;
+  const isCitationsGraph = graph.type === 'citations';
 
   // Create an object to store the data
   const data: GraphData = {
@@ -17,7 +20,8 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
   await Promise.all(
     Object.keys(tab.scopes).map(async scope => {
       // Get the values
-      const { measures, works } = tab.scopes[scope];
+      const { measures = [], works = [] } = tab.scopes[scope];
+      const filteredWorks = works.filter(Boolean);
 
       // Make sure the metric is in the sources list
       if (!scopes.includes(scope)) {
@@ -25,15 +29,65 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
       }
 
       // If there are no works, add an empty object to the data and then skip it since otherwise it will return all events)
-      if (works.filter(work => !!work).length === 0) {
+      if (filteredWorks.length === 0) {
         data.data = {
           [scope]: { total: 0, data: [] }
         };
         return;
       }
 
+      // Citations use a dedicated endpoint rather than the events feed.
+      if (isCitationsGraph) {
+        const query = filteredWorks
+          .map(work => `work_uri=${encodeURIComponent(work)}`)
+          .join('&');
+        const citationsUrl =
+          config.settings.citations_url ||
+          config.settings.base_url.replace(EVENTS_ENDPOINT_REGEX, '/citations');
+
+        const res = await HTTPRequest<APIResponse>({
+          method: 'GET',
+          url: `${citationsUrl}?${query}`
+        });
+
+        const filtered = (res.data || []).filter(event => {
+          const startDate = tab.scopes[scope].startDate;
+          const endDate = tab.scopes[scope].endDate;
+          if (
+            startDate &&
+            event.timestamp &&
+            new Date(event.timestamp) < new Date(startDate)
+          ) {
+            return false;
+          }
+          if (
+            endDate &&
+            event.timestamp &&
+            new Date(event.timestamp) >= new Date(endDate)
+          ) {
+            return false;
+          }
+          return true;
+        });
+
+        const total = filtered.reduce(
+          (sum, event) => sum + (event.value ?? 1),
+          0
+        );
+        data.total += total;
+        data.data = {
+          ...data.data,
+          [scope]: {
+            total,
+            data: filtered
+          }
+        };
+        data.merged = [...data.merged, ...filtered];
+        return;
+      }
+
       // Merge the `works` into a single string
-      const query = works.map(work => `work_uri:${work}`).join(',');
+      const query = filteredWorks.map(work => `work_uri:${work}`).join(',');
 
       // Make a request for the data
       const res = await HTTPRequest<APIResponse>({

@@ -1,3 +1,4 @@
+export * from './map-citations-data';
 export * from './map-country-table-data';
 export * from './map-hypothesis-data';
 export * from './map-line-graph-data';

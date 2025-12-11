@@ -8,11 +8,18 @@ interface IntlProviderProps {
 }
 
 interface ContextProps {
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string | number>) => string;
 }
 
 const IntlContext = createContext<ContextProps>({
-  t: (key: string) => key
+  t: (key: string, vars?: Record<string, string | number>) => {
+    if (!vars) {
+      return key;
+    }
+    return Object.keys(vars).reduce((acc, varKey) => {
+      return acc.replace(new RegExp(`{${varKey}}`, 'g'), String(vars[varKey]));
+    }, key);
+  }
 });
 
 export const IntlProvider = (props: IntlProviderProps) => {
@@ -46,8 +53,17 @@ export const IntlProvider = (props: IntlProviderProps) => {
   }, [lang, config, setConfig]);
 
   // Create a function to get a translation
-  const t = (path: string) => {
-    return dictionary[lang][path] || dictionary['en-US'][path] || path;
+  const t = (path: string, vars?: Record<string, string | number>) => {
+    const template =
+      dictionary[lang][path] || dictionary['en-US'][path] || path;
+
+    if (!vars) {
+      return template;
+    }
+
+    return Object.keys(vars).reduce((acc, varKey) => {
+      return acc.replace(new RegExp(`{${varKey}}`, 'g'), String(vars[varKey]));
+    }, template);
   };
 
   return <IntlContext.Provider value={{ t }}>{children}</IntlContext.Provider>;

@@ -16,6 +16,7 @@ export interface Config {
     locale: string;
     cdn_scripts_url: string;
     cdn_images_url: string;
+    citations_url?: string;
   };
   options: {
     default_graph_width: number;

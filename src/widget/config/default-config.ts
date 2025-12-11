@@ -4,6 +4,7 @@ import { DEFAULT_ELEMENT_ID } from './consts';
 export const defaultConfig: Config = {
   settings: {
     base_url: 'https://metrics-api.operas-eu.org/events',
+    citations_url: 'https://metrics-api.operas-eu.org/citations',
     element_id: DEFAULT_ELEMENT_ID,
     locale: 'en-US',
     cdn_scripts_url:

@@ -16,4 +16,16 @@ export interface APIEvent {
   uploader_uri: string;
   value: number;
   work_uri: string;
+  // Citation-specific fields (if present in API)
+  authors?: { last_name: string; initial?: string }[];
+  editors?: { last_name: string; initial?: string }[];
+  year?: number;
+  title?: string;
+  source?: string;
+  volume?: string | null;
+  issue?: string | null;
+  page?: string | null;
+  doi?: string | null;
+  url?: string | null;
+  type?: string | null;
 }

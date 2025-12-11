@@ -1,4 +1,5 @@
 import {
+  Citations,
   CountryTable,
   HypothesisTable,
   LineGraph,
@@ -11,6 +12,7 @@ import type {
   Config,
   Graph,
   GraphData,
+  Citations as ICitations,
   CountryTable as ICountryTable,
   HypothesisTable as IHypothesisTable,
   LineGraph as ILineGraph,
@@ -23,6 +25,7 @@ import type {
 import { log } from '@/utils';
 import type React from 'react';
 import {
+  mapCitationsData,
   mapCountryTableData,
   mapHypothesisData,
   mapLineGraphData,
@@ -112,6 +115,22 @@ const loadList: Loader<IList> = ({ id, data, graph }) => {
   };
 };
 
+const loadCitations: Loader<ICitations> = ({
+  id,
+  data,
+  graph,
+  tab,
+  config
+}) => {
+  const res = mapCitationsData(data, tab, config);
+  return {
+    Component: (
+      <Citations id={id} data={res.items} total={res.total} graph={graph} />
+    ),
+    hasData: res.items.length > 0
+  };
+};
+
 /**
  * Fetches data for a graph component and returns the component
  */
@@ -138,6 +157,8 @@ export const loadComponentData = (
         return loadTweets({ id, graph, data, tab, config });
       case 'list':
         return loadList({ id, graph, data, tab, config });
+      case 'citations':
+        return loadCitations({ id, graph, data, tab, config });
       default: {
         const _unreachable: never = graph;
         throw new Error('Unhandled graph type');

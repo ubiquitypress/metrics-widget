@@ -18,7 +18,8 @@ export type Graph =
   | WorldMap
   | HypothesisTable
   | Tweets
-  | List;
+  | List
+  | Citations;
 
 interface BaseGraph {
   id: string;
@@ -71,6 +72,16 @@ export interface List extends BaseGraph {
     name_replacements?: {
       [key: string]: string;
     };
+  };
+}
+export interface Citations extends BaseGraph {
+  type: 'citations';
+  config?: {
+    page_size?: number;
+    enrich_from_crossref?: boolean;
+    show_cite_action?: boolean;
+    view_all_url?: string;
+    show_inline_title?: boolean;
   };
 }
 
