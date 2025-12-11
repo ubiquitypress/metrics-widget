@@ -84,7 +84,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: npm-dist
-          path: .
+          path: dist/npm
       - run: npm ci
       - name: Guard tag vs package.json version
         run: |
@@ -110,7 +110,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: embed-dist
-          path: .
+          path: dist
       - id: auth
         uses: google-github-actions/auth@v2
         with:
