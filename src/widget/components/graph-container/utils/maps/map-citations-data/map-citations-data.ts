@@ -52,12 +52,12 @@ export const mapCitationsData = (
       editors: formatNames(citation.editors),
       year: citation.year,
       source: citation.source || undefined,
-      volume: citation.volume,
-      issue: citation.issue,
-      page: citation.page,
-      doi: citation.doi,
-      url: citation.url,
-      type: citation.type
+      volume: citation.volume || undefined,
+      issue: citation.issue || undefined,
+      page: citation.page || undefined,
+      doi: citation.doi || undefined,
+      url: citation.url || undefined,
+      type: citation.type || undefined
     };
   });
 

@@ -1,6 +1,5 @@
 import type { Config, Graph, GraphData, Tab } from '@/types';
-import { HTTPRequest } from '@/utils';
-import { loadCitationScope } from './load-citations';
+import { HTTPRequest, loadCitationScope } from '@/utils';
 import type { APIResponse } from './types';
 
 export const loadData = async (tab: Tab, graph: Graph, config: Config) => {

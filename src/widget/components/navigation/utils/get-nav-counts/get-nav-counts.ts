@@ -1,15 +1,7 @@
 import type { Config, Graph, GraphRowObject, NavCount } from '@/types';
-import { HTTPRequest, log } from '@/utils';
+import { HTTPRequest, loadCitationScope, log } from '@/utils';
+import { flattenGraphs } from '../flatten-graphs';
 import type { APIResponse } from './types';
-
-const EVENTS_ENDPOINT_REGEX = /\/events$/;
-
-const flattenGraphs = (graphs: Graph | GraphRowObject) => {
-  if ('graphs' in graphs) {
-    return graphs.graphs;
-  }
-  return [graphs];
-};
 
 /**
  * Fetches the `measure_uri` aggregation for each metric, returning the
@@ -58,48 +50,15 @@ export const getNavCounts = async (config: Config): Promise<NavCount[]> => {
           }
 
           if (isCitationScope) {
-            const query = filteredWorks
-              .map(work => `work_uri=${encodeURIComponent(work)}`)
-              .join('&');
-            const citationsUrl =
-              config.settings.citations_url ||
-              config.settings.base_url.replace(
-                EVENTS_ENDPOINT_REGEX,
-                '/citations'
-              );
-
-            const res = await HTTPRequest<APIResponse>({
-              method: 'GET',
-              url: `${citationsUrl}?${query}`
-            });
-
-            const filtered = (res.data || []).filter(event => {
-              const startDate = tab.scopes[scope].startDate;
-              const endDate = tab.scopes[scope].endDate;
-              if (
-                startDate &&
-                event.timestamp &&
-                new Date(event.timestamp) < new Date(startDate)
-              ) {
-                return false;
-              }
-              if (
-                endDate &&
-                event.timestamp &&
-                new Date(event.timestamp) >= new Date(endDate)
-              ) {
-                return false;
-              }
-              return true;
-            });
-
-            const total = filtered.reduce(
-              (sum, event) => sum + (event.value ?? 1),
-              0
+            const citationResult = await loadCitationScope(
+              filteredWorks,
+              tab.scopes[scope],
+              config
             );
 
-            data.total += total;
-            data.counts[scope] = (data.counts[scope] || 0) + total;
+            data.total += citationResult.total;
+            data.counts[scope] =
+              (data.counts[scope] || 0) + citationResult.total;
             return;
           }
 

@@ -17,8 +17,8 @@ export interface APIEvent {
   value: number;
   work_uri: string;
   // Citation-specific fields (if present in API)
-  authors?: { last_name: string; initial?: string }[];
-  editors?: { last_name: string; initial?: string }[];
+  authors?: NameInput[];
+  editors?: NameInput[];
   year?: number;
   title?: string;
   source?: string;
@@ -29,3 +29,13 @@ export interface APIEvent {
   url?: string | null;
   type?: string | null;
 }
+
+export type NameInput =
+  | string
+  | {
+      last_name?: string;
+      initial?: string;
+      family?: string;
+      given?: string;
+      name?: string;
+    };

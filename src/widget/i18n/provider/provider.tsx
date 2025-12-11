@@ -2,6 +2,7 @@ import { useConfig } from '@/config';
 import type React from 'react';
 import { createContext, useContext, useEffect } from 'react';
 import { createDictionary, getLang } from '../utils';
+import { interpolate } from './interpolate';
 
 interface IntlProviderProps {
   children: React.ReactNode;
@@ -16,9 +17,7 @@ const IntlContext = createContext<ContextProps>({
     if (!vars) {
       return key;
     }
-    return Object.keys(vars).reduce((acc, varKey) => {
-      return acc.replace(new RegExp(`{${varKey}}`, 'g'), String(vars[varKey]));
-    }, key);
+    return interpolate(key, vars);
   }
 });
 
@@ -61,9 +60,7 @@ export const IntlProvider = (props: IntlProviderProps) => {
       return template;
     }
 
-    return Object.keys(vars).reduce((acc, varKey) => {
-      return acc.replace(new RegExp(`{${varKey}}`, 'g'), String(vars[varKey]));
-    }, template);
+    return interpolate(template, vars);
   };
 
   return <IntlContext.Provider value={{ t }}>{children}</IntlContext.Provider>;

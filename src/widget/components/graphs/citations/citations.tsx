@@ -67,8 +67,10 @@ const formatMeta = (item: CitationRecord) => {
   if (item.issue) {
     volIssue.push(item.issue);
   }
-  if (volIssue.length > 0) {
-    parts.push(volIssue.join('(') + (item.issue ? ')' : ''));
+  if (volIssue.length === 2) {
+    parts.push(`${volIssue[0]}(${volIssue[1]})`);
+  } else if (volIssue.length === 1) {
+    parts.push(volIssue[0]);
   }
   if (item.page) {
     parts.push(item.page);
@@ -104,6 +106,31 @@ export const Citations = (props: CitationsProps) => {
     return data.slice(start, end);
   }, [data, page, pageSize]);
 
+  const pageItems = useMemo(() => {
+    if (pageCount <= 7) {
+      return Array.from({ length: pageCount }, (_, i) => i + 1);
+    }
+
+    const items: Array<number | 'ellipsis-left' | 'ellipsis-right'> = [1];
+    const left = Math.max(2, page - 1);
+    const right = Math.min(pageCount - 1, page + 1);
+
+    if (left > 2) {
+      items.push('ellipsis-left');
+    }
+
+    for (let p = left; p <= right; p += 1) {
+      items.push(p);
+    }
+
+    if (right < pageCount - 1) {
+      items.push('ellipsis-right');
+    }
+
+    items.push(pageCount);
+    return items;
+  }, [page, pageCount]);
+
   if (data.length === 0) {
     return <GraphEmptyMessage />;
   }
@@ -126,14 +153,17 @@ export const Citations = (props: CitationsProps) => {
         </div>
       </div>
 
-      <div className={styles.listArea}>
+      <div ref={listRef} className={styles.listArea}>
         <div className={styles.list}>
           {pageSlice.map((item, idx) => {
             const rank = startIdx + idx;
             const meta = formatMeta(item);
             const doiLink = item.doi ? `https://doi.org/${item.doi}` : item.url;
+            const linkLabel = item.doi
+              ? t('graphs.citations.doi_prefix')
+              : t('graphs.citations.link_prefix');
             const typeLabel = item.type
-              ? item.type.replace('-', ' ').replace('_', ' ')
+              ? item.type.replace(/[-_]/g, ' ')
               : 'Citation';
 
             return (
@@ -156,7 +186,7 @@ export const Citations = (props: CitationsProps) => {
                   {doiLink && (
                     <div className={styles.links}>
                       <a href={doiLink} target='_blank' rel='noreferrer'>
-                        {t('graphs.citations.doi_prefix')} {item.doi || doiLink}
+                        {linkLabel} {item.doi || doiLink}
                       </a>
                     </div>
                   )}
@@ -177,8 +207,15 @@ export const Citations = (props: CitationsProps) => {
           >
             <ChevronLeft aria-hidden='true' />
           </button>
-          {Array.from({ length: pageCount }).map((_, i) => {
-            const p = i + 1;
+          {pageItems.map(item => {
+            if (item === 'ellipsis-left' || item === 'ellipsis-right') {
+              return (
+                <span key={item} aria-hidden='true'>
+                  …
+                </span>
+              );
+            }
+            const p = item;
             return (
               <button
                 type='button'
@@ -186,9 +223,10 @@ export const Citations = (props: CitationsProps) => {
                 className={cx({ [styles.active]: p === page })}
                 onClick={() => {
                   setPage(p);
-                  listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+                  listRef.current?.scrollTo({ top: 0 });
                 }}
                 aria-label={t('graphs.citations.go_to_page', { page: p })}
+                aria-current={p === page ? 'page' : undefined}
               >
                 {p}
               </button>
@@ -198,7 +236,7 @@ export const Citations = (props: CitationsProps) => {
             type='button'
             onClick={() => {
               setPage(Math.min(pageCount, page + 1));
-              listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+              listRef.current?.scrollTo({ top: 0 });
             }}
             disabled={page === pageCount}
             aria-label={t('graphs.citations.next_page')}

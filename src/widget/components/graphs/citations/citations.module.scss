@@ -154,14 +154,8 @@
   border-color: var(--color-primary-light, #edf0fb);
 }
 
-.active {
-  background: #3150d0;
-  color: #ffffff;
-  border-color: #3150d0;
-}
-
 .viewAll {
-  color: #3150d0;
+  color: var(--color-primary, #506cd3);
   text-decoration: none;
   text-align: center;
   display: inline-flex;
