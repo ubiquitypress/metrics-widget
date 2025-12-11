@@ -39,21 +39,17 @@ export const loadCitationScope = async (
       url: `${citationsUrl}?${query}`
     });
 
+    const startTs = scope.startDate
+      ? new Date(scope.startDate).getTime()
+      : null;
+    const endTs = scope.endDate ? new Date(scope.endDate).getTime() : null;
+
     const filtered = (res.data || []).filter(event => {
-      const startDate = scope.startDate;
-      const endDate = scope.endDate;
-      if (
-        startDate &&
-        event.timestamp &&
-        new Date(event.timestamp) < new Date(startDate)
-      ) {
+      const ts = event.timestamp ? new Date(event.timestamp).getTime() : null;
+      if (startTs !== null && ts !== null && ts < startTs) {
         return false;
       }
-      if (
-        endDate &&
-        event.timestamp &&
-        new Date(event.timestamp) >= new Date(endDate)
-      ) {
+      if (endTs !== null && ts !== null && ts >= endTs) {
         return false;
       }
       return true;

@@ -78,8 +78,7 @@ export interface Citations extends BaseGraph {
   type: 'citations';
   config?: {
     page_size?: number;
-    enrich_from_crossref?: boolean;
-    show_cite_action?: boolean;
+    enrich_from_crossref?: boolean; // reserved for future use
     view_all_url?: string;
     show_inline_title?: boolean;
   };
