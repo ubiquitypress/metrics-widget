@@ -1,8 +1,7 @@
 import type { Config, Graph, GraphData, Tab } from '@/types';
 import { HTTPRequest } from '@/utils';
+import { loadCitationScope } from './load-citations';
 import type { APIResponse } from './types';
-
-const EVENTS_ENDPOINT_REGEX = /\/events$/;
 
 export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
   // Get the list of sources, which will tell us which data to load
@@ -38,51 +37,21 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
 
       // Citations use a dedicated endpoint rather than the events feed.
       if (isCitationsGraph) {
-        const query = filteredWorks
-          .map(work => `work_uri=${encodeURIComponent(work)}`)
-          .join('&');
-        const citationsUrl =
-          config.settings.citations_url ||
-          config.settings.base_url.replace(EVENTS_ENDPOINT_REGEX, '/citations');
-
-        const res = await HTTPRequest<APIResponse>({
-          method: 'GET',
-          url: `${citationsUrl}?${query}`
-        });
-
-        const filtered = (res.data || []).filter(event => {
-          const startDate = tab.scopes[scope].startDate;
-          const endDate = tab.scopes[scope].endDate;
-          if (
-            startDate &&
-            event.timestamp &&
-            new Date(event.timestamp) < new Date(startDate)
-          ) {
-            return false;
-          }
-          if (
-            endDate &&
-            event.timestamp &&
-            new Date(event.timestamp) >= new Date(endDate)
-          ) {
-            return false;
-          }
-          return true;
-        });
-
-        const total = filtered.reduce(
-          (sum, event) => sum + (event.value ?? 1),
-          0
+        const citationResult = await loadCitationScope(
+          filteredWorks,
+          tab.scopes[scope],
+          config
         );
-        data.total += total;
+
+        data.total += citationResult.total;
         data.data = {
           ...data.data,
           [scope]: {
-            total,
-            data: filtered
+            total: citationResult.total,
+            data: citationResult.data
           }
         };
-        data.merged = [...data.merged, ...filtered];
+        data.merged = [...data.merged, ...citationResult.data];
         return;
       }
 
