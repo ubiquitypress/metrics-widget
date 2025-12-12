@@ -1,5 +1,5 @@
 import { GraphEmptyMessage } from '@/components/common';
-import { useConfig } from '@/config';
+import { graphDefaults, useConfig } from '@/config';
 import type { WorldMap as IWorldMap } from '@/types';
 import { formatNumber, getWidgetStyle } from '@/utils';
 import { useEffect, useMemo } from 'react';
@@ -121,6 +121,10 @@ export const WorldMap = (props: WorldMapProps) => {
         className={styles['world-map']}
         data-testid='world-map'
         aria-hidden
+        style={{
+          height:
+            props.graph.options?.height || graphDefaults.world_map.height || ''
+        }}
       />
 
       <WorldMapTable {...props} />
