@@ -100,11 +100,40 @@ export const WorldMap = (props: WorldMapProps) => {
       return;
     }
 
+    // Cleanup any prior render (e.g., React strict effects or re-renders)
+    try {
+      const existing =
+        $el.vectorMap('get', 'mapObject') || $el.data('mapObject');
+      if (existing) {
+        $el.vectorMap('remove');
+      }
+    } catch {
+      // ignore if nothing was mounted yet
+    }
+
+    // Clear any orphaned DOM left behind
+    try {
+      const host = document.getElementById(canvasId);
+      if (host) {
+        host.innerHTML = '';
+      }
+    } catch {
+      // ignore
+    }
+
     $el.vectorMap(options);
 
     return () => {
       try {
         $el.vectorMap('remove');
+      } catch {
+        // ignore
+      }
+      try {
+        const host = document.getElementById(canvasId);
+        if (host) {
+          host.innerHTML = '';
+        }
       } catch {
         // ignore
       }
