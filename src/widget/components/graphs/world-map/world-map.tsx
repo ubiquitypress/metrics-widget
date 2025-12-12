@@ -107,22 +107,35 @@ export const WorldMap = (props: WorldMapProps) => {
       $el.vectorMap('get', 'mapObject') || $el.data('mapObject');
 
     const resizeMap = () => {
+      // Keep map sizing in sync with the host container
       const map = getMap();
       const host = document.getElementById(canvasId);
       if (!map || !host) {
         return;
       }
 
-      const { height } = host.getBoundingClientRect();
+      // Prefer measured heights, fall back to computed CSS or a sane default
+      const { height: rectHeight } = host.getBoundingClientRect();
+      const cssHeight = Number.parseFloat(
+        globalThis.getComputedStyle?.(host)?.height || '0'
+      );
+
+      const candidateHeight =
+        rectHeight ||
+        host.clientHeight ||
+        host.offsetHeight ||
+        cssHeight ||
+        250;
+
       const targetHeight = Math.max(
         200,
-        Math.min(
-          800,
-          Math.round(
-            height || host.clientHeight || host.offsetHeight || map.height || 0
-          )
-        )
+        Math.min(800, Math.round(candidateHeight))
       );
+
+      // Defensive guard: avoid NaN or zero-height updates
+      if (!Number.isFinite(targetHeight) || targetHeight <= 0) {
+        return;
+      }
 
       map.container?.css?.({ width: '100%', height: `${targetHeight}px` });
       map.updateSize?.();
