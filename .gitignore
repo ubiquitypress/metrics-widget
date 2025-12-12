@@ -1,5 +1,6 @@
 # Dist
 dist/widget.js*
+dist/widget.css
 dist/*.widget.js*
 dist/npm
 
