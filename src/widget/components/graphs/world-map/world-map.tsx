@@ -113,23 +113,15 @@ export const WorldMap = (props: WorldMapProps) => {
         return;
       }
 
-      const width =
-        host.clientWidth ||
-        host.offsetWidth ||
-        map.width ||
-        map.defaultWidth ||
-        0;
-      if (!width) {
-        return;
-      }
-
-      const aspect =
-        map.defaultHeight && map.defaultWidth
-          ? map.defaultHeight / map.defaultWidth
-          : 0.6;
+      const { height } = host.getBoundingClientRect();
       const targetHeight = Math.max(
         200,
-        Math.min(800, Math.round(width * aspect))
+        Math.min(
+          800,
+          Math.round(
+            height || host.clientHeight || host.offsetHeight || map.height || 0
+          )
+        )
       );
 
       map.container?.css?.({ width: '100%', height: `${targetHeight}px` });
