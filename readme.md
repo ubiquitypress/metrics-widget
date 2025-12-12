@@ -41,6 +41,18 @@ export const Example = () => <MetricsWidget config={config} />;
 
 If you are not using React, use the HTML embed below.
 
+> Events in React: the component accepts an optional `events` prop with the same event names as the HTML embed. Example:
+>
+> ```tsx
+> <MetricsWidget
+>   config={config}
+>   events={{
+>     widget_ready: tabs => console.log('ready with', tabs),
+>     widget_loading: () => console.log('loading')
+>   }}
+> />
+> ```
+
 > Note: The npm package ships the React entrypoint and CSS (from `dist/npm`). The script-tag/UMD bundle for HTML embeds is served via the published CDN/GCS paths (or from the built `dist/` artifacts), not via the npm tarball.
 
 ## HTML embed (non-React)
@@ -727,6 +739,22 @@ Here is an example illustrating every possible widget event, made possible by si
 ```
 
 One notable feature here is that you can specify as many repeat events as possible, and each will be executed separately. For instance, there are three `widget_ready` listeners being defined, and each will be called sequentially once that event is triggered.
+
+### React example
+
+The React entrypoint exposes an `events` prop with the same event names:
+
+```tsx
+<MetricsWidget
+  config={config}
+  events={{
+    widget_loading: () => console.log('widget loading'),
+    widget_ready: tabs => console.log('widget ready', tabs)
+  }}
+/>
+```
+
+This is useful for driving your own loading states without inspecting the DOM.
 
 ## Use-case Example
 
