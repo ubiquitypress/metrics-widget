@@ -1,4 +1,5 @@
 const path = require('node:path');
+const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -60,6 +61,14 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'widget.css'
-    })
-  ]
+    }),
+    new webpack.NormalModuleReplacementPlugin(
+      /src\/widget\/config\/graphs\/scripts\.ts$/,
+      path.resolve(__dirname, './src/widget/config/graphs/scripts.eager.ts')
+    )
+  ],
+  optimization: {
+    splitChunks: false,
+    runtimeChunk: false
+  }
 };
