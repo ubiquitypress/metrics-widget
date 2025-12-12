@@ -8,6 +8,7 @@ import type {
   LineGraph as ILineGraph
 } from '@/types';
 import { formatNumber, getWidgetStyle } from '@/utils';
+import type { Chart } from 'chart.js';
 import { transparentize } from 'polished';
 import { useEffect } from 'react';
 import styles from './line-graph.module.scss';
@@ -55,6 +56,18 @@ export const LineGraph = (props: LineGraphProps) => {
     if (!ctx) {
       return;
     }
+
+    // Destroy any existing chart tied to this canvas before recreating
+    const ChartLib = (
+      globalThis as typeof globalThis & {
+        Chart?: typeof import('chart.js').Chart;
+      }
+    ).Chart;
+    if (ChartLib?.getChart) {
+      ChartLib.getChart(canvas)?.destroy?.();
+    }
+
+    let chart: Chart | null = null;
 
     // Create the chart
     const chartDatasets: ChartDatasetConfig[] = datasets.map(
@@ -147,7 +160,12 @@ export const LineGraph = (props: LineGraphProps) => {
       }
     };
 
-    new globalThis.Chart(ctx, chartConfig);
+    chart = new globalThis.Chart(ctx, chartConfig) as unknown as Chart;
+
+    return () => {
+      chart?.destroy();
+      chart = null;
+    };
   }, [
     canvasId,
     colors,
