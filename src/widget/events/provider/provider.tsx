@@ -3,14 +3,15 @@ import { createContext, useContext, useState } from 'react';
 import type { Event, EventArgs, EventState, EventsMap } from '../types';
 import { getWindowEvents } from '../utils';
 
-interface EventsProviderProps {
-  children: React.ReactNode;
-}
-
 interface EventsContextProps {
   emit: <T extends Event>(event: Event, ...args: EventArgs[T]) => void;
   on: <T extends Event>(event: Event, callback: EventsMap[T]) => void;
   off: <T extends Event>(event: Event, callback: EventsMap[T]) => void;
+}
+
+interface EventsProviderProps {
+  children: React.ReactNode;
+  initialEvents?: Partial<EventsMap>;
 }
 
 const EventsContext = createContext<EventsContextProps>({
@@ -20,8 +21,21 @@ const EventsContext = createContext<EventsContextProps>({
 });
 
 export const EventsProvider = (props: EventsProviderProps) => {
-  const { children } = props;
-  const [events, setEvents] = useState<EventState>({});
+  const { children, initialEvents = {} } = props;
+
+  const initialState: EventState = Object.entries(initialEvents).reduce(
+    (acc, [event, callback]) => {
+      if (callback) {
+        acc[event as Event] = [
+          callback as unknown as (...args: EventArgs[Event]) => void
+        ];
+      }
+      return acc;
+    },
+    {} as EventState
+  );
+
+  const [events, setEvents] = useState<EventState>(initialState);
 
   // Trigger an event
   const emit = <T extends Event>(event: T, ...args: EventArgs[T]) => {

@@ -1,4 +1,5 @@
 import { Main } from './widget';
+import type { EventsMap } from './widget/events';
 import type {
   Config,
   Graph,
@@ -10,13 +11,14 @@ import type {
 
 export interface MetricsWidgetProps {
   config: UserConfig;
+  events?: Partial<EventsMap>;
 }
 
 /**
  * React entrypoint for the metrics widget. Pass a UserConfig and handle the rest as a normal React component.
  */
-export const MetricsWidget = ({ config }: MetricsWidgetProps) => (
-  <Main config={config} />
+export const MetricsWidget = ({ config, events }: MetricsWidgetProps) => (
+  <Main config={config} events={events} />
 );
 
 export type { UserConfig, Config, Graph, Graphs, Scope, Tab };
