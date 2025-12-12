@@ -28,9 +28,8 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
 
       // If there are no works, add an empty object to the data and then skip it since otherwise it will return all events)
       if (filteredWorks.length === 0) {
-        data.data = {
-          [scope]: { total: 0, data: [] }
-        };
+        // Spread existing data to avoid overwriting other scopes resolving in parallel.
+        data.data = { ...data.data, [scope]: { total: 0, data: [] } };
         return;
       }
 
