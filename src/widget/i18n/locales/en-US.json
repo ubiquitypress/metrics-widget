@@ -25,6 +25,17 @@
     },
     "tweets": {
       "load_more": "More tweets"
+    },
+    "citations": {
+      "title": "Citing Sources",
+      "showing": "Showing {start}–{end} of {total}",
+      "view_all": "View all citations",
+      "doi_prefix": "DOI:",
+      "link_prefix": "Link:",
+      "pagination_label": "Citation pagination",
+      "prev_page": "Previous page",
+      "next_page": "Next page",
+      "go_to_page": "Go to page {page}"
     }
   }
 }

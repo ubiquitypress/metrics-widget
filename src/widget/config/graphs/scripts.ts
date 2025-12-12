@@ -79,6 +79,7 @@ export const graphScripts = (_config: Config): GraphScriptLoader => {
         });
       });
     },
-    list: async () => undefined
+    list: async () => undefined,
+    citations: async () => undefined
   };
 };

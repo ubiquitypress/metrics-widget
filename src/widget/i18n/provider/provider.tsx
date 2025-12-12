@@ -2,17 +2,23 @@ import { useConfig } from '@/config';
 import type React from 'react';
 import { createContext, useContext, useEffect } from 'react';
 import { createDictionary, getLang } from '../utils';
+import { interpolate } from './interpolate';
 
 interface IntlProviderProps {
   children: React.ReactNode;
 }
 
 interface ContextProps {
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string | number>) => string;
 }
 
 const IntlContext = createContext<ContextProps>({
-  t: (key: string) => key
+  t: (key: string, vars?: Record<string, string | number>) => {
+    if (!vars) {
+      return key;
+    }
+    return interpolate(key, vars);
+  }
 });
 
 export const IntlProvider = (props: IntlProviderProps) => {
@@ -46,8 +52,15 @@ export const IntlProvider = (props: IntlProviderProps) => {
   }, [lang, config, setConfig]);
 
   // Create a function to get a translation
-  const t = (path: string) => {
-    return dictionary[lang][path] || dictionary['en-US'][path] || path;
+  const t = (path: string, vars?: Record<string, string | number>) => {
+    const template =
+      dictionary[lang][path] || dictionary['en-US'][path] || path;
+
+    if (!vars) {
+      return template;
+    }
+
+    return interpolate(template, vars);
   };
 
   return <IntlContext.Provider value={{ t }}>{children}</IntlContext.Provider>;

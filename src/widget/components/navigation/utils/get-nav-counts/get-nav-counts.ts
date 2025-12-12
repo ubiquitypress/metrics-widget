@@ -1,5 +1,6 @@
-import type { Config, NavCount } from '@/types';
-import { HTTPRequest, log } from '@/utils';
+import type { Config, Graph, GraphRowObject, NavCount } from '@/types';
+import { HTTPRequest, loadCitationScope, log } from '@/utils';
+import { flattenGraphs } from '../flatten-graphs';
 import type { APIResponse } from './types';
 
 /**
@@ -21,20 +22,48 @@ export const getNavCounts = async (config: Config): Promise<NavCount[]> => {
       counts: {}
     };
 
+    const citationScopes = new Set<string>();
+    const graphs = (tab.graphs as (Graph | GraphRowObject)[]).flatMap(
+      flattenGraphs
+    );
+    for (const graph of graphs) {
+      if (graph.type === 'citations') {
+        graph.scopes?.forEach(scope => {
+          citationScopes.add(scope);
+        });
+      }
+    }
+
     // Fetch the data for each metric
     await Promise.all(
       Object.keys(tab.scopes).map(async scope => {
         try {
           // Get the values
-          const { measures, works } = tab.scopes[scope];
+          const { measures = [], works = [] } = tab.scopes[scope];
+          const filteredWorks = works.filter(Boolean);
+
+          const isCitationScope = citationScopes.has(scope);
 
           // If there are no works, skip this metric (since otherwise it will return all events)
-          if (works.filter(work => !!work).length === 0) {
+          if (filteredWorks.length === 0) {
+            return;
+          }
+
+          if (isCitationScope) {
+            const citationResult = await loadCitationScope(
+              filteredWorks,
+              tab.scopes[scope],
+              config
+            );
+
+            data.total += citationResult.total;
+            data.counts[scope] =
+              (data.counts[scope] || 0) + citationResult.total;
             return;
           }
 
           // Merge the `works` into a single string
-          const query = works.map(work => `work_uri:${work}`).join(',');
+          const query = filteredWorks.map(work => `work_uri:${work}`).join(',');
 
           // Make a request for the data
           const res = await HTTPRequest<APIResponse>({

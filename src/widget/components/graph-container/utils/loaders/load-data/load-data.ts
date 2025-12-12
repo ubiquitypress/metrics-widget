@@ -1,10 +1,11 @@
 import type { Config, Graph, GraphData, Tab } from '@/types';
-import { HTTPRequest } from '@/utils';
+import { HTTPRequest, loadCitationScope } from '@/utils';
 import type { APIResponse } from './types';
 
 export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
   // Get the list of sources, which will tell us which data to load
   const { scopes = [] } = graph;
+  const isCitationsGraph = graph.type === 'citations';
 
   // Create an object to store the data
   const data: GraphData = {
@@ -17,7 +18,8 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
   await Promise.all(
     Object.keys(tab.scopes).map(async scope => {
       // Get the values
-      const { measures, works } = tab.scopes[scope];
+      const { measures = [], works = [] } = tab.scopes[scope];
+      const filteredWorks = works.filter(Boolean);
 
       // Make sure the metric is in the sources list
       if (!scopes.includes(scope)) {
@@ -25,15 +27,34 @@ export const loadData = async (tab: Tab, graph: Graph, config: Config) => {
       }
 
       // If there are no works, add an empty object to the data and then skip it since otherwise it will return all events)
-      if (works.filter(work => !!work).length === 0) {
+      if (filteredWorks.length === 0) {
+        // Spread existing data to avoid overwriting other scopes resolving in parallel.
+        data.data = { ...data.data, [scope]: { total: 0, data: [] } };
+        return;
+      }
+
+      // Citations use a dedicated endpoint rather than the events feed.
+      if (isCitationsGraph) {
+        const citationResult = await loadCitationScope(
+          filteredWorks,
+          tab.scopes[scope],
+          config
+        );
+
+        data.total += citationResult.total;
         data.data = {
-          [scope]: { total: 0, data: [] }
+          ...data.data,
+          [scope]: {
+            total: citationResult.total,
+            data: citationResult.data
+          }
         };
+        data.merged = [...data.merged, ...citationResult.data];
         return;
       }
 
       // Merge the `works` into a single string
-      const query = works.map(work => `work_uri:${work}`).join(',');
+      const query = filteredWorks.map(work => `work_uri:${work}`).join(',');
 
       // Make a request for the data
       const res = await HTTPRequest<APIResponse>({

@@ -33,5 +33,9 @@ export const graphDefaults: Record<Graphs, Data> = {
     height: undefined,
     maxHeight: '250px',
     overflowY: 'auto'
+  },
+  citations: {
+    height: '400px',
+    overflowY: 'auto'
   }
 };
