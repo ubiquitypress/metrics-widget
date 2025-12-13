@@ -22,13 +22,13 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/npm/types/react.d.ts",
+      "types": "./dist/npm/types/src/react.d.ts",
       "import": "./dist/npm/index.js",
       "require": "./dist/npm/index.js"
     },
     "./widget.css": "./dist/npm/widget.css"
   },
-  "types": "./dist/npm/types/react.d.ts",
+  "types": "./dist/npm/types/src/react.d.ts",
   "main": "./dist/npm/index.js",
   "module": "./dist/npm/index.js",
   "peerDependencies": {
