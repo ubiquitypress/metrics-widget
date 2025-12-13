@@ -11,10 +11,15 @@ import type {
 } from './widget/types';
 
 export interface MetricsWidgetProps {
+  /** Widget configuration object */
   config: UserConfig;
+  /** Optional event callbacks (same names as script embed) */
   events?: Partial<EventsMap>;
+  /** Optional id for the outer container */
   id?: string;
+  /** Optional className for the outer container */
   className?: string;
+  /** Optional ref for the outer container */
   containerRef?: React.Ref<HTMLDivElement>;
 }
 
