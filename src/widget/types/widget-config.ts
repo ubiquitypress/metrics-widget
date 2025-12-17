@@ -33,4 +33,11 @@ export interface Config {
   };
 }
 
-export interface UserConfig extends Partial<Config> {}
+type PartialOptions = Partial<Config['options']>;
+type PartialSettings = Partial<Config['settings']>;
+
+export interface UserConfig
+  extends Partial<Omit<Config, 'options' | 'settings'>> {
+  options?: PartialOptions;
+  settings?: PartialSettings;
+}
