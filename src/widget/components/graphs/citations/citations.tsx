@@ -128,8 +128,10 @@ export const Citations = (props: CitationsProps) => {
                   </div>
                   <div
                     className={styles.citationTitle}
-                    // Titles may include safe inline HTML (e.g. italics); sanitize before rendering
-                    dangerouslySetInnerHTML={{ __html: sanitizeHTML(item.title) }}
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: sanitized via DOMPurify
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHTML(item.title)
+                    }}
                   />
                   {(item.authors || item.editors || item.year) && (
                     <div className={styles.byline}>
