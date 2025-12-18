@@ -1,7 +1,7 @@
 import { GraphEmptyMessage } from '@/components/common';
 import { useIntl } from '@/i18n';
 import type { Citations as ICitations } from '@/types';
-import { cx, formatNumber } from '@/utils';
+import { cx, formatNumber, sanitizeHTML } from '@/utils';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CitationIcon } from './citation-icon';
@@ -126,7 +126,11 @@ export const Citations = (props: CitationsProps) => {
                     <CitationIcon type={typeLabel} />
                     <span>{typeLabel}</span>
                   </div>
-                  <div className={styles.citationTitle}>{item.title}</div>
+                  <div
+                    className={styles.citationTitle}
+                    // Titles may include safe inline HTML (e.g. italics); sanitize before rendering
+                    dangerouslySetInnerHTML={{ __html: sanitizeHTML(item.title) }}
+                  />
                   {(item.authors || item.editors || item.year) && (
                     <div className={styles.byline}>
                       {item.authors || item.editors || ''}
